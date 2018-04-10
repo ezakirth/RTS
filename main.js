@@ -3,7 +3,13 @@ var Simplex = new SimplexNoise();
 var zbuffer = 0;
 function setup()
 {
-    console.log("ok");
+    sprite = new Sprite({
+        texture : textures.dirt_grass
+    });
+
+    quad = new Quad({
+        texture : textures.dirt_grass
+    });
 }
 
 
@@ -11,14 +17,23 @@ function render(timestamp)
 {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    var y = Math.sin(timestamp)* 100;
-//    for (var i=0;i<5;i++)
-    {
-    sprite(textures.dirt_grass, 0, y+100, 100, 100);
-    sprite(textures.dirt_grass, 25, y+125, 100, 100);
-    sprite(textures.dirt_grass, 50, y+150, 100, 100);
-    sprite(textures.dirt_grass, 75, y+175, 100, 100);
-//    }
+    var x = Math.cos(timestamp/1000)*100;
+    var y = Math.sin(timestamp/1000)*100;
+
+    sprite.setVertices({
+        x : 300 - x, y : 300 - y,
+        w : 100, h : 100
+    });
+    quad.setVertices({
+        x : 100 + x, y : 100 + y,
+        x2 : 200 + x, y2 : 100 + y,
+        x3 : 200 + x, y3 : 200 + y,
+        x4 : 100 + x, y4 : 200 + y
+    });
+    
+    sprite.draw();
+    quad.draw();
+
     requestAnimationFrame(function(timestamp) { zbuffer = 0; render(timestamp); });
 }
 
