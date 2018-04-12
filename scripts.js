@@ -111,7 +111,7 @@ var Bike = {
 };
 
 Bike.img = document.createElement("img");
-Bike.img.src = "bike.png";
+Bike.img.src = "ball.png";
 
 
 function draw()
