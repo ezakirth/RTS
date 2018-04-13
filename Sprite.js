@@ -23,6 +23,11 @@ class Sprite extends Quad {
         this.w = param.w || this.w;
         this.h = param.h || this.h;
 
+        if (this.align == "center")
+        {
+            this.x = this.x - this.w/2;
+            this.y = this.y - this.h/2;
+        }
         var bl = {x : this.x, y : this.y};
         var br = {x : this.x + this.w, y : this.y};
         var tr = {x : this.x + this.w, y : this.y + this.h};

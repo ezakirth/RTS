@@ -10,7 +10,10 @@ class Quad {
      */
     constructor(param) {
         this.w, this.h, this.x, this.y, this.x2, this.y2, this.x3, this.y3, this.x4, this.y4 = 0;
+        this.modelMatrix = twgl.m4.identity();
 
+        this.type = param.type;
+        this.align = param.align;
         this.texture = param.texture;
         zbuffer += 0.00001;
         this.zindex = zbuffer;
@@ -36,11 +39,14 @@ class Quad {
         this.setVertices(param);
 
 
+
+        twgl.m4.ortho(0, gl.canvas.clientWidth, 0, gl.canvas.clientHeight, -1, 1, this.modelMatrix);
+
         this.uniforms = {
-            u_worldViewProjection: twgl.m4.identity(),
+            u_worldViewProjection: this.modelMatrix,
             u_texture: this.texture
         };
-        twgl.m4.ortho(0, gl.canvas.clientWidth, 0, gl.canvas.clientHeight, -1, 1, this.uniforms.u_worldViewProjection);        
+        
     }
 
     /**
@@ -77,6 +83,18 @@ class Quad {
 
     draw()
     {
+
+        if (this.type != "static")
+        {
+            twgl.m4.ortho(0, gl.canvas.clientWidth, 0, gl.canvas.clientHeight, -1, 1, this.uniforms.u_worldViewProjection);
+            twgl.m4.multiply(this.modelMatrix, ViewMatrix, this.uniforms.u_worldViewProjection);
+            if (this.type == "doodad")
+            {
+//                twgl.m4.translate(this.modelMatrix, twgl.v3.create(5,0,0), this.modelMatrix);
+                twgl.m4.multiply(this.modelMatrix, ViewMatrix, this.uniforms.u_worldViewProjection);
+            }
+        }
+
         twgl.setBuffersAndAttributes(gl, gl.programInfo, this.bufferInfo);
         twgl.setUniforms(gl.programInfo, this.uniforms);
         twgl.drawBufferInfo(gl, this.bufferInfo);

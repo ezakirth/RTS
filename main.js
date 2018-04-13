@@ -1,10 +1,12 @@
 
-
+var viewMatrix;
 var zbuffer = 0;
 function setup()
 {
 
+    ViewMatrix = twgl.m4.identity();
     bg = new Sprite({
+        type : "static",
         texture : textures.bg,
         x : .01,
         y : .01 + 200,
@@ -13,29 +15,24 @@ function setup()
     });
     
 
-    sun = new Sprite({
-        texture : textures.sun,
-        x : gl.canvas.clientWidth - 600,
-        y : gl.canvas.clientHeight/2,
-        w : 400,
-        h : 400
-    });
-
     halo = new Sprite({
+        align : "center",
+        type : "static",
         texture : textures.halo,
-        x : gl.canvas.clientWidth - 800,
-        y : gl.canvas.clientHeight - 650,
-        w : 800,
-        h : 800
+        x : 0.1,
+        y : 0.1,
+        w : 600,
+        h : 600
     });
 
-
-    glow = new Sprite({
-        texture : textures.glow,
-        x : gl.canvas.clientWidth - 600,
-        y : gl.canvas.clientHeight/2,
-        w : 400,
-        h : 400
+    sun = new Sprite({
+        align : "center",
+        type : "static",
+        texture : textures.sun,
+        x : 0.1,
+        y : 0.1,
+        w : 300,
+        h : 300
     });
 
 
@@ -45,25 +42,50 @@ function setup()
         size : 256
     });
 
+    glow = new Sprite({
+        align : "center",
+        type : "unit",
+        texture : textures.glow,
+        x : 600.1,
+        y : 200.1,
+        w : 100,
+        h : 100
+    });
+
+
+
 
 
 }
 
 
+function rotate(sprite, timestamp)
+{
+    twgl.m4.ortho(0, gl.canvas.clientWidth, 0, gl.canvas.clientHeight, -1, 1, sprite.uniforms.u_worldViewProjection);
+    twgl.m4.translate(sprite.uniforms.u_worldViewProjection, twgl.v3.create(gl.canvas.clientWidth - 200, 500,0), sprite.uniforms.u_worldViewProjection);
+    twgl.m4.axisRotate(sprite.uniforms.u_worldViewProjection, twgl.v3.create(0,0,-1), timestamp/600, sprite.uniforms.u_worldViewProjection);
+    
+}
+
 function render(timestamp)
 {
-    Input.update();
+    ViewMatrix = twgl.m4.identity();
 
+    Input.update();
+    twgl.m4.translate(ViewMatrix, twgl.v3.create(Input.Pos,0,0), ViewMatrix);
+    rotate(sun, timestamp);
+    rotate(halo, -timestamp/8);
+
+    
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     bg.draw();
 
+    halo.draw();
     sun.draw();
-  //  halo.draw();
-  //  glow.draw();
-
     ground.draw();
 
+    glow.draw();
 
     requestAnimationFrame(render);
 }

@@ -79,11 +79,13 @@ function GLsetup()
             wrap: gl.CLAMP_TO_EDGE,
             src: "textures/sun.png"
         },
+
         glow : {
             minMag : gl.LINEAR,
             wrap: gl.CLAMP_TO_EDGE,
             src: "textures/glow.png"
         },
+
         halo : {
             minMag : gl.LINEAR,
             wrap: gl.CLAMP_TO_EDGE,

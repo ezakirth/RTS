@@ -10,23 +10,35 @@ var Input = {
     inertia : 0,
     keyLeft : false,
     keyRight : false,
+    Pos : 0,
     update : function() {
 
         if (Input.keyLeft || Input.keyRight)
         {
             if (Input.keyLeft)
             {
-                Input.inertia = 10;
+                Input.inertia --;
+                Input.Pos += 5;
             }
             else
             {
-                Input.inertia = -10;
+                Input.inertia ++;
+                Input.Pos -= 5;
             }
         }
-    
+        Input.Pos -= Input.inertia;
         Input.inertia -= Input.inertia/20;
-        twgl.m4.translate(ground.uniforms.u_worldViewProjection, twgl.v3.create(Input.inertia,0,0), ground.uniforms.u_worldViewProjection);
-     
+        if (Input.Pos > 0)
+        {
+            Input.inertia = 0;
+            Input.Pos = 0;
+        } 
+        if (Input.Pos < -(ground.max))
+        {
+            Input.inertia = 0;
+            Input.Pos = -(ground.max);
+        } 
+        
     }
 };
 
@@ -55,7 +67,8 @@ document.onmousemove = function(e) {
 
     if (Input.active)
     {
-        Input.inertia = -(Input.lastX - Input.mouseX);
+        Input.Pos = Input.Pos - (Input.lastX - Input.mouseX);
+        Input.inertia = (Input.lastX - Input.mouseX);
     }
 }
 

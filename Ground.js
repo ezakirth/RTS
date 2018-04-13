@@ -10,14 +10,16 @@ class Ground {
      */
     constructor(param) {
 
+        this.modelMatrix = twgl.m4.identity();
 
         var Simplex = new SimplexNoise();
         var w = Math.floor(gl.canvas.clientWidth/32);
         this.w = w;
+        this.size = param.size;
         var terrain = [];
         var xa, xb, ya, yb;
         var noiseVal = 0;
-        for (var i=0; i<w*10+1; i++)
+        for (var i=0; i<w*30+1; i++)
         {
             noiseVal = i/(gl.canvas.clientWidth/w);
             terrain[i] = Simplex.noise(noiseVal, 0)*50;
@@ -31,18 +33,18 @@ class Ground {
         var index = 0;
 
         this.textcoord = [];
-        for (var i=0; i<w*10; i+=2)
+        for (var i=0; i<w*30; i+=2)
         {
             xa = (i)*(gl.canvas.clientWidth/w);
             xb = (i+1)*(gl.canvas.clientWidth/w);
             ya = terrain[i] + param.offsetY;
             yb = terrain[i+1] + param.offsetY;
 
-            this.position.push(xa, ya + param.size, this.zindex);
+            this.position.push(xa, ya + this.size, this.zindex);
             this.position.push(xb, yb, this.zindex);
 
-            var ratio = (i/w)*Math.floor(gl.canvas.clientWidth/param.size);
-            var step = (1/w)*Math.floor(gl.canvas.clientWidth/param.size);
+            var ratio = (i/w)*Math.floor(gl.canvas.clientWidth/this.size);
+            var step = (1/w)*Math.floor(gl.canvas.clientWidth/this.size);
             this.textcoord.push(
                 ratio, 0,
                 ratio+step, 1
@@ -71,14 +73,18 @@ class Ground {
             u_worldViewProjection: twgl.m4.identity(),
             u_texture: this.texture
         };
-        twgl.m4.ortho(0, gl.canvas.clientWidth, 0, gl.canvas.clientHeight, -1, 1, this.uniforms.u_worldViewProjection);
-        twgl.m4.translate(this.uniforms.u_worldViewProjection, twgl.v3.create(-12*256,0,0), this.uniforms.u_worldViewProjection);
+        twgl.m4.ortho(0, gl.canvas.clientWidth, 0, gl.canvas.clientHeight, -1, 1, this.modelMatrix);
+        twgl.m4.translate(this.modelMatrix, twgl.v3.create(-this.size/2,0,0), this.modelMatrix);
+
+        this.max = (xb - this.size*4)/2 - gl.canvas.clientWidth;
 
     }
 
 
     draw()
     {
+        twgl.m4.multiply(this.modelMatrix, ViewMatrix, this.uniforms.u_worldViewProjection);
+        
         twgl.setBuffersAndAttributes(gl, gl.programInfo, this.bufferInfo);
         twgl.setUniforms(gl.programInfo, this.uniforms);
 
