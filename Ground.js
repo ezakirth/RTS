@@ -1,3 +1,5 @@
+"use strict";
+
 /**
  * @class Ground
  * @author Xavier de Boysson
@@ -86,7 +88,7 @@ class Ground {
     draw()
     {
         // Projection*View*Model
-        twgl.m4.multiply(projectionMatrix, ViewMatrix, this.uniforms.u_modelViewProjection);
+        twgl.m4.multiply(world.projectionMatrix, world.ViewMatrix, this.uniforms.u_modelViewProjection);
         twgl.m4.multiply(this.uniforms.u_modelViewProjection, this.modelMatrix, this.uniforms.u_modelViewProjection);
 
 

@@ -1,3 +1,5 @@
+"use strict";
+
 /**
  * @class Quad
  * @author Xavier de Boysson
@@ -87,9 +89,9 @@ class Quad {
 
         // Projection*View*Model
         if (this.type == "static")
-            twgl.m4.multiply(projectionMatrix, twgl.m4.identity(), this.uniforms.u_modelViewProjection);
+            twgl.m4.multiply(world.projectionMatrix, twgl.m4.identity(), this.uniforms.u_modelViewProjection);
         else
-            twgl.m4.multiply(projectionMatrix, ViewMatrix, this.uniforms.u_modelViewProjection);
+            twgl.m4.multiply(world.projectionMatrix, world.ViewMatrix, this.uniforms.u_modelViewProjection);
 
         twgl.m4.multiply(this.uniforms.u_modelViewProjection, this.modelMatrix, this.uniforms.u_modelViewProjection);
 
@@ -103,11 +105,11 @@ this.transform();
         {
             twgl.m4.ortho(0, gl.canvas.clientWidth, 0, gl.canvas.clientHeight, -1, 1, this.uniforms.u_worldViewProjection);
 
-            twgl.m4.multiply(this.modelMatrix, ViewMatrix, this.uniforms.u_modelViewProjection);
+            twgl.m4.multiply(this.modelMatrix, world.ViewMatrix, this.uniforms.u_modelViewProjection);
             if (this.type == "doodad")
             {
 //                twgl.m4.translate(this.modelMatrix, twgl.v3.create(5,0,0), this.modelMatrix);
-                twgl.m4.multiply(this.modelMatrix, ViewMatrix, this.uniforms.u_modelViewProjection);
+                twgl.m4.multiply(this.modelMatrix, world.ViewMatrix, this.uniforms.u_modelViewProjection);
             }
         }
 */

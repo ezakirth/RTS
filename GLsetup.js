@@ -1,5 +1,7 @@
+"use strict";
+
 var gl = null;
-loadShaders("shader.frag", "shader.vert", GLsetup);
+Utils.loadShaders("shader.frag", "shader.vert", GLsetup);
 
 function GLsetup()
 {
@@ -22,88 +24,7 @@ function GLsetup()
 //    gl.clearColor(45.9, 26.775, 21.93, 1);
     gl.clearColor(0.180, 0.105, 0.086, 1);
 
+    loadTextures();
 
-    var types = ["grass", "asian", "desert", "jungle", "rock", "snow"];
-    var style = Math.floor(Math.random()*6);
-
-    textures = twgl.createTextures(gl,
-    {
-        ground : {
-            minMag: gl.LINEAR,
-            wrapS: gl.REPEAT,
-            wrapT: gl.CLAMP_TO_EDGE,
-            src: "textures/ground_" + types[style] + ".png"
-        },
-
-        bg : {
-            minMag : gl.NEAREST,
-            src: "textures/bg_" + types[style] + ".png"
-        },
-
-        bg2 : {
-            minMag : gl.NEAREST,
-            src: "textures/bg2_" + types[style] + ".png"
-        },
-
-        doodad_corner : {
-            minMag : gl.LINEAR,
-            wrap: gl.CLAMP_TO_EDGE,
-            src: "textures/doodad_corner_" + types[style] + ".png"
-        },
-
-        doodad1 : {
-            minMag : gl.LINEAR,
-            wrap: gl.CLAMP_TO_EDGE,
-            src: "textures/doodad1_" + types[style] + ".png"
-        },
-
-        doodad2 : {
-            minMag : gl.LINEAR,
-            wrap: gl.CLAMP_TO_EDGE,
-            src: "textures/doodad2_" + types[style] + ".png"
-        },
-
-        doodad3 : {
-            minMag : gl.LINEAR,
-            wrap: gl.CLAMP_TO_EDGE,
-            src: "textures/doodad3_" + types[style] + ".png"
-        },
-
-        doodad4 : {
-            minMag : gl.LINEAR,
-            wrap: gl.CLAMP_TO_EDGE,
-            src: "textures/doodad4_" + types[style] + ".png"
-        },
-        
-        sun : {
-            minMag : gl.LINEAR,
-            wrap: gl.CLAMP_TO_EDGE,
-            src: "textures/sun.png"
-        },
-
-        glow : {
-            minMag : gl.LINEAR,
-            wrap: gl.CLAMP_TO_EDGE,
-            src: "textures/glow.png"
-        },
-
-        halo : {
-            minMag : gl.LINEAR,
-            wrap: gl.CLAMP_TO_EDGE,
-            src: "textures/halo.png"
-        },
-
-
-        unit : {
-            minMag : gl.LINEAR,
-            wrap: gl.CLAMP_TO_EDGE,
-            src: "unit.png"
-        },
-
-    }, function() {setup(); render();});
 }
 
-function lerp (start, end, amt)
-{
-    return (1-amt)*start+amt*end
-}

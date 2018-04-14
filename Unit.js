@@ -1,3 +1,5 @@
+"use strict";
+
 /**
  * @class Unit
  * @author Xavier de Boysson
@@ -24,34 +26,39 @@ class Unit {
 
         this.speed = 3 + (-1 + Math.random()*2);
         this.rotation = .4;
-        this.pos = {x:150 + (Math.random()*3000), y:200};
-        var i = Math.floor((0 + this.pos.x + ground.width/2)/(gl.canvas.clientWidth/ground.w));
-        this.pos.y = ground.terrain[i] + ground.offsetY - 32 + this.offset;
+
+        this.pos = twgl.v3.create(
+            150 + (Math.random()*3000),
+            200,
+            0
+        );
+
+        var i = Math.floor((this.pos[0] + world.ground.width/2)/(gl.canvas.clientWidth/world.ground.w));
+        this.pos[1] = world.ground.terrain[i] + world.ground.offsetY - 32 + this.offset;
     
 
     }
 
-    draw(timestamp)
+    update()
     {
-        this.sprite.modelMatrix = twgl.m4.identity();
+        this.sprite.modelMatrix = twgl.m4.identity(this.sprite.modelMatrix);
 
-        this.pos.x += this.speed*speed;
-        var i = Math.floor((0 + this.pos.x + ground.width/2)/(gl.canvas.clientWidth/ground.w));
-        var h = ground.terrain[i]+ground.offsetY - 32 + this.offset;
-        var h2 = ground.terrain[i+1]+ground.offsetY - 32 + this.offset;
+        this.pos[0] += this.speed*world.speed;
+        var i = Math.floor((this.pos[0] + world.ground.width/2)/(gl.canvas.clientWidth/world.ground.w));
+        var h = world.ground.terrain[i] + world.ground.offsetY - 32 + this.offset;
+        var h2 = world.ground.terrain[i+1] + world.ground.offsetY - 32 + this.offset;
 
-        this.pos.y = lerp(this.pos.y, h, .1*speed);        
+        this.pos[1] = Utils.lerp(this.pos[1], h, .08*world.speed);        
 
+        var angle = Math.atan2(h2 - h, world.ground.w/2);
+        this.rotation = Utils.lerp(this.rotation , angle , .1*world.speed);
 
+        twgl.m4.translate(this.sprite.modelMatrix, this.pos, this.sprite.modelMatrix);
+        Utils.rotate(this.sprite, this.rotation);
+    }
 
-        var angle = Math.atan2(h2 - h, ground.w/4)
-    
-        this.rotation = lerp(this.rotation , angle , .1*speed);
-
-
-        twgl.m4.translate(this.sprite.modelMatrix, twgl.v3.create(this.pos.x, this.pos.y,0), this.sprite.modelMatrix);
-
-        twgl.m4.axisRotate(this.sprite.modelMatrix, twgl.v3.create(0,0,1), this.rotation*speed, this.sprite.modelMatrix);
+    draw()
+    {
         this.sprite.draw();
     }
 }
