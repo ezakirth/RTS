@@ -1,3 +1,5 @@
+var speed = 1;
+
 var Input = {
     active : false,
     lastX : 0,
@@ -17,17 +19,17 @@ var Input = {
         {
             if (Input.keyLeft)
             {
-                Input.inertia --;
-                Input.Pos += 5;
+                Input.inertia -= speed;
+                Input.Pos += 5 * speed;
             }
             else
             {
-                Input.inertia ++;
-                Input.Pos -= 5;
+                Input.inertia += speed;
+                Input.Pos -= 5 * speed;
             }
         }
-        Input.Pos -= Input.inertia;
-        Input.inertia -= Input.inertia/20;
+        Input.Pos -= Input.inertia * speed;
+        Input.inertia -= (Input.inertia/20)*speed;
         if (Input.Pos > 0)
         {
             Input.inertia = 0;
@@ -67,8 +69,8 @@ document.onmousemove = function(e) {
 
     if (Input.active)
     {
-        Input.Pos = Input.Pos - (Input.lastX - Input.mouseX);
-        Input.inertia = (Input.lastX - Input.mouseX);
+        Input.Pos -= (Input.lastX - Input.mouseX)*speed;
+        Input.inertia = (Input.lastX - Input.mouseX)*speed;
     }
 }
 

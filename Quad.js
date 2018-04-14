@@ -10,7 +10,6 @@ class Quad {
      */
     constructor(param) {
         this.w, this.h, this.x, this.y, this.x2, this.y2, this.x3, this.y3, this.x4, this.y4 = 0;
-        this.modelMatrix = twgl.m4.identity();
 
         this.type = param.type;
         this.align = param.align;
@@ -40,10 +39,12 @@ class Quad {
 
 
 
-        twgl.m4.ortho(0, gl.canvas.clientWidth, 0, gl.canvas.clientHeight, -1, 1, this.modelMatrix);
+//        twgl.m4.ortho(0, gl.canvas.clientWidth, 0, gl.canvas.clientHeight, -1, 1, this.modelMatrix);
+
+        this.modelMatrix = twgl.m4.identity();
 
         this.uniforms = {
-            u_worldViewProjection: this.modelMatrix,
+            u_modelViewProjection: twgl.m4.identity(),
             u_texture: this.texture
         };
         
@@ -81,20 +82,35 @@ class Quad {
         twgl.setAttribInfoBufferFromArray(gl, this.bufferInfo.attribs.a_position, this.position);        
     }
 
-    draw()
+    transform()
     {
 
-        if (this.type != "static")
+        // Projection*View*Model
+        if (this.type == "static")
+            twgl.m4.multiply(projectionMatrix, twgl.m4.identity(), this.uniforms.u_modelViewProjection);
+        else
+            twgl.m4.multiply(projectionMatrix, ViewMatrix, this.uniforms.u_modelViewProjection);
+
+        twgl.m4.multiply(this.uniforms.u_modelViewProjection, this.modelMatrix, this.uniforms.u_modelViewProjection);
+
+    }
+    draw()
+    {
+this.transform();
+
+
+/*        if (this.type != "static")
         {
             twgl.m4.ortho(0, gl.canvas.clientWidth, 0, gl.canvas.clientHeight, -1, 1, this.uniforms.u_worldViewProjection);
-            twgl.m4.multiply(this.modelMatrix, ViewMatrix, this.uniforms.u_worldViewProjection);
+
+            twgl.m4.multiply(this.modelMatrix, ViewMatrix, this.uniforms.u_modelViewProjection);
             if (this.type == "doodad")
             {
 //                twgl.m4.translate(this.modelMatrix, twgl.v3.create(5,0,0), this.modelMatrix);
-                twgl.m4.multiply(this.modelMatrix, ViewMatrix, this.uniforms.u_worldViewProjection);
+                twgl.m4.multiply(this.modelMatrix, ViewMatrix, this.uniforms.u_modelViewProjection);
             }
         }
-
+*/
         twgl.setBuffersAndAttributes(gl, gl.programInfo, this.bufferInfo);
         twgl.setUniforms(gl.programInfo, this.uniforms);
         twgl.drawBufferInfo(gl, this.bufferInfo);

@@ -1,4 +1,4 @@
-uniform mat4 u_worldViewProjection;
+uniform mat4 u_modelViewProjection;
 
 attribute vec4 a_position;
 attribute vec2 a_texcoord;
@@ -8,6 +8,6 @@ varying vec2 v_texCoord;
 
     void main() {
     v_texCoord = a_texcoord;
-    v_position = (u_worldViewProjection * a_position);
+    v_position = (u_modelViewProjection * a_position);
     gl_Position = v_position;
     }

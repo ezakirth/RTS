@@ -19,6 +19,7 @@ function GLsetup()
     gl.enable(gl.CULL_FACE);
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+//    gl.clearColor(45.9, 26.775, 21.93, 1);
     gl.clearColor(0.180, 0.105, 0.086, 1);
 
 
