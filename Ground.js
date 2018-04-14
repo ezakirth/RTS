@@ -16,13 +16,14 @@ class Ground {
         this.w = w;
         this.width = param.width;
         this.height = param.height;
-        var terrain = [];
+        this.offsetY = param.offsetY;
+        this.terrain = [];
         var xa, xb, ya, yb;
         var noiseVal = 0;
         for (var i=0; i<w*30+1; i++)
         {
             noiseVal = i/(gl.canvas.clientWidth/w);
-            terrain[i] = Simplex.noise(noiseVal, 0)*64;
+            this.terrain[i] = Simplex.noise(noiseVal, 0)*64;
         }
         
 
@@ -37,8 +38,8 @@ class Ground {
         {
             xa = (i)*(gl.canvas.clientWidth/w);
             xb = (i+1)*(gl.canvas.clientWidth/w);
-            ya = terrain[i] + param.offsetY;
-            yb = terrain[i+1] + param.offsetY;
+            ya = this.terrain[i] + this.offsetY;
+            yb = this.terrain[i+1] + this.offsetY;
 
             this.position.push(xa, ya, this.zindex);
             this.position.push(xb, yb - this.height, this.zindex);

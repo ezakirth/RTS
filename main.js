@@ -11,9 +11,9 @@ function setup()
         type : "static",
         texture : textures.bg,
         x : .01,
-        y : .01,// + 200,
+        y : .01,
         w : gl.canvas.clientWidth,
-        h : gl.canvas.clientHeight// - 200
+        h : gl.canvas.clientHeight
     });
     
 
@@ -23,8 +23,8 @@ function setup()
         texture : textures.halo,
         x : 0.1,
         y : 0.1,
-        w : 400,
-        h : 400
+        w : 350,
+        h : 350
     });
 
     sun = new Sprite({
@@ -54,15 +54,11 @@ function setup()
         height : 384
     });
 
-    unit = new Sprite({
-        align : "center",
-        type : "unit",
-        texture : textures.glow,
-        x : 600.1,
-        y : 200.1,
-        w : 100,
-        h : 100
-    });
+    units = [];
+    for (var i=0;i<100;i++)
+    {
+        units[i] = new Unit();
+    }
 
 
     twgl.m4.translate(sun.modelMatrix, twgl.v3.create(gl.canvas.clientWidth - 400, gl.canvas.clientHeight - 150,0), sun.modelMatrix);
@@ -85,42 +81,38 @@ function scale(sprite, val)
 var last = 0;
 function render(timestamp)
 {
+    // Normalize game speed
     if (timestamp === undefined)
-        timestamp = 0.1;
+        timestamp = 1;
     speed = 60/(1000/(timestamp - last));
-    if (isNaN(speed)) speed = 1;
     last = timestamp;
 
-
-    ViewMatrix = twgl.m4.identity();
-
     Input.update();
+    ViewMatrix = twgl.m4.identity();
     twgl.m4.translate(ViewMatrix, twgl.v3.create(Input.Pos,0,0), ViewMatrix);
 
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     drawSky(timestamp);
-
-    
-
-
     ground.draw();
 
-    twgl.m4.translate(unit.modelMatrix, twgl.v3.create(1, 0,0), unit.modelMatrix);
-    unit.draw();
-
+    for (var i=0;i<units.length;i++)
+    {
+        units[i].draw(timestamp);
+    }
     
     requestAnimationFrame(render);
 }
+
 
 function drawSky(timestamp)
 {
     bg.draw();
 
-    rotate(halo, .002);
-    rotate(glow, -.005);
-    scale(halo, 1 + Math.sin(timestamp/100)/200);
-    scale(glow, 1 + Math.sin(timestamp/200)/150);
+    rotate(halo, .004*speed);
+    rotate(glow, -.01*speed);
+    scale(halo, 1 + Math.sin(timestamp/100)/200*speed);
+    scale(glow, 1 + Math.sin(timestamp/200)/150*speed);
 
     halo.draw();
     sun.draw();

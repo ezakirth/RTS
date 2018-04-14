@@ -3,7 +3,7 @@ loadShaders("shader.frag", "shader.vert", GLsetup);
 
 function GLsetup()
 {
-    gl = document.getElementById("canvas").getContext("webgl");
+    gl = document.getElementById("canvas").getContext("webgl",{ alpha: true });
     gl.canvas.width = window.innerWidth;
     gl.canvas.height = window.innerHeight;
 
@@ -94,5 +94,16 @@ function GLsetup()
         },
 
 
+        unit : {
+            minMag : gl.LINEAR,
+            wrap: gl.CLAMP_TO_EDGE,
+            src: "unit.png"
+        },
+
     }, function() {setup(); render();});
+}
+
+function lerp (start, end, amt)
+{
+    return (1-amt)*start+amt*end
 }
