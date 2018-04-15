@@ -11,9 +11,7 @@ class Sky {
      * @param {Object} {texture : WebGLTexture, x : float, y : float, x2 : float, y2 : float, x3 : float, y3 : float, x4 : float, y4 : float}
      */
     constructor(param) {
-
-        var ratio = Game.width / window.innerWidth;
-
+        this.size = 2;
         this.bg = new Sprite({
             type : "static",
             texture : textures.bg,
@@ -27,29 +25,29 @@ class Sky {
             align : "center",
             type : "static",
             texture : textures.halo,
-            w : 350,
-            h : 350
+            w : 350 * this.size,
+            h : 350 * this.size
         });
     
         this.sun = new Sprite({
             align : "center",
             type : "static",
             texture : textures.sun,
-            w : 200,
-            h : 200
+            w : 200 * this.size,
+            h : 200 * this.size
         });
     
         this.glow = new Sprite({
             align : "center",
             type : "static",
             texture : textures.glow,
-            w : 220,
-            h : 220
+            w : 220 * this.size,
+            h : 220 * this.size
         });
 
         this.pos = twgl.v3.create(
-            Game.width - 400/ratio,
-            Game.height - 150,
+            Game.width -  200 * this.size,
+            Game.height - 150 * this.size,
             0
         );
 

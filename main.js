@@ -1,3 +1,5 @@
+"use strict";
+
 function setup()
 {
     Game.world = new World();

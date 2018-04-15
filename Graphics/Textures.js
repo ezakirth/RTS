@@ -21,8 +21,17 @@ function loadTextures()
         },
 
         bg2 : {
-            minMag : gl.NEAREST,
+            minMag : gl.LINEAR,
+            wrapS: gl.REPEAT,
+            wrapT: gl.CLAMP_TO_EDGE,
             src: "assets/textures/bg2_" + types[style] + ".png"
+        },
+
+        bg3 : {
+            minMag : gl.LINEAR,
+            wrapS: gl.REPEAT,
+            wrapT: gl.CLAMP_TO_EDGE,
+            src: "assets/textures/bg_small2.png"
         },
 
         doodad_corner : {

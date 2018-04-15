@@ -5,7 +5,7 @@ Utils.loadShaders("shader.frag", "shader.vert", GLsetup);
 
 function GLsetup()
 {
-    gl = document.getElementById("canvas").getContext("webgl",{ alpha: true });
+    gl = document.getElementById("canvas").getContext("webgl",{ alpha: true, premultipliedAlpha: true });
     gl.canvas.width = 1920;
     gl.canvas.height = 1080;
 
@@ -21,7 +21,8 @@ function GLsetup()
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
-    gl.clearColor(0.180, 0.105, 0.086, 1);
+    gl.clearColor(1, 1, 1, 1);
+//    gl.clearColor(0.180, 0.105, 0.086, 1);
 
     loadTextures();
 }

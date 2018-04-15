@@ -16,7 +16,7 @@ class Map {
         var Simplex = new SimplexNoise();
 
         this.blockWidth = Math.floor(Game.width/32);
-        this.mapSize = 1.5*this.blockWidth;
+        this.mapSize = 4*this.blockWidth;
 
         this.texWidth = param.texWidth;
         this.texHeight = param.texHeight;
