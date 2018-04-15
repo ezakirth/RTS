@@ -3,24 +3,24 @@
   <head>
     <link rel="stylesheet" type="text/css" href="reset.css">
     <link rel="stylesheet" type="text/css" href="styles.css">
-    <script src="jquery-3.3.1.min.js"></script>
-    <script src="twgl-full.min.js"></script>
-    <script src="utils.js"></script>
+    <script src="lib/jquery-3.3.1.min.js"></script>
+    <script src="lib/twgl-full.min.js"></script>
+    <script src="lib/utils.js"></script>
+    <script src="lib/noise.js"></script>
+    <script src="Graphics/Sprite.js"></script>
+    <script src="Graphics/Textures.js"></script>
+    <script src="Graphics/GLsetup.js"></script>
+    <script src="World/Map.js"></script>
+    <script src="World/Sky.js"></script>
+    <script src="World/Unit.js"></script>
+    <script src="World/World.js"></script>
     <script src="Input.js"></script>
-    <script src="Ground.js"></script>
-    <script src="Quad.js"></script>
-    <script src="Sprite.js"></script>
-    <script src="Sky.js"></script>
-    <script src="Unit.js"></script>
-    <script src="World.js"></script>
-    <script src="noise.js"></script>
-    <script src="Textures.js"></script>
-    <script src="GLsetup.js"></script>
+    <script src="Game.js"></script>
     <script src="main.js"></script>
     <script id="vs" type="x-shader/x-fragment"></script>
     <script id="fs" type="x-shader/x-fragment"></script> 
   </head>
   <body>
-    <canvas id="canvas" style="background:linear-gradient(white, black);"></canvas>
+    <canvas id="canvas" style="background-image:url('BG.png');background-size: 100% 100%;"></canvas>
   </body>
 </html>

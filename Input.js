@@ -2,94 +2,112 @@
 
 var Input = {
     active : false,
-    lastX : 0,
-    lastY : 0,
-    originX : 0,
-    originY : 0,
-    mouseX : 0,
-    mouseY : 0,
+    last : {x : 0, y : 0},
+    origin: {x : 0, y : 0},
+    pos : {x : 0, y : 0},
     delta : 0,
     inertia : 0,
     keyLeft : false,
     keyRight : false,
-    Pos : 0,
+    viewPos : 0,
     update : function() {
 
         if (Input.keyLeft || Input.keyRight)
         {
             if (Input.keyLeft)
             {
-                Input.inertia -= world.speed;
-                Input.Pos += 5 * world.speed;
+                Input.inertia -= Game.world.speed;
+                Input.viewPos += 5 * Game.world.speed;
             }
             else
             {
-                Input.inertia += world.speed;
-                Input.Pos -= 5 * world.speed;
+                Input.inertia += Game.world.speed;
+                Input.viewPos -= 5 * Game.world.speed;
             }
         }
-        Input.Pos -= Input.inertia * world.speed;
-        Input.inertia -= (Input.inertia/20)*world.speed;
-        if (Input.Pos > 0)
+        Input.viewPos -= Input.inertia * Game.world.speed;
+        Input.inertia -= (Input.inertia/20)*Game.world.speed;
+        if (Input.viewPos > 0)
         {
             Input.inertia = 0;
-            Input.Pos = 0;
+            Input.viewPos = 0;
         } 
-        if (Input.Pos < -(world.ground.max))
+        if (Input.viewPos < -(Game.world.map.maxViewWidth))
         {
             Input.inertia = 0;
-            Input.Pos = -(world.ground.max);
+            Input.viewPos = -(Game.world.map.maxViewWidth);
         } 
         
-    }
-};
+    },
 
-document.onmouseup = function(e)
-{
-    Input.active = false;
-    Input.lastX = Input.mouseX;
-    Input.lastY = Input.mouseY;
-    Input.mouseX = e.clientX;
-    Input.mouseY = e.clientY;   
-}
-document.onmousedown = function(e)
-{
-    Input.active = true;
-    Input.lastX = Input.mouseX;
-    Input.lastY = Input.mouseY;
-    Input.originX = Input.mouseX;
-    Input.originY = Input.mouseY;
-}
-
-document.onmousemove = function(e) {
-    Input.lastX = Input.mouseX;
-    Input.lastY = Input.mouseY;    
-    Input.mouseX = e.clientX;
-    Input.mouseY = e.clientY;
-
-    if (Input.active)
+    inputUp : function(e)
     {
-        Input.Pos -= (Input.lastX - Input.mouseX)*world.speed;
-        Input.inertia = (Input.lastX - Input.mouseX)*world.speed;
-    }
-}
+        Input.active = false;
+        Input.last.x = Input.pos.x;
+        Input.last.y = Input.pos.y;
+    },
 
+    inputDown : function(e)
+    {
+        Input.active = true;
+        Input.last.x = Input.pos.x;
+        Input.last.y = Input.pos.y;
+        Input.origin.x = Input.pos.x;
+        Input.origin.y = Input.pos.y;
+        Input.getPosition(Input.pos, e);
+    },
+    
+    inputMove : function(e)
+    {
+        Input.last.x = Input.pos.x;
+        Input.last.y = Input.pos.y;
+        Input.getPosition(Input.pos, e);
+    
+        if (Input.active)
+        {
+            Input.viewPos -= (Input.last.x - Input.pos.x)*Game.world.speed;
+            Input.inertia = (Input.last.x - Input.pos.x)*Game.world.speed;
+        }
+    },
 
-document.onkeydown = function(e)
-{
-    if(e.keyCode == 37) { // left
-        Input.keyLeft = true;
-    }
-    else if(e.keyCode == 39) { // right
-        Input.keyRight = true;
-    }
+    inputKeyDown : function(e)
+    {
+        if(e.keyCode == 37) { // left
+            Input.keyLeft = true;
+        }
+        else if(e.keyCode == 39) { // right
+            Input.keyRight = true;
+        }
+    },
+
+    inputKeyUp : function(e)
+    {
+        Input.keyLeft = false;
+        Input.keyRight = false;
+    },
+
+	getPosition : function(point, event)
+	{
+		if (event.touches)
+		{
+			point.x = event.touches[0].pageX * Game.ratioX;
+			point.y = event.touches[0].pageY * Game.ratioY;
+		}
+		else
+		{
+			point.x = event.pageX * Game.ratioX;
+			point.y = event.pageY * Game.ratioY;
+		}
+	},    
 };
 
-document.onkeyup = function(e)
-{
-    Input.keyLeft = false;
-    Input.keyRight = false;
-};
+document.addEventListener('touchstart', Input.inputDown);
+document.addEventListener('touchend', Input.inputUp);
+document.addEventListener('touchmove', Input.inputMove);
 
+document.addEventListener('mousedown', Input.inputDown);
+document.addEventListener('mouseup', Input.inputUp);
+document.addEventListener('mousemove', Input.inputMove);
 
-
+document.addEventListener('keyup', Input.inputKeyUp);
+document.addEventListener('keydown', Input.inputKeyDown);

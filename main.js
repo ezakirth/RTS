@@ -1,17 +1,15 @@
-"use strict";
-
-var zbuffer = 0;
-var world = null;
 function setup()
 {
-    world = new World();
-    world.init();
+    Game.world = new World();
+    Game.world.init();
+
+    Game.scaleTo(window.innerWidth, window.innerHeight);
 }
 
 function render()
 {
-    world.update();
-    world.draw();
+    Game.world.update();
+    Game.world.draw();
 
     requestAnimationFrame(render);
 }

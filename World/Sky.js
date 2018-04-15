@@ -11,13 +11,16 @@ class Sky {
      * @param {Object} {texture : WebGLTexture, x : float, y : float, x2 : float, y2 : float, x3 : float, y3 : float, x4 : float, y4 : float}
      */
     constructor(param) {
+
+        var ratio = Game.width / window.innerWidth;
+
         this.bg = new Sprite({
             type : "static",
             texture : textures.bg,
             x : .01,
             y : .01,
-            w : gl.canvas.clientWidth,
-            h : gl.canvas.clientHeight
+            w : Game.width,
+            h : Game.height
         });
 
         this.halo = new Sprite({
@@ -51,8 +54,8 @@ class Sky {
         });
 
         this.pos = twgl.v3.create(
-            gl.canvas.clientWidth - 400,
-            gl.canvas.clientHeight - 150,
+            Game.width - 400/ratio,
+            Game.height - 150,
             0
         );
 
@@ -72,22 +75,27 @@ class Sky {
         twgl.m4.translate(this.halo.modelMatrix, this.pos, this.halo.modelMatrix);
         twgl.m4.translate(this.glow.modelMatrix, this.pos, this.glow.modelMatrix);
 
-        this.rotHalo += .002*world.speed;
+        this.rotHalo += .002*Game.world.speed;
         if (this.rotHalo > 2*Math.PI)
             this.rotHalo = 0;
 
-        this.rotGlow -= .004*world.speed;
+        this.rotGlow -= .004*Game.world.speed;
         if (this.rotGlow < -2*Math.PI)
             this.rotGlow = 0;
 
-        this.scaleHalo += .02 * world.speed;
-        this.scaleGlow += .01 * world.speed;
+        this.scaleHalo += .02 * Game.world.speed;
+        this.scaleGlow += .01 * Game.world.speed;
 
         Utils.rotate(this.halo, this.rotHalo);
         Utils.rotate(this.glow, this.rotGlow);
         
         Utils.scale(this.halo, 1 + Math.sin(this.scaleHalo)/15);
         Utils.scale(this.glow, 1 + Math.sin(this.scaleGlow)/5);
+
+        this.bg.update();
+        this.halo.update();
+        this.sun.update();
+        this.glow.update();
     }
 
     draw()

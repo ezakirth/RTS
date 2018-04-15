@@ -12,8 +12,8 @@ class World {
      */
     constructor(param) {
         this.ViewMatrix = twgl.m4.identity();
-        this.projectionMatrix = twgl.m4.ortho(0, gl.canvas.clientWidth, 0, gl.canvas.clientHeight, -1, 1);
-            
+        this.projectionMatrix = twgl.m4.ortho(0, Game.width, 0, Game.height, -1, 1);
+        this.z = 0;
         this.time = 1;
         this.speed = 1;
         this.lastTime = 1;
@@ -24,13 +24,13 @@ class World {
     {
         this.sky = new Sky();
 
-        this.ground = new Ground({
+        this.map = new Map({
             texture : textures.ground,
             offsetY : 256,
-            width : 192,
-            height : 384
+            texWidth : 192,
+            texHeight : 384,
+            noise : 64
         });
-    
         
         for (var i=0;i<1000;i++)
         {
@@ -46,10 +46,12 @@ class World {
         if (this.speed > 5) this.speed = 5;
         Input.update();
         this.ViewMatrix = twgl.m4.identity(this.ViewMatrix);
-        twgl.m4.translate(this.ViewMatrix, twgl.v3.create(Input.Pos,0,0), this.ViewMatrix);
+        twgl.m4.translate(this.ViewMatrix, twgl.v3.create(Input.viewPos,0,0), this.ViewMatrix);
 
         this.sky.update();
 
+        this.map.update();
+        
         for (var i=0; i<this.units.length; i++)
         {
             this.units[i].update();
@@ -62,7 +64,7 @@ class World {
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
         this.sky.draw();
-        this.ground.draw();
+        this.map.draw();
             
         for (var i=0; i<this.units.length; i++)
         {

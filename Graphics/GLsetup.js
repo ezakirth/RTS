@@ -6,10 +6,10 @@ Utils.loadShaders("shader.frag", "shader.vert", GLsetup);
 function GLsetup()
 {
     gl = document.getElementById("canvas").getContext("webgl",{ alpha: true });
-    gl.canvas.width = window.innerWidth;
-    gl.canvas.height = window.innerHeight;
+    gl.canvas.width = 1920;//window.innerWidth;
+    gl.canvas.height = 1080;//window.innerHeight;
 
-    
+   // if (true) return;
     gl.programInfo = twgl.createProgramInfo(gl, ["vs", "fs"]);
     gl.useProgram(gl.programInfo.program);
 
@@ -25,6 +25,15 @@ function GLsetup()
     gl.clearColor(0.180, 0.105, 0.086, 1);
 
     loadTextures();
-
+}
+/*
+function resizeCanvas() {
+    gl.canvas.width = window.innerWidth;
+    gl.canvas.height = window.innerHeight;
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height); 
+    console.log('ok');  
+    render();
 }
 
+window.addEventListener('resize', resizeCanvas);
+*/
