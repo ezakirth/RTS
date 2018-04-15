@@ -98,21 +98,8 @@ class Quad {
     }
     draw()
     {
-this.transform();
+        this.transform();
 
-
-/*        if (this.type != "static")
-        {
-            twgl.m4.ortho(0, gl.canvas.clientWidth, 0, gl.canvas.clientHeight, -1, 1, this.uniforms.u_worldViewProjection);
-
-            twgl.m4.multiply(this.modelMatrix, world.ViewMatrix, this.uniforms.u_modelViewProjection);
-            if (this.type == "doodad")
-            {
-//                twgl.m4.translate(this.modelMatrix, twgl.v3.create(5,0,0), this.modelMatrix);
-                twgl.m4.multiply(this.modelMatrix, world.ViewMatrix, this.uniforms.u_modelViewProjection);
-            }
-        }
-*/
         twgl.setBuffersAndAttributes(gl, gl.programInfo, this.bufferInfo);
         twgl.setUniforms(gl.programInfo, this.uniforms);
         twgl.drawBufferInfo(gl, this.bufferInfo);

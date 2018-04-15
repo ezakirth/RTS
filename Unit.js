@@ -21,6 +21,7 @@ class Unit {
             h : 100
         });
 
+        this.visible = false;
 
         this.offset = -10 + Math.random()*20;
 
@@ -41,24 +42,39 @@ class Unit {
 
     update()
     {
-        this.sprite.modelMatrix = twgl.m4.identity(this.sprite.modelMatrix);
+        this.visible = false;
+
 
         this.pos[0] += this.speed*world.speed;
-        var i = Math.floor((this.pos[0] + world.ground.width/2)/(gl.canvas.clientWidth/world.ground.w));
-        var h = world.ground.terrain[i] + world.ground.offsetY - 32 + this.offset;
-        var h2 = world.ground.terrain[i+1] + world.ground.offsetY - 32 + this.offset;
 
-        this.pos[1] = Utils.lerp(this.pos[1], h, .08*world.speed);        
+        var min = -(twgl.m4.getTranslation(world.ViewMatrix)[0] + 256);
+        var max = min + gl.canvas.clientWidth + 512;
+        var x = this.pos[0];
 
-        var angle = Math.atan2(h2 - h, world.ground.w/2);
-        this.rotation = Utils.lerp(this.rotation , angle , .1*world.speed);
+        if (x > min && x < max)
+            this.visible = true;
 
-        twgl.m4.translate(this.sprite.modelMatrix, this.pos, this.sprite.modelMatrix);
-        Utils.rotate(this.sprite, this.rotation);
+            var i = Math.floor((this.pos[0] + world.ground.width/2)/(gl.canvas.clientWidth/world.ground.w));
+            var h = world.ground.terrain[i] + world.ground.offsetY - 32 + this.offset;
+
+            this.pos[1] = Utils.lerp(this.pos[1], h, .08*world.speed);        
+
+            
+        if (this.visible)
+        {
+            var h2 = world.ground.terrain[i+1] + world.ground.offsetY - 32 + this.offset;
+            var angle = Math.atan2(h2 - h, world.ground.w/2);
+            this.rotation = Utils.lerp(this.rotation , angle , .1*world.speed);
+
+            this.sprite.modelMatrix = twgl.m4.identity(this.sprite.modelMatrix);
+            twgl.m4.translate(this.sprite.modelMatrix, this.pos, this.sprite.modelMatrix);
+            Utils.rotate(this.sprite, this.rotation);
+        }
     }
 
     draw()
     {
-        this.sprite.draw();
+        if (this.visible)
+            this.sprite.draw();
     }
 }

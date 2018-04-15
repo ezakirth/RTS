@@ -8,9 +8,9 @@ function setup()
     world.init();
 }
 
-function render(timestamp)
+function render()
 {
-    world.update(timestamp);
+    world.update();
     world.draw();
 
     requestAnimationFrame(render);

@@ -16,7 +16,7 @@ class World {
             
         this.time = 1;
         this.speed = 1;
-        this.lastTime = 0;
+        this.lastTime = 1;
         this.units = [];
     }
 
@@ -32,23 +32,20 @@ class World {
         });
     
         
-        for (var i=0;i<100;i++)
+        for (var i=0;i<1000;i++)
         {
             this.units[i] = new Unit();
         }
     }
 
-    update(timestamp)
+    update()
     {
-        this.time = timestamp;
+        this.time = Date.now();
         // Normalize game speed
-        if (this.time === undefined)
-            this.time = .1;
         this.speed = 60/(1000/(this.time - this.lastTime));
-        this.lastTime = this.time;
-
+        if (this.speed > 5) this.speed = 5;
         Input.update();
-        this.ViewMatrix = twgl.m4.identity();
+        this.ViewMatrix = twgl.m4.identity(this.ViewMatrix);
         twgl.m4.translate(this.ViewMatrix, twgl.v3.create(Input.Pos,0,0), this.ViewMatrix);
 
         this.sky.update();
@@ -66,12 +63,14 @@ class World {
 
         this.sky.draw();
         this.ground.draw();
-    
+            
         for (var i=0; i<this.units.length; i++)
         {
             this.units[i].draw();
         }
     
+        this.lastTime = this.time;
+
     }
     
 }

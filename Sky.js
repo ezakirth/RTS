@@ -80,14 +80,14 @@ class Sky {
         if (this.rotGlow < -2*Math.PI)
             this.rotGlow = 0;
 
-        this.scaleHalo = 1 + (Math.sin(world.time/200)/15)*world.speed;
-        this.scaleGlow = 1 + (Math.sin(world.time/400)/5)*world.speed;
+        this.scaleHalo += .02 * world.speed;
+        this.scaleGlow += .01 * world.speed;
 
         Utils.rotate(this.halo, this.rotHalo);
         Utils.rotate(this.glow, this.rotGlow);
         
-        Utils.scale(this.halo, this.scaleHalo);
-        Utils.scale(this.glow, this.scaleGlow);
+        Utils.scale(this.halo, 1 + Math.sin(this.scaleHalo)/15);
+        Utils.scale(this.glow, 1 + Math.sin(this.scaleGlow)/5);
     }
 
     draw()
