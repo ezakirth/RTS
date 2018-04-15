@@ -17,8 +17,8 @@ class Sprite {
         Game.world.z += 0.00001;
         this.zindex = Game.world.z;
 
-        this.x = param.x || 0.1;
-        this.y = param.y || 0.1;
+        this.x = param.x || 0;
+        this.y = param.y || 0;
         this.w = param.w || 100;
         this.h = param.h || 100;
 

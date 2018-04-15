@@ -6,10 +6,9 @@ Utils.loadShaders("shader.frag", "shader.vert", GLsetup);
 function GLsetup()
 {
     gl = document.getElementById("canvas").getContext("webgl",{ alpha: true });
-    gl.canvas.width = 1920;//window.innerWidth;
-    gl.canvas.height = 1080;//window.innerHeight;
+    gl.canvas.width = 1920;
+    gl.canvas.height = 1080;
 
-   // if (true) return;
     gl.programInfo = twgl.createProgramInfo(gl, ["vs", "fs"]);
     gl.useProgram(gl.programInfo.program);
 
@@ -21,19 +20,17 @@ function GLsetup()
     gl.enable(gl.CULL_FACE);
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-//    gl.clearColor(45.9, 26.775, 21.93, 1);
+
     gl.clearColor(0.180, 0.105, 0.086, 1);
 
     loadTextures();
 }
-/*
+
 function resizeCanvas() {
     gl.canvas.width = window.innerWidth;
     gl.canvas.height = window.innerHeight;
-    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height); 
-    console.log('ok');  
-    render();
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+    Game.scaleTo(gl.canvas.width, gl.canvas.height);
 }
 
 window.addEventListener('resize', resizeCanvas);
-*/

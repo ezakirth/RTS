@@ -17,8 +17,8 @@ class Sky {
         this.bg = new Sprite({
             type : "static",
             texture : textures.bg,
-            x : .01,
-            y : .01,
+            x : 0,
+            y : 0,
             w : Game.width,
             h : Game.height
         });
@@ -27,8 +27,6 @@ class Sky {
             align : "center",
             type : "static",
             texture : textures.halo,
-            x : 0.1,
-            y : 0.1,
             w : 350,
             h : 350
         });
@@ -37,8 +35,6 @@ class Sky {
             align : "center",
             type : "static",
             texture : textures.sun,
-            x : 0.1,
-            y : 0.1,
             w : 200,
             h : 200
         });
@@ -47,8 +43,6 @@ class Sky {
             align : "center",
             type : "static",
             texture : textures.glow,
-            x : 0.1,
-            y : 0.1,
             w : 220,
             h : 220
         });

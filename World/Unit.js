@@ -21,8 +21,6 @@ class Unit {
             align : "center",
             type : "unit",
             texture : textures.unit,
-            x : 0 + .1,
-            y : 0 + .1,
             w : 100,
             h : 100
         });
