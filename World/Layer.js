@@ -11,6 +11,9 @@ class Layer {
      * @param {Object} {texture : WebGLTexture, x : float, y : float, x2 : float, y2 : float, x3 : float, y3 : float, x4 : float, y4 : float}
      */
     constructor(param) {
+        this.layerViewMatrix = twgl.m4.identity();
+        
+        this.distance = param.distance;
         Game.world.z += 0.00001;
         this.zindex = Game.world.z;
 
@@ -61,11 +64,15 @@ class Layer {
 
     }
 
-    update(viewMatrix)
+    update()
     {
-        twgl.m4.multiply(Game.world.projectionMatrix, viewMatrix, this.uniforms.u_modelViewProjection);
+        // View matrix
+        this.layerViewMatrix = twgl.m4.identity(this.layerViewMatrix);
+        twgl.m4.translate(this.layerViewMatrix, twgl.v3.create(Input.viewPos/this.distance,0,0), this.layerViewMatrix);
 
-        twgl.m4.multiply(this.uniforms.u_modelViewProjection, this.modelMatrix, this.uniforms.u_modelViewProjection);
+        // Transform layer
+        twgl.m4.multiply(Game.world.projectionMatrix, this.layerViewMatrix, this.uniforms.u_modelViewProjection);
+        twgl.m4.multiply(this.uniforms.u_modelViewProjection, this.modelMatrix, this.uniforms.u_modelViewProjection);        
     }
 
     draw()
