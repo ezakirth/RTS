@@ -1,53 +1,48 @@
 "use strict";
 
 /**
- * @class Sky
+ * @class Sun
  * @author Xavier de Boysson
  * @
  */
-class Sky {
+class Sun {
     /**
-     * Creates a Sky object
+     * Creates a Sun object
      * @param {Object} {texture : WebGLTexture, x : float, y : float, x2 : float, y2 : float, x3 : float, y3 : float, x4 : float, y4 : float}
      */
     constructor(param) {
-        this.size = 2;
-        this.bg = new Sprite({
-            type : "static",
-            texture : textures.bg,
-            x : 0,
-            y : 0,
-            w : Game.width,
-            h : Game.height
-        });
+        this.size = param.size;
+        this.x = param.x;
+        this.y = param.y;
+
 
         this.halo = new Sprite({
             align : "center",
             type : "static",
             texture : textures.halo,
-            w : 350 * this.size,
-            h : 350 * this.size
+            w : 1.75 * this.size,
+            h : 1.75 * this.size
         });
     
         this.sun = new Sprite({
             align : "center",
             type : "static",
             texture : textures.sun,
-            w : 200 * this.size,
-            h : 200 * this.size
+            w : this.size,
+            h : this.size
         });
     
         this.glow = new Sprite({
             align : "center",
             type : "static",
             texture : textures.glow,
-            w : 220 * this.size,
-            h : 220 * this.size
+            w : this.size,
+            h : this.size
         });
 
         this.pos = twgl.v3.create(
-            Game.width -  200 * this.size,
-            Game.height - 150 * this.size,
+            this.x,
+            this.y,
             0
         );
 
@@ -84,7 +79,6 @@ class Sky {
         Utils.scale(this.halo, 1 + Math.sin(this.scaleHalo)/15);
         Utils.scale(this.glow, 1 + Math.sin(this.scaleGlow)/5);
 
-        this.bg.update();
         this.halo.update();
         this.sun.update();
         this.glow.update();
@@ -92,7 +86,6 @@ class Sky {
 
     draw()
     {
-        this.bg.draw();
         this.halo.draw();
         this.sun.draw();
         this.glow.draw();

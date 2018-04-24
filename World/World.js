@@ -12,10 +12,8 @@ class World {
      */
     constructor(param) {
         this.ViewMatrix = twgl.m4.identity();
-        this.layerFarViewMatrix = twgl.m4.identity();
-        this.layerMediumViewMatrix = twgl.m4.identity();
-
         this.projectionMatrix = twgl.m4.ortho(0, Game.width, 0, Game.height, -1, 1);
+
         this.z = 0;
         this.time = 1;
         this.speed = 1;
@@ -25,10 +23,20 @@ class World {
 
     init()
     {
-        this.sky = new Sky();
+        this.bg = new Sprite({
+            type : "static",
+            texture : textures.bg,
+            x : 0,
+            y : 0,
+            w : Game.width,
+            h : Game.height
+        });
 
-        this.layerFar = new Layer({ texture : textures.bg2 , scale : 4, offset: 96});
-        this.layerMedium = new Layer( { texture : textures.bg2, scale : 8, offset: 148 });
+
+        this.sun = new Sun({ size : 350, x: Game.width -  400, y: Game.height - 300 });
+
+        this.layerFar = new Layer({ texture : textures.bg2 , distance: 8, scale : 4, offset: 96});
+        this.layerMedium = new Layer( { texture : textures.bg2, distance: 4, scale : 8, offset: 148 });
 
         this.map = new Map({
             texture : textures.ground,
@@ -38,7 +46,7 @@ class World {
             noise : 64
         });
         
-        for (var i=0;i<1000;i++)
+        for (var i=0;i<3;i++)
         {
             this.units[i] = new Unit();
         }
@@ -55,17 +63,15 @@ class World {
         Input.update();
 
         this.ViewMatrix = twgl.m4.identity(this.ViewMatrix);
-        this.layerFarViewMatrix = twgl.m4.identity(this.layerFarViewMatrix);
-        this.layerMediumViewMatrix = twgl.m4.identity(this.layerMediumViewMatrix);
 
         twgl.m4.translate(this.ViewMatrix, twgl.v3.create(Input.viewPos,0,0), this.ViewMatrix);
-        twgl.m4.translate(this.layerFarViewMatrix, twgl.v3.create(Input.viewPos/8,0,0), this.layerFarViewMatrix);
-        twgl.m4.translate(this.layerMediumViewMatrix, twgl.v3.create(Input.viewPos/4,0,0), this.layerMediumViewMatrix);
 
-        this.sky.update();
+        this.bg.update();
+        
+        this.sun.update();
 
-        this.layerFar.update(this.layerFarViewMatrix);
-        this.layerMedium.update(this.layerMediumViewMatrix);
+        this.layerFar.update();
+        this.layerMedium.update();
 
         this.map.update();
         
@@ -80,7 +86,9 @@ class World {
     {
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-        this.sky.draw();
+        this.bg.draw();
+
+        this.sun.draw();
         this.layerFar.draw();
         this.layerMedium.draw();
         
