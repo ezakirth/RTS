@@ -5,7 +5,7 @@ Utils.loadShaders("shader.frag", "shader.vert", GLsetup);
 
 function GLsetup()
 {
-    gl = document.getElementById("canvas").getContext("webgl",{ alpha: true, premultipliedAlpha: true });
+    gl = document.getElementById("canvas").getContext("webgl",{ alpha: false, premultipliedAlpha: true });
     gl.canvas.width = 1920;
     gl.canvas.height = 1080;
 

@@ -1,0 +1,94 @@
+
+#Menu {
+    position:fixed;
+    top:0px;
+    left:0px;
+    height: 100%;
+    width: 256px;
+    padding:10px;
+    background: #18222d;
+}
+
+a {
+    text-decoration: none;
+    color: #94c0dc;
+}
+
+#View {
+    position:fixed;
+    top:0px;
+    left:0px;
+    height: 100%;
+    width: 100%;
+}
+
+.menuItem {
+    position: relative;
+    width: 100%;
+    box-sizing : border-box;
+    padding: 10px;
+}
+
+input[type="text"] {
+    border: none;
+    background: inherit;
+    border: 1px solid rgba(41, 128, 185, 0.3);
+    padding: 1em 0.5em 0.5em;
+    width: 100%;
+    color: #94c0dc;
+}
+
+input[type="text"]:read-only {
+    cursor: default;
+}
+
+label, input[type="text"] {
+    border-radius: 5px;
+    box-sizing : border-box;
+}
+
+
+
+label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #2980b9;
+    border: 1px solid rgba(41, 128, 185, 0.5);
+    padding: 0 1em 0.2em;
+    display: block;
+}
+
+
+button, input[type="button"]
+{
+    position: relative;
+    display: block;
+   /* padding: 15px;*/
+    color: #94c0dc;
+    margin: 0 auto;
+    background: rgba(41, 128, 185, 0.3);
+    font-size: 18px;
+    text-align: center;
+    font-style: normal;
+    width: 100%;
+    border: 1px solid rgba(41, 128, 185, 0.5);
+    border-width: 1px 1px 3px;
+    margin-bottom: 10px;
+}
+
+button:hover, input[type="button"]:hover
+{
+    background: rgba(41, 127, 185, 0.5);
+    color : white;
+}
+
+button:active, input[type="button"]:active
+{
+    background: #2980b9;
+}
+
+button:focus, input[type="button"]:focus {
+    background: rgba(41, 127, 185, 0.5);
+}
+

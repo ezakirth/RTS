@@ -89,5 +89,11 @@ function loadTextures()
             src: "assets/textures/unit.png"
         },
 
-    }, function() {setup(); render();});    
+    }, function()
+    {
+        textures.types = types;
+        textures.style = style;
+        setup();
+        render();
+    });    
 }
