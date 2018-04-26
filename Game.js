@@ -20,6 +20,10 @@ var Game = {
         Game.ratioY = Game.height/screenHeight;
     },
 
-    world : null
+    world : null,
 
+    update : function()
+    {
+        Game.renderMode = $("input[name='renderMode']:checked").val() || gl.LINE_STRIP;
+    }
 };

@@ -73,7 +73,8 @@ class Sprite {
     {
         twgl.setBuffersAndAttributes(gl, gl.programInfo, this.bufferInfo);
         twgl.setUniforms(gl.programInfo, this.uniforms);
-        twgl.drawBufferInfo(gl, this.bufferInfo);
+
+        gl.drawElements(Game.renderMode, this.bufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
     }    
 
 }

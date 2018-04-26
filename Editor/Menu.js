@@ -8,10 +8,15 @@ var Menu = {
     {
         Menu.elem = document.getElementById("Menu");
 
-        Menu.addItem("textures", true, "Texture set", '');
-        Menu.addItem("nbTiles", true, "Nb tiles", '');
-        Menu.addItem("layer", false, "Layer", 0);
+        Menu.addItem({lib : "Texture set", items : [{type : "text", id : "textures", readonly : true, value : ''}]});
 
+        Menu.addItem({lib: "Render mode", items : [
+            {type : "radio", name : "renderMode", id : "renderMode1", label : "TRIANGLE_STRIP", value : gl.TRIANGLE_STRIP},
+            {type : "radio", name : "renderMode", id : "renderMode2", label : "TRIANGLES", value : gl.TRIANGLES},
+            {type : "radio", name : "renderMode", id : "renderMode3", label : "LINE_STRIP", value : gl.LINE_STRIP}
+        ]});
+        
+        
         Menu.update();
     },
 
@@ -23,22 +28,44 @@ var Menu = {
         });
     },
 
-    addItem(id, readonly, name, content)
+    addItem(params)
     {
         var div = document.createElement("div");
         div.className = "menuItem";
-        var label = document.createElement("label");
-        var input = document.createElement("input");
-        input.id = id;
-        label.innerText = name;
-        input.setAttribute("type", "text");
-        input.setAttribute("value", content);
-        input.readOnly = readonly;
-        div.appendChild(label);
-        div.appendChild(input);
-        
+
+        var lib = document.createElement("label");
+        lib.className = "menuItem";
+        lib.innerText = params.lib || "Item";
+        div.appendChild(lib);
+
+        for (var i=0; i<params.items.length; i++)
+        {
+            var item = params.items[i];
+            
+            if (item.label)
+            {
+                var label = document.createElement("label");
+                label.appendChild(document.createTextNode(item.label));
+                label.setAttribute("for", item.id);
+                div.appendChild(label);
+            }
+
+            var input = document.createElement("input");
+
+            input.id = item.id;
+            input.setAttribute("type", item.type);
+            input.setAttribute("value", item.value);
+            input.setAttribute("name", item.name);
+            input.readOnly = item.readonly;
+
+            div.appendChild(input);
+
+
+
+        }
+
         Menu.elem.appendChild(div);
-        this["item_" + id] = div;
+        
     },
 
     update : function()

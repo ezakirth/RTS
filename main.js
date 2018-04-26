@@ -14,6 +14,7 @@ function setup()
 
 function render()
 {
+    Game.update();
     Game.world.update();
     Game.world.draw();
 

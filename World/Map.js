@@ -124,7 +124,7 @@ class Map {
         twgl.setBuffersAndAttributes(gl, gl.programInfo, this.bufferInfo);
         twgl.setUniforms(gl.programInfo, this.uniforms);
 
-        gl.drawElements(gl.TRIANGLE_STRIP, this.bufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
+        gl.drawElements(Game.renderMode, this.bufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
     }
 }
 

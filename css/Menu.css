@@ -22,7 +22,7 @@ a {
     width: 100%;
 }
 
-.menuItem {
+div.menuItem {
     position: relative;
     width: 100%;
     box-sizing : border-box;
@@ -38,22 +38,32 @@ input[type="text"] {
     color: #94c0dc;
 }
 
+input[type="radio"] {
+    border: none;
+    background: inherit;
+    border: 1px solid rgba(41, 128, 185, 0.3);
+    color: #94c0dc;
+    margin-top:20px;
+}
+
 input[type="text"]:read-only {
     cursor: default;
 }
 
-label, input[type="text"] {
+input[type="text"] {
     border-radius: 5px;
     box-sizing : border-box;
 }
 
 
 
-label {
+label.menuItem {
     position: absolute;
     top: 0;
     left: 0;
     background: #2980b9;
+    border-radius: 5px;
+    box-sizing : border-box;
     border: 1px solid rgba(41, 128, 185, 0.5);
     padding: 0 1em 0.2em;
     display: block;
