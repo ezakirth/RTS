@@ -13,7 +13,6 @@ function render()
 {
     Game.update();
     Menu.update();
-    Overlay.update();
 
     Game.world.update();
     Game.world.draw();

@@ -17,8 +17,8 @@ var Game = {
         $("#canvas").css(css);
         $("#overlay").css(css);
 
-        Overlay.offsetX = $(Overlay.ctx.canvas).offset().left;
-        Overlay.offsetY = $(Overlay.ctx.canvas).offset().top;
+        Menu.overlay.offsetX = $(Menu.overlay.ctx.canvas).offset().left;
+        Menu.overlay.offsetY = $(Menu.overlay.ctx.canvas).offset().top;
 
         Game.scaledWidth = $("#canvas").width();
         Game.scaledHeight = $("#canvas").height();
@@ -31,7 +31,6 @@ var Game = {
 
     update : function()
     {
-        Game.wireFrame = $("input[name='wireFrame']:checked").val();
     },
 
     touch : function(x, y)

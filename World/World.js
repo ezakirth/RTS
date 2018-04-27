@@ -19,9 +19,11 @@ class World {
         this.speed = 1;
         this.lastTime = 1;
         this.units = [];
+
+        this.layers = [];
     }
 
-    init()
+    setBG()
     {
         this.bg = new Sprite({
             type : "static",
@@ -31,11 +33,31 @@ class World {
             w : Game.width,
             h : Game.height
         });
+    }
 
+    setMap()
+    {
+        this.map = new Map({
+            texture : textures.ground,
+            offsetY : 256,
+            texWidth : 192,
+            texHeight : 384,
+            noise : 64
+        });
+    }
+
+    addLayer(params)
+    {
+        this.layers.push(new Layer(params));
+    }
+
+    init()
+    {
+        this.setBG();
 
         this.sun = new Sun({ size : 350, x: Game.width -  400, y: Game.height - 300 });
 
-        this.layerFar = new Layer({
+        this.addLayer({
             texture : textures.bg2,
             x : 0,
             y : 96,
@@ -45,7 +67,7 @@ class World {
             scale : 4
         });
 
-        this.layerMedium = new Layer( {
+        this.addLayer({
             texture : textures.bg2,
             x : 0,
             y : 148,
@@ -55,15 +77,9 @@ class World {
             scale : 8
         });
 
-        this.map = new Map({
-            texture : textures.ground,
-            offsetY : 256,
-            texWidth : 192,
-            texHeight : 384,
-            noise : 64
-        });
+        this.setMap();
         
-        for (var i=0;i<3;i++)
+        for (var i=0;i<0;i++)
         {
             this.units[i] = new Unit();
         }
@@ -87,8 +103,10 @@ class World {
         
         this.sun.update();
 
-        this.layerFar.update();
-        this.layerMedium.update();
+        for (var i=0; i<this.layers.length; i++)
+        {
+            this.layers[i].update();
+        }
 
         this.map.update();
         
@@ -106,8 +124,11 @@ class World {
         this.bg.draw();
 
         this.sun.draw();
-        this.layerFar.draw();
-        this.layerMedium.draw();
+
+        for (var i=0; i<this.layers.length; i++)
+        {
+            this.layers[i].update();
+        }
         
         this.map.draw();
             
@@ -124,8 +145,12 @@ class World {
     {
         this.bg.touch(x, y);
         this.sun.touch(x, y);
-        this.layerFar.touch(x, y);
-        this.layerMedium.touch(x, y);
+
+        for (var i=0; i<this.layers.length; i++)
+        {
+            this.layers[i].touch(x, y);
+        }
+        
     }
     
 }

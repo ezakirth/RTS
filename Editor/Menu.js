@@ -23,14 +23,6 @@ var Menu = {
         Menu.update();
     },
 
-    loadObj : function(obj)
-    {
-        Object.keys(obj).forEach(function(key)
-        {
-            Menu.addItem(key, obj[key]);
-        });
-    },
-
     addItem(params)
     {
         var div = document.createElement("div");
@@ -78,6 +70,9 @@ var Menu = {
     update : function()
     {
         $("#textures").val(textures.types[textures.style]);
+        Game.wireFrame = $("input[name='wireFrame']:checked").val();
+        
+        Menu.overlay.update();        
     }
 
 };

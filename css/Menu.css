@@ -6,7 +6,7 @@
     height: 100%;
     width: 256px;
     padding:10px;
-    background: #18222d;
+    background: #18222dbb;
 }
 
 a {
@@ -61,7 +61,7 @@ label.menuItem {
     position: absolute;
     top: 0;
     left: 0;
-    background: #2980b9;
+    background: #2980b9bb;
     border-radius: 5px;
     box-sizing : border-box;
     border: 1px solid rgba(41, 128, 185, 0.5);
