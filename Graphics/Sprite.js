@@ -63,7 +63,11 @@ class Sprite {
         this.uniforms = {
             u_modelViewProjection: twgl.m4.identity(),
             u_texture: this.texture
-        }; 
+        };
+
+        this.screenPos = twgl.m4.getTranslation(this.modelMatrix);
+        this.screenX = 0;
+        this.screenY = 0;
     }
 
     update()
@@ -75,6 +79,8 @@ class Sprite {
             twgl.m4.multiply(Game.world.projectionMatrix, Game.world.ViewMatrix, this.uniforms.u_modelViewProjection);
 
         twgl.m4.multiply(this.uniforms.u_modelViewProjection, this.modelMatrix, this.uniforms.u_modelViewProjection);
+
+        this.screenPos = twgl.m4.getTranslation(this.modelMatrix);
     }
 
     draw()
@@ -86,7 +92,29 @@ class Sprite {
             gl.drawElements(gl.LINE_STRIP, this.bufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
         else
             gl.drawElements(gl.TRIANGLES, this.bufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
-    }    
+    }
+    
+    touch(x, y)
+    {
+        var spriteX = this.screenPos[0];
+        var spriteY = this.screenPos[1];
+        
+        if (this.align == "center")
+        {
+            spriteX -= this.w/2;
+            spriteY -= this.h/2;
+        }
+
+        if ( (x > spriteX && x < spriteX + this.w) && (y > spriteY && y < spriteY + this.h) )
+        {
+            if (!Game.target || this.zindex > Game.target.zindex)
+            {
+                this.screenX = spriteX;
+                this.screenY = Game.height - (spriteY + this.h);
+                Game.target = this;
+            }
+        }
+
+    }
 
 }
-

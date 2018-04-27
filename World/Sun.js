@@ -90,5 +90,10 @@ class Sun {
         this.sun.draw();
         this.glow.draw();
     }
+
+    touch(x, y)
+    {
+        this.sun.touch(x, y);
+    }
     
 }

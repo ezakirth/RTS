@@ -7,14 +7,14 @@ function setup()
     Game.world.init();
 
     Game.scaleTo(window.innerWidth, window.innerHeight);
-
-    $("#saveButton").attr("href", "data:application/xml;charset=utf-8," + JSON.stringify(Game.world.map));
-    
 }
 
 function render()
 {
     Game.update();
+    Menu.update();
+    Overlay.update();
+
     Game.world.update();
     Game.world.draw();
 

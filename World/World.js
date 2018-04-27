@@ -119,5 +119,13 @@ class World {
         
         this.lastTime = this.time;
     }
+
+    touch(x, y)
+    {
+        this.bg.touch(x, y);
+        this.sun.touch(x, y);
+        this.layerFar.touch(x, y);
+        this.layerMedium.touch(x, y);
+    }
     
 }

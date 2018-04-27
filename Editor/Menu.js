@@ -8,11 +8,15 @@ var Menu = {
     {
         Menu.elem = document.getElementById("Menu");
 
+
+//        $("#saveButton").attr("href", "data:application/xml;charset=utf-8," + JSON.stringify(Game.world.map));
+        $("#saveButton").click(function(e){e.preventDefault();console.log(JSON.stringify(Game.world.map))});
+        
         Menu.addItem({lib : "Texture set", items : [{type : "text", id : "textures", readonly : true, value : ''}]});
 
         Menu.addItem({lib: "Wireframe", items : [
-            {type : "radio", name : "wireFrame", id : "wireFrame1", label : "Yes", value : 1, checked : true},
-            {type : "radio", name : "wireFrame", id : "wireFrame0", label : "No", value : 0},
+            {type : "radio", name : "wireFrame", id : "wireFrame1", label : "On", value : 1},
+            {type : "radio", name : "wireFrame", id : "wireFrame0", label : "Off", value : 0, checked : true},
         ]});
         
         

@@ -4,6 +4,7 @@ var Game = {
     width : 1920,
     height : 1080,
     ratio : 16/9,
+    target : null,
 
     scaleTo : function(screenWidth, screenHeight)
     {
@@ -14,16 +15,27 @@ var Game = {
             css = {width : screenHeight*Game.ratio, height: screenHeight, left: "50%", "margin-left" : -(screenHeight*Game.ratio)/2, top: 0, "margin-top" : 0};
 
         $("#canvas").css(css);
+        $("#overlay").css(css);
 
+        Overlay.offsetX = $(Overlay.ctx.canvas).offset().left;
+        Overlay.offsetY = $(Overlay.ctx.canvas).offset().top;
 
-        Game.ratioX = Game.width/screenWidth;
-        Game.ratioY = Game.height/screenHeight;
+        Game.scaledWidth = $("#canvas").width();
+        Game.scaledHeight = $("#canvas").height();
+
+        Game.ratioX = Game.width/Game.scaledWidth;
+        Game.ratioY = Game.height/Game.scaledHeight;
     },
 
     world : null,
 
     update : function()
     {
-        Game.wireFrame = $("input[name='wireFrame']:checked").val() || "1";
+        Game.wireFrame = $("input[name='wireFrame']:checked").val();
+    },
+
+    touch : function(x, y)
+    {
+        Game.world.touch(x, y);
     }
 };

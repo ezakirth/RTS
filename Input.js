@@ -45,6 +45,7 @@ var Input = {
         Input.active = false;
         Input.last.x = Input.pos.x;
         Input.last.y = Input.pos.y;
+        Game.target = null;
     },
 
     inputDown : function(e)
@@ -55,6 +56,7 @@ var Input = {
         Input.origin.x = Input.pos.x;
         Input.origin.y = Input.pos.y;
         Input.getPosition(Input.pos, e);
+        Game.touch(Input.pos.x, Game.height - Input.pos.y);
     },
     
     inputMove : function(e)
@@ -90,14 +92,15 @@ var Input = {
 	{
 		if (event.touches)
 		{
-			point.x = event.touches[0].pageX * Game.ratioX;
-			point.y = event.touches[0].pageY * Game.ratioY;
+			point.x = (event.touches[0].pageX + Overlay.offsetX) * Game.ratioX;
+			point.y = (event.touches[0].pageY + Overlay.offsetY) * Game.ratioY;
 		}
 		else
 		{
-			point.x = event.pageX * Game.ratioX;
-			point.y = event.pageY * Game.ratioY;
-		}
+			point.x = (event.pageX - Overlay.offsetX) * Game.ratioX;
+			point.y = (event.pageY - Overlay.offsetY) * Game.ratioY;
+        }
+
 	},    
 };
 

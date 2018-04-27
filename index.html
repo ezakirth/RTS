@@ -1,6 +1,38 @@
 <!DOCTYPE html>
 <html>
   <head>
+<script id="fs" type="shader">
+    precision mediump float;
+
+    varying vec4 v_position;
+    varying vec2 v_texCoord;
+    
+    uniform sampler2D u_texture;
+    
+    void main() {
+        vec4 diffuseColor = texture2D(u_texture, v_texCoord);
+    
+        gl_FragColor = vec4 (diffuseColor.rgb, diffuseColor.a);
+    }
+</script>
+
+<script id="vs" type="shader">
+    uniform mat4 u_modelViewProjection;
+
+    attribute vec4 a_position;
+    attribute vec2 a_texcoord;
+    
+    varying vec4 v_position;
+    varying vec2 v_texCoord;
+    
+    void main() {
+    v_texCoord = a_texcoord;
+    v_position = (u_modelViewProjection * a_position);
+    gl_Position = v_position;
+    }
+</script>
+
+    <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="css/reset.css">
     <link rel="stylesheet" type="text/css" href="css/styles.css">
     <link rel="stylesheet" type="text/css" href="css/Menu.css">
@@ -12,6 +44,7 @@
     <script src="Graphics/Textures.js"></script>
     <script src="Graphics/GLsetup.js"></script>
     <script src="Editor/Menu.js"></script>
+    <script src="Editor/Overlay.js"></script>
     <script src="World/Map.js"></script>
     <script src="World/Sun.js"></script>
     <script src="World/Unit.js"></script>
@@ -20,15 +53,12 @@
     <script src="Input.js"></script>
     <script src="Game.js"></script>
     <script src="main.js"></script>
-    <script id="vs" type="x-shader/x-fragment"></script>
-    <script id="fs" type="x-shader/x-fragment"></script> 
   </head>
-  <body>
-    <canvas id="canvas" style="background-color:black;background-image:url('BG.png');background-size: 100% 100%;"></canvas>
+  <body onload="GLsetup();">
+    <canvas id="canvas"></canvas>
+    <canvas id="overlay"></canvas>
     <div id="Menu">
-
-  <button><a id="saveButton" style="display:flex;justify-content:center;align-items:center;padding:15px;" href="data:application/xml;charset=utf-8,your code here" download="map.txt">Save map</a></button>
-
+      <button><a id="saveButton" style="display:flex;justify-content:center;align-items:center;padding:15px;" href="data:application/xml;charset=utf-8,your code here" download="map.txt">Save map</a></button>
     </div>
 
   </body>

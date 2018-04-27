@@ -17,4 +17,12 @@ html, body {
 
 #canvas {
     position:absolute;
+    background-color:black;
+    background-image:url('../BG.png');
+    background-size: 100% 100%;
+}
+
+#overlay {
+    position:absolute;
+    background-color:transparent;
 }

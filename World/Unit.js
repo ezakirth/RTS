@@ -84,4 +84,9 @@ class Unit {
         if (this.visible)
             this.sprite.draw();
     }
+
+    touch(x, y)
+    {
+        this.sprite.touch(x, y);
+    }
 }
