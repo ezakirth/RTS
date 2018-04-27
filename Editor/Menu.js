@@ -10,10 +10,9 @@ var Menu = {
 
         Menu.addItem({lib : "Texture set", items : [{type : "text", id : "textures", readonly : true, value : ''}]});
 
-        Menu.addItem({lib: "Render mode", items : [
-            {type : "radio", name : "renderMode", id : "renderMode1", label : "TRIANGLE_STRIP", value : gl.TRIANGLE_STRIP},
-            {type : "radio", name : "renderMode", id : "renderMode2", label : "TRIANGLES", value : gl.TRIANGLES},
-            {type : "radio", name : "renderMode", id : "renderMode3", label : "LINE_STRIP", value : gl.LINE_STRIP}
+        Menu.addItem({lib: "Wireframe", items : [
+            {type : "radio", name : "wireFrame", id : "wireFrame1", label : "Yes", value : 1, checked : true},
+            {type : "radio", name : "wireFrame", id : "wireFrame0", label : "No", value : 0},
         ]});
         
         
@@ -56,6 +55,10 @@ var Menu = {
             input.setAttribute("type", item.type);
             input.setAttribute("value", item.value);
             input.setAttribute("name", item.name);
+            if (item.checked)
+            {
+                input.defaultChecked = item.checked;
+            }            
             input.readOnly = item.readonly;
 
             div.appendChild(input);

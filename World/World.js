@@ -35,8 +35,25 @@ class World {
 
         this.sun = new Sun({ size : 350, x: Game.width -  400, y: Game.height - 300 });
 
-        this.layerFar = new Layer({ texture : textures.bg2 , distance: 8, scale : 4, offset: 96});
-        this.layerMedium = new Layer( { texture : textures.bg2, distance: 4, scale : 8, offset: 148 });
+        this.layerFar = new Layer({
+            texture : textures.bg2,
+            x : 0,
+            y : 96,
+            w : 1024*4,
+            h : 512,
+            distance: 8,
+            scale : 4
+        });
+
+        this.layerMedium = new Layer( {
+            texture : textures.bg2,
+            x : 0,
+            y : 148,
+            w : 1024*8,
+            h : 512,
+            distance: 4,
+            scale : 8
+        });
 
         this.map = new Map({
             texture : textures.ground,

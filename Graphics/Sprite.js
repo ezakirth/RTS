@@ -8,14 +8,15 @@
 class Sprite {
     /**
      * Creates a Sprite object
-     * @param {Object} {texture : WebGLTexture, x : float, y : float, w : float, h : float}
+     * @param {Object} {texture : WebGLTexture, x : float, y : float, w : float, h : float, type : string, align : string, scale : float}
      */
     constructor(param) {
-        this.type = param.type;
+        this.type = param.type || "dynamic";
         this.align = param.align;
         this.texture = param.texture;
         Game.world.z += 0.00001;
         this.zindex = Game.world.z;
+        this.scale = param.scale || 1;
 
         this.x = param.x || 0;
         this.y = param.y || 0;
@@ -46,7 +47,14 @@ class Sprite {
                 ],
                 drawType: gl.STATIC_DRAW
             },
-            texcoord: [0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0],
+            texcoord: [
+                0, 1,
+                this.scale, 1,
+                0, 0,
+                0, 0,
+                this.scale, 1,
+                this.scale, 0
+            ],
             indices: [0,1,2,3,4,5]
         });
 
@@ -74,7 +82,10 @@ class Sprite {
         twgl.setBuffersAndAttributes(gl, gl.programInfo, this.bufferInfo);
         twgl.setUniforms(gl.programInfo, this.uniforms);
 
-        gl.drawElements(Game.renderMode, this.bufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
+        if (Game.wireFrame == "1")
+            gl.drawElements(gl.LINE_STRIP, this.bufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
+        else
+            gl.drawElements(gl.TRIANGLES, this.bufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
     }    
 
 }

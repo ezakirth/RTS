@@ -24,6 +24,6 @@ var Game = {
 
     update : function()
     {
-        Game.renderMode = $("input[name='renderMode']:checked").val() || gl.LINE_STRIP;
+        Game.wireFrame = $("input[name='wireFrame']:checked").val() || "1";
     }
 };
