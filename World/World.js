@@ -127,7 +127,7 @@ class World {
 
         for (var i=0; i<this.layers.length; i++)
         {
-            this.layers[i].update();
+            this.layers[i].draw();
         }
         
         this.terrain.draw();

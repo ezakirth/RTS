@@ -67,8 +67,17 @@ var Input = {
     
         if (Input.active)
         {
-            Input.viewPos -= (Input.last.x - Input.pos.x)*Game.world.speed;
-            Input.inertia = (Input.last.x - Input.pos.x)*Game.world.speed;
+            var deltaX = (Input.last.x - Input.pos.x)*Game.world.speed;
+            var deltaY = (Input.last.y - Input.pos.y)*Game.world.speed;
+            if (Game.target)
+            {
+                Game.move(deltaX, deltaY);
+            }
+            else
+            {
+                Input.viewPos -= deltaX;
+                Input.inertia = deltaX;
+            }
         }
     },
 

@@ -19,16 +19,14 @@ class Layer extends Sprite {
 
     update()
     {
-
-
-        // View matrix
-        this.layerViewMatrix = twgl.m4.identity(this.layerViewMatrix);
-        twgl.m4.translate(this.layerViewMatrix, twgl.v3.create(Input.viewPos/this.distance,0,0), this.layerViewMatrix);
-
         this.modelMatrix =  twgl.m4.identity(this.modelMatrix);
         twgl.m4.translate(this.modelMatrix, this.pos, this.modelMatrix);
         twgl.m4.rotateZ(this.modelMatrix, this.r, this.modelMatrix);
         twgl.m4.scale(this.modelMatrix, this.size, this.modelMatrix);
+        
+        // View matrix
+        this.layerViewMatrix = twgl.m4.identity(this.layerViewMatrix);
+        twgl.m4.translate(this.layerViewMatrix, twgl.v3.create(Input.viewPos/this.distance,0,0), this.layerViewMatrix);
         
         // Transform layer
         twgl.m4.multiply(Game.world.projectionMatrix, this.layerViewMatrix, this.uniforms.u_modelViewProjection);
