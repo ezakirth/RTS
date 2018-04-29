@@ -42,8 +42,15 @@ var Game = {
     {
         if (Game.target)
         {
-            Game.target.x -= x;
-            Game.target.y += y;
+            if (Game.target == Game.world.sun.sun)
+            {
+                Game.world.sun.move(x, y);
+            }
+            else
+            {
+                Game.target.x -= x;
+                Game.target.y += y;
+            }
         }
     }
 };

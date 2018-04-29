@@ -87,6 +87,17 @@ button, input[type="button"]
     margin-bottom: 10px;
 }
 
+input[type="color"] {
+    background-color: transparent;
+    width: 100%;
+    padding-top: 15px;
+    padding-bottom: 5px;
+    border-radius: 5px;
+    box-sizing: border-box; 
+    border: 1px solid rgba(41, 128, 185, 0.3);
+    height: 50px;
+}
+
 button:hover, input[type="button"]:hover
 {
     background: rgba(41, 127, 185, 0.5);

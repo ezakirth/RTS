@@ -11,11 +11,15 @@ class Sprite {
      * @param {Object} {texture : WebGLTexture, x : float, y : float, w : float, h : float, type : string, align : string, scale : float}
      */
     constructor(param) {
-        this.static = param.static;
+        this.static = param.static || false;
+        this.layer = param.layer || false;
         this.align = param.align;
         this.texture = param.texture;
-        Game.world.z += 0.00001;
+        Game.world.z ++;
         this.zindex = Game.world.z;
+
+        this.layerViewMatrix = twgl.m4.identity();
+        this.distance = param.distance;
 
         this.scale = param.scale || 1;
 
@@ -65,7 +69,8 @@ class Sprite {
 
         this.uniforms = {
             u_modelViewProjection: twgl.m4.identity(),
-            u_texture: this.texture
+            u_texture: this.texture,
+            u_color:  new Float32Array([1, 1, 1])
         };
 
         this.screenX = 0;
@@ -86,7 +91,16 @@ class Sprite {
         if (this.static)
             twgl.m4.multiply(Game.world.projectionMatrix, twgl.m4.identity(), this.uniforms.u_modelViewProjection);
         else
-            twgl.m4.multiply(Game.world.projectionMatrix, Game.world.ViewMatrix, this.uniforms.u_modelViewProjection);
+        {
+            if (this.layer)
+            {
+                this.layerViewMatrix = twgl.m4.identity(this.layerViewMatrix);
+                twgl.m4.translate(this.layerViewMatrix, twgl.v3.create(Input.viewPos/this.distance,0,0), this.layerViewMatrix);
+                twgl.m4.multiply(Game.world.projectionMatrix, this.layerViewMatrix, this.uniforms.u_modelViewProjection);
+            }
+            else
+                twgl.m4.multiply(Game.world.projectionMatrix, Game.world.ViewMatrix, this.uniforms.u_modelViewProjection);
+        }
 
         twgl.m4.multiply(this.uniforms.u_modelViewProjection, this.modelMatrix, this.uniforms.u_modelViewProjection);
 
@@ -112,11 +126,10 @@ class Sprite {
         {
             if (!Game.target || this.zindex > Game.target.zindex)
             {
-                this.cursorX = x;
-                this.cursorY = y;
                 this.screenX = spriteX - this.w/2;
                 this.screenY = Game.height - (spriteY + this.h/2);
                 Game.target = this;
+                Menu.loadItem(this);
             }
         }
 
@@ -162,5 +175,18 @@ class Sprite {
         this.size[1] = h;
     }
 
+    get color()
+    {
+        var rgb = Math.floor(this.uniforms.u_color[2])*255 | (Math.floor(this.uniforms.u_color[1])*255 << 8) | (Math.floor(this.uniforms.u_color[0])*255 << 16);
+        return "#" + (0x1000000 | rgb).toString(16).substring(1);
+    }
+
+    set color(hex)
+    {
+        var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        this.uniforms.u_color[0] = parseInt(result[1], 16)/255;
+        this.uniforms.u_color[1] = parseInt(result[2], 16)/255;
+        this.uniforms.u_color[2] = parseInt(result[3], 16)/255;
+    }
 
 }

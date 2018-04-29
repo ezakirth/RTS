@@ -12,7 +12,7 @@ class World {
      */
     constructor(param) {
         this.ViewMatrix = twgl.m4.identity();
-        this.projectionMatrix = twgl.m4.ortho(0, Game.width, 0, Game.height, -1, 1);
+        this.projectionMatrix = twgl.m4.ortho(0, Game.width, 0, Game.height, -100, 100);
 
         this.z = 0;
         this.time = 1;
@@ -48,7 +48,7 @@ class World {
 
     addLayer(params)
     {
-        this.layers.push(new Layer(params));
+        this.layers.push(new Sprite(params));
     }
 
     init()
@@ -58,6 +58,7 @@ class World {
         this.sun = new Sun({ size : 350, x: Game.width -  400, y: Game.height - 300 });
 
         this.addLayer({
+            layer : true,
             texture : textures.bg2,
             x : (1024*4)/2,
             y : 96 + 512/2,
@@ -68,6 +69,7 @@ class World {
         });
 
         this.addLayer({
+            layer : true,
             texture : textures.bg2,
             x : (1024*8)/2,
             y : 148 + 512/2,
@@ -83,8 +85,6 @@ class World {
         {
             this.units[i] = new Unit();
         }
-
-
     }
 
     update()
@@ -143,7 +143,6 @@ class World {
 
     touch(x, y)
     {
-        this.bg.touch(x, y);
         this.sun.touch(x, y);
 
         for (var i=0; i<this.layers.length; i++)

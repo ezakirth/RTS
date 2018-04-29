@@ -45,6 +45,16 @@ class Sun {
 
     }
 
+    move(x, y)
+    {
+        this.halo.x -= x;
+        this.halo.y += y;
+        this.glow.x -= x;
+        this.glow.y += y;
+        this.sun.x -= x;
+        this.sun.y += y;
+    }
+
     update()
     {
 

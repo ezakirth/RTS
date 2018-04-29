@@ -1,5 +1,7 @@
 var Menu = {
     elem : null,
+    selected : null,
+
     palette : {
         canvas : null,
         ctx : null,
@@ -21,6 +23,29 @@ var Menu = {
         
         
         Menu.update();
+    },
+
+    loadItem(item)
+    {
+        Menu.selected = item;
+        $("#itemInfo").empty();
+
+        Menu.addItem({itemInfo : true, lib : "x", items : [{type : "text", id : "item_x", readonly : true, value : item.x}]});
+        Menu.addItem({itemInfo : true, lib : "y", items : [{type : "text", id : "item_y", readonly : true, value : item.y}]});
+        Menu.addItem({itemInfo : true, lib : "w", items : [{type : "text", id : "item_w", readonly : true, value : item.w}]});
+        Menu.addItem({itemInfo : true, lib : "h", items : [{type : "text", id : "item_h", readonly : true, value : item.h}]});
+        Menu.addItem({itemInfo : true, lib : "zindex", items : [{type : "text", id : "item_zindex", readonly : true, value : item.zindex}]});
+        Menu.addItem({itemInfo : true, lib : "color", items : [{type : "color", id : "item_color", readonly : true, value : item.color, onchange: "Menu.selected.color = this.value;" }]});
+
+
+        //return "rgb(" + "#FF0000".match(/[A-Za-z0-9]{2}/g).map(function(v) { return parseInt(v, 16) }).join(",") + ")";
+/*        for(var key in item) {
+            var value = item[key];
+            if ($.inArray( typeof value, ["string", "boolean", "number"]) !== -1)
+            {
+                Menu.addItem({itemInfo : true, lib : key, items : [{type : "text", id : "item_" + key, readonly : true, value : value}]});
+            }
+        }*/
     },
 
     addItem(params)
@@ -51,6 +76,10 @@ var Menu = {
             input.setAttribute("type", item.type);
             input.setAttribute("value", item.value);
             input.setAttribute("name", item.name);
+            if (item.onchange)
+            {
+                input.setAttribute("onchange", item.onchange);
+            }
             if (item.checked)
             {
                 input.defaultChecked = item.checked;
@@ -63,7 +92,12 @@ var Menu = {
 
         }
 
-        Menu.elem.appendChild(div);
+        if (params.itemInfo)
+        {
+            $("#itemInfo").append(div);
+        }
+        else
+            Menu.elem.appendChild(div);
         
     },
 

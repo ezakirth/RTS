@@ -8,11 +8,12 @@
     varying vec2 v_texCoord;
     
     uniform sampler2D u_texture;
+    uniform vec3 u_color;
     
     void main() {
         vec4 diffuseColor = texture2D(u_texture, v_texCoord);
     
-        gl_FragColor = vec4 (diffuseColor.rgb, diffuseColor.a);
+        gl_FragColor = vec4 (diffuseColor.rgb * u_color, diffuseColor.a);
     }
 </script>
 
@@ -48,7 +49,6 @@
     <script src="World/Terrain.js"></script>
     <script src="World/Sun.js"></script>
     <script src="World/Unit.js"></script>
-    <script src="World/Layer.js"></script>
     <script src="World/World.js"></script>
     <script src="Input.js"></script>
     <script src="Game.js"></script>
@@ -58,6 +58,7 @@
     <canvas id="canvas"></canvas>
     <canvas id="overlay"></canvas>
     <div id="Menu">
+      <div id="itemInfo"></div>
       <button><a id="saveButton" style="display:flex;justify-content:center;align-items:center;padding:15px;" href="data:application/xml;charset=utf-8,your code here" download="map.txt">Save map</a></button>
     </div>
 

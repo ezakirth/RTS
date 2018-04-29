@@ -56,7 +56,7 @@ class Terrain {
 
 
 
-        Game.world.z += 0.00001;
+        Game.world.z ++;
         this.zindex = Game.world.z;
         this.position = [];
         this.indices = [];
@@ -103,7 +103,8 @@ class Terrain {
 
         this.uniforms = {
             u_modelViewProjection: twgl.m4.identity(),
-            u_texture: this.texture
+            u_texture: this.texture,
+            u_color:  new Float32Array([1, 1, 1])
         };
 
         twgl.m4.translate(this.modelMatrix, twgl.v3.create(-this.texWidth/2,0,0), this.modelMatrix);
