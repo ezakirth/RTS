@@ -11,28 +11,32 @@ class Sprite {
      * @param {Object} {texture : WebGLTexture, x : float, y : float, w : float, h : float, type : string, align : string, scale : float}
      */
     constructor(param) {
-        this.type = param.type || "dynamic";
+        this.static = param.static;
         this.align = param.align;
         this.texture = param.texture;
         Game.world.z += 0.00001;
         this.zindex = Game.world.z;
+
         this.scale = param.scale || 1;
 
-        this.x = param.x || 0;
-        this.y = param.y || 0;
-        this.w = param.w || 100;
-        this.h = param.h || 100;
+        this.pos = twgl.v3.create(
+            param.x || 0,
+            param.y || 0,
+            0
+        );
 
-        if (this.align == "center")
-        {
-            this.x -= this.w/2;
-            this.y -= this.h/2;
-        }
+        this.size = twgl.v3.create(
+            param.w || 100,
+            param.h || 100,
+            1
+        );
 
-        var bl = {x : this.x, y : this.y};
-        var br = {x : this.x + this.w, y : this.y};
-        var tr = {x : this.x + this.w, y : this.y + this.h};
-        var tl = {x : this.x, y : this.y + this.h};
+        this.r = 0;
+
+        var bl = {x : -.5, y : -.5};
+        var br = {x : .5, y : -.5};
+        var tr = {x : .5, y : .5};
+        var tl = {x : -.5, y : .5};
 
         // initialize the buffers
         this.bufferInfo = twgl.createBufferInfoFromArrays(gl, {
@@ -44,8 +48,7 @@ class Sprite {
                     tl.x, tl.y, this.zindex,
                     br.x, br.y, this.zindex,
                     tr.x, tr.y, this.zindex
-                ],
-                drawType: gl.STATIC_DRAW
+                ]
             },
             texcoord: [
                 0, 1,
@@ -65,22 +68,28 @@ class Sprite {
             u_texture: this.texture
         };
 
-        this.screenPos = twgl.m4.getTranslation(this.modelMatrix);
         this.screenX = 0;
         this.screenY = 0;
     }
 
+
+
     update()
     {
+        this.modelMatrix =  twgl.m4.identity(this.modelMatrix);
+        twgl.m4.translate(this.modelMatrix, this.pos, this.modelMatrix);
+        twgl.m4.rotateZ(this.modelMatrix, this.r, this.modelMatrix);
+        twgl.m4.scale(this.modelMatrix, this.size, this.modelMatrix);
+        
+
         // Projection*View*Model
-        if (this.type == "static")
+        if (this.static)
             twgl.m4.multiply(Game.world.projectionMatrix, twgl.m4.identity(), this.uniforms.u_modelViewProjection);
         else
             twgl.m4.multiply(Game.world.projectionMatrix, Game.world.ViewMatrix, this.uniforms.u_modelViewProjection);
 
         twgl.m4.multiply(this.uniforms.u_modelViewProjection, this.modelMatrix, this.uniforms.u_modelViewProjection);
 
-        this.screenPos = twgl.m4.getTranslation(this.modelMatrix);
     }
 
     draw()
@@ -96,25 +105,62 @@ class Sprite {
     
     touch(x, y)
     {
-        var spriteX = this.screenPos[0];
-        var spriteY = this.screenPos[1];
-        
-        if (this.align == "center")
-        {
-            spriteX -= this.w/2;
-            spriteY -= this.h/2;
-        }
-
-        if ( (x > spriteX && x < spriteX + this.w) && (y > spriteY && y < spriteY + this.h) )
+        var screenPos = twgl.m4.getTranslation(this.modelMatrix);
+        var spriteX = screenPos[0];
+        var spriteY = screenPos[1];
+        if ( (x > spriteX - this.w/2 && x < spriteX + this.w/2) && (y > spriteY - this.h/2 && y < spriteY + this.h/2) )
         {
             if (!Game.target || this.zindex > Game.target.zindex)
             {
-                this.screenX = spriteX;
-                this.screenY = Game.height - (spriteY + this.h);
+                this.cursorX = x;
+                this.cursorY = y;
+                this.screenX = spriteX - this.w/2;
+                this.screenY = Game.height - (spriteY + this.h/2);
                 Game.target = this;
             }
         }
 
     }
+
+    get x()
+    {
+        return this.pos[0];
+    }
+
+    set x(x)
+    {
+        this.pos[0] = x;
+    }
+
+    get y()
+    {
+        return this.pos[1];
+    }
+
+    set y(y)
+    {
+        this.pos[1] = y;
+    }
+
+    get w()
+    {
+        return this.size[0];
+    }
+
+    set w(w)
+    {
+        this.size[0] = w;
+    }
+
+    get h()
+    {
+        return this.size[1];
+    }
+
+    set h(h)
+    {
+        this.size[1] = h;
+    }
+
 
 }

@@ -36,5 +36,13 @@ var Game = {
     touch : function(x, y)
     {
         Game.world.touch(x, y);
+        console.log(x, y);
+        if (Game.target)
+        {
+ //           Game.target.move(Game.target.x, Game.target.y);
+//            Game.target.move(x, y);
+            console.log(Game.target.x, Game.target.y);
+
+        }
     }
 };

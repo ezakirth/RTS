@@ -25,21 +25,16 @@ class Unit {
             h : 100
         });
 
-        this.rotation = 0;
         this.visible = false;
-
-        this.pos = twgl.v3.create(
-            150 + (Math.random()*3000),
-            200,
-            0
-        );
 
         // add a random heught pos offset for each unit so they're not all stacked up
         this.offset = -10 + Math.random()*20;
 
-        // height relative to position in map
-        var i = Math.floor((this.pos[0] + Game.world.map.texWidth/2)/(Game.width/Game.world.map.blockWidth));
-        this.pos[1] = Game.world.map.terrain[i] + Game.world.map.offsetY - 32 + this.offset;
+        this.sprite.x = (150 + (Math.random()*3000));
+
+        // height relative to position in terrain
+        var i = Math.floor((this.sprite.x + Game.world.terrain.texWidth/2)/(Game.width/Game.world.terrain.blockWidth));
+        this.sprite.y = (Game.world.terrain.terrain[i] + Game.world.terrain.offsetY - 32 + this.offset);
     
 
     }
@@ -50,30 +45,26 @@ class Unit {
 
         // Set player x: move unit through the Game.world if possible
         if (!(this.fighting || this.dying))
-            this.pos[0] += this.speed*Game.world.speed;
+            this.sprite.x = (this.sprite.x + this.speed*Game.world.speed);
 
-        // Set player y: height relative to position in map
-        var i = Math.floor((this.pos[0] + Game.world.map.texWidth/2)/(Game.width/Game.world.map.blockWidth));
-        var h = Game.world.map.terrain[i] + Game.world.map.offsetY - 32 + this.offset;
-        this.pos[1] = Utils.lerp(this.pos[1], h, .08*Game.world.speed);        
+        // Set player y: height relative to position in terrain
+        var i = Math.floor((this.sprite.x + Game.world.terrain.texWidth/2)/(Game.width/Game.world.terrain.blockWidth));
+        var h = Game.world.terrain.terrain[i] + Game.world.terrain.offsetY - 32 + this.offset;
+        this.sprite.y = (Utils.lerp(this.sprite.y, h, .08*Game.world.speed));
 
         // Visibility test
         var min = -(twgl.m4.getTranslation(Game.world.ViewMatrix)[0] + 256);
         var max = min + Game.width + 512;
-        var x = this.pos[0];
-        if (x > min && x < max)
+        if (this.sprite.x > min && this.sprite.x < max)
             this.visible = true;
         
         if (this.visible)
         {
-            // Place and rotate sprite to match map location
-            var h2 = Game.world.map.terrain[i+1] + Game.world.map.offsetY - 32 + this.offset;
-            var angle = Math.atan2(h2 - h, Game.world.map.blockWidth/2);
-            this.rotation = Utils.lerp(this.rotation , angle , .1*Game.world.speed);
+            // Place and rotate sprite to match terrain location
+            var h2 = Game.world.terrain.terrain[i+1] + Game.world.terrain.offsetY - 32 + this.offset;
+            var angle = Math.atan2(h2 - h, Game.world.terrain.blockWidth/2);
+            this.sprite.r = Utils.lerp(this.sprite.r , angle , .1*Game.world.speed);
 
-            this.sprite.modelMatrix = twgl.m4.identity(this.sprite.modelMatrix);
-            twgl.m4.translate(this.sprite.modelMatrix, this.pos, this.sprite.modelMatrix);
-            Utils.rotate(this.sprite, this.rotation);
 
             this.sprite.update();            
         }

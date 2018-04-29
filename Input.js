@@ -32,10 +32,10 @@ var Input = {
             Input.inertia = 0;
             Input.viewPos = 0;
         } 
-        if (Input.viewPos < -(Game.world.map.maxViewWidth))
+        if (Input.viewPos < -(Game.world.terrain.maxViewWidth))
         {
             Input.inertia = 0;
-            Input.viewPos = -(Game.world.map.maxViewWidth);
+            Input.viewPos = -(Game.world.terrain.maxViewWidth);
         } 
         
     },

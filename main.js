@@ -5,8 +5,6 @@ function setup()
     Menu.init();
     Game.world = new World();
     Game.world.init();
-
-    Game.scaleTo(window.innerWidth, window.innerHeight);
 }
 
 function render()

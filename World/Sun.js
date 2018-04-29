@@ -17,67 +17,44 @@ class Sun {
 
 
         this.halo = new Sprite({
-            align : "center",
-            type : "static",
+            static : true,
             texture : textures.halo,
+            x : this.x,
+            y : this.y,
             w : 1.75 * this.size,
-            h : 1.75 * this.size
+            h : 1.75 * this.size,
         });
     
         this.sun = new Sprite({
-            align : "center",
-            type : "static",
+            static : true,
             texture : textures.sun,
+            x : this.x,
+            y : this.y,
             w : this.size,
             h : this.size
         });
     
         this.glow = new Sprite({
-            align : "center",
-            type : "static",
+            static : true,
             texture : textures.glow,
+            x : this.x,
+            y : this.y,
             w : this.size,
             h : this.size
         });
 
-        this.pos = twgl.v3.create(
-            this.x,
-            this.y,
-            0
-        );
-
-        this.scaleHalo = 0;
-        this.scaleGlow = 0;
-        this.rotHalo = 0;
-        this.rotGlow = 0;
     }
 
     update()
     {
-        this.sun.modelMatrix =  twgl.m4.identity(this.sun.modelMatrix);
-        this.halo.modelMatrix =  twgl.m4.identity(this.halo.modelMatrix);
-        this.glow.modelMatrix =  twgl.m4.identity(this.glow.modelMatrix);
 
-        twgl.m4.translate(this.sun.modelMatrix, this.pos, this.sun.modelMatrix);
-        twgl.m4.translate(this.halo.modelMatrix, this.pos, this.halo.modelMatrix);
-        twgl.m4.translate(this.glow.modelMatrix, this.pos, this.glow.modelMatrix);
+        this.halo.r += .002*Game.world.speed;
+        if (this.halo.r > 2*Math.PI)
+            this.halo.r = 0;
 
-        this.rotHalo += .002*Game.world.speed;
-        if (this.rotHalo > 2*Math.PI)
-            this.rotHalo = 0;
-
-        this.rotGlow -= .004*Game.world.speed;
-        if (this.rotGlow < -2*Math.PI)
-            this.rotGlow = 0;
-
-        this.scaleHalo += .02 * Game.world.speed;
-        this.scaleGlow += .01 * Game.world.speed;
-
-        Utils.rotate(this.halo, this.rotHalo);
-        Utils.rotate(this.glow, this.rotGlow);
-        
-        Utils.scale(this.halo, 1 + Math.sin(this.scaleHalo)/15);
-        Utils.scale(this.glow, 1 + Math.sin(this.scaleGlow)/5);
+        this.glow.r -= .004*Game.world.speed;
+        if (this.glow.r < -2*Math.PI)
+            this.glow.r = 0;
 
         this.halo.update();
         this.sun.update();

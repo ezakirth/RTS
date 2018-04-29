@@ -26,18 +26,18 @@ class World {
     setBG()
     {
         this.bg = new Sprite({
-            type : "static",
+            static : true,
             texture : textures.bg,
-            x : 0,
-            y : 0,
+            x : Game.width/2,
+            y : Game.height/2,
             w : Game.width,
             h : Game.height
         });
     }
 
-    setMap()
+    setTerrain()
     {
-        this.map = new Map({
+        this.terrain = new Terrain({
             texture : textures.ground,
             offsetY : 256,
             texWidth : 192,
@@ -59,8 +59,8 @@ class World {
 
         this.addLayer({
             texture : textures.bg2,
-            x : 0,
-            y : 96,
+            x : (1024*4)/2,
+            y : 96 + 512/2,
             w : 1024*4,
             h : 512,
             distance: 8,
@@ -69,17 +69,17 @@ class World {
 
         this.addLayer({
             texture : textures.bg2,
-            x : 0,
-            y : 148,
+            x : (1024*8)/2,
+            y : 148 + 512/2,
             w : 1024*8,
             h : 512,
             distance: 4,
             scale : 8
         });
 
-        this.setMap();
+        this.setTerrain();
         
-        for (var i=0;i<0;i++)
+        for (var i=0;i<10;i++)
         {
             this.units[i] = new Unit();
         }
@@ -108,7 +108,7 @@ class World {
             this.layers[i].update();
         }
 
-        this.map.update();
+        this.terrain.update();
         
         for (var i=0; i<this.units.length; i++)
         {
@@ -130,7 +130,7 @@ class World {
             this.layers[i].update();
         }
         
-        this.map.draw();
+        this.terrain.draw();
             
         for (var i=0; i<this.units.length; i++)
         {

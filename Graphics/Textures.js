@@ -94,6 +94,7 @@ function loadTextures()
         textures.types = types;
         textures.style = style;
         setup();
+        resizeCanvas();
         render();
     });    
 }
