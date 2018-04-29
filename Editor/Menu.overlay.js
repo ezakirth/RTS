@@ -13,9 +13,11 @@ Menu.overlay = {
         var ctx = Menu.overlay.ctx;
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
-        if (Game.target)
+        if (Menu.selected)
         {
-            var sprite = Game.target;
+            var sprite = Menu.selected;
+            sprite.updateOverlayPos();            
+
             ctx.beginPath();
             ctx.rect(sprite.screenX, sprite.screenY, sprite.w, sprite.h);
             ctx.stroke();

@@ -150,6 +150,12 @@ class World {
             this.layers[i].touch(x, y);
         }
         
+        for (var i=0; i<this.units.length; i++)
+        {
+            this.units[i].touch(x, y);
+        }
+
+       // if (!Game.target) Menu.selected = null;
     }
     
 }

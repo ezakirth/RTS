@@ -45,6 +45,7 @@ var Menu = {
 
         Menu.addItem({itemInfo : true, items : [{type : "text", label : "x:", id : "item_x", readonly : true, value : item.x}]});
         Menu.addItem({itemInfo : true, items : [{type : "text", label : "y:", id : "item_y", readonly : true, value : item.y}]});
+        Menu.addItem({itemInfo : true, items : [{type : "text", label : "r:", id : "item_r", readonly : true, value : item.r}]});
         Menu.addItem({itemInfo : true, items : [{type : "text", label : "width:", id : "item_w", readonly : true, value : item.w}]});
         Menu.addItem({itemInfo : true, items : [{type : "text", label : "height:", id : "item_h", readonly : true, value : item.h}]});
         Menu.addItem({itemInfo : true, items : [{type : "text", label : "zindex:", id : "item_zindex", readonly : false, value : item.zindex}]});

@@ -116,11 +116,30 @@ class Sprite {
         else
             gl.drawElements(gl.TRIANGLES, this.bufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
     }
+
+    updateOverlayPos()
+    {
+        var layerPos = null;
+        if (this.layer || this.static)
+            layerPos = twgl.m4.getTranslation(this.layerViewMatrix);
+        else
+            layerPos = twgl.m4.getTranslation(Game.world.ViewMatrix);
+
+        var screenPos = twgl.m4.getTranslation(this.modelMatrix);
+        this.screenX = screenPos[0] - this.w/2 + layerPos[0];
+        this.screenY = Game.height - (screenPos[1] + this.h/2);
+    }
     
     touch(x, y)
     {
+        var layerPos = null;
+        if (this.layer || this.static)
+            layerPos = twgl.m4.getTranslation(this.layerViewMatrix);
+        else
+            layerPos = twgl.m4.getTranslation(Game.world.ViewMatrix);
+
         var screenPos = twgl.m4.getTranslation(this.modelMatrix);
-        var spriteX = screenPos[0];
+        var spriteX = screenPos[0] + layerPos[0];
         var spriteY = screenPos[1];
         if ( (x > spriteX - this.w/2 && x < spriteX + this.w/2) && (y > spriteY - this.h/2 && y < spriteY + this.h/2) )
         {
