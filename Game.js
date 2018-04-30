@@ -17,8 +17,8 @@ var Game = {
         $("#canvas").css(css);
         $("#overlay").css(css);
 
-        Menu.overlay.offsetX = $(Menu.overlay.ctx.canvas).offset().left;
-        Menu.overlay.offsetY = $(Menu.overlay.ctx.canvas).offset().top;
+        Editor.overlay.offsetX = $(Editor.overlay.ctx.canvas).offset().left;
+        Editor.overlay.offsetY = $(Editor.overlay.ctx.canvas).offset().top;
 
         Game.scaledWidth = $("#canvas").width();
         Game.scaledHeight = $("#canvas").height();
@@ -31,6 +31,12 @@ var Game = {
 
     update : function()
     {
+        Game.world.update();
+    },
+
+    draw : function()
+    {
+        Game.world.draw();
     },
 
     touch : function(x, y)
@@ -40,7 +46,7 @@ var Game = {
 
     move : function(x, y)
     {
-        if (Menu.editMode && Game.target)
+        if (Editor.editMode && Game.target)
         {
             if (Game.target == Game.world.sun.sun)
             {

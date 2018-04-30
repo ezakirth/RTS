@@ -1,12 +1,12 @@
 
-#Menu {
+#Editor {
     position:fixed;
     top:0px;
     left:0px;
-    margin-top: -20px;
     height: 100%;
     width: 256px;
-    padding:10px;
+    padding-left:10px;
+    padding-right:10px;
     background: #18222dec;
 }
 

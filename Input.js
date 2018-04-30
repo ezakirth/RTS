@@ -101,13 +101,13 @@ var Input = {
 	{
 		if (event.touches)
 		{
-			point.x = (event.touches[0].pageX - Menu.overlay.offsetX) * Game.ratioX;
-			point.y = (event.touches[0].pageY - Menu.overlay.offsetY) * Game.ratioY;
+			point.x = (event.touches[0].pageX - Editor.overlay.offsetX) * Game.ratioX;
+			point.y = (event.touches[0].pageY - Editor.overlay.offsetY) * Game.ratioY;
 		}
 		else
 		{
-			point.x = (event.pageX - Menu.overlay.offsetX) * Game.ratioX;
-			point.y = (event.pageY - Menu.overlay.offsetY) * Game.ratioY;
+			point.x = (event.pageX - Editor.overlay.offsetX) * Game.ratioX;
+			point.y = (event.pageY - Editor.overlay.offsetY) * Game.ratioY;
         }
 
 	},    

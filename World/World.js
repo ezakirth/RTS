@@ -155,7 +155,7 @@ class World {
             this.units[i].touch(x, y);
         }
 
-       // if (!Game.target) Menu.selected = null;
+       // if (!Game.target) Editor.selected = null;
     }
     
 }

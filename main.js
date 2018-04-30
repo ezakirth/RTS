@@ -2,7 +2,7 @@
 
 function setup()
 {
-    Menu.init();
+    Editor.init();
     Game.world = new World();
     Game.world.init();
 }
@@ -10,12 +10,11 @@ function setup()
 function render()
 {
     Game.update();
-    Menu.update();
+    Editor.update();
 
-    Game.world.update();
-    Game.world.draw();
+   // Game.draw();
 
     requestAnimationFrame(render);
 }
 
-(function(){var script=document.createElement('script');script.onload=function(){var stats=new Stats();document.body.appendChild(stats.dom);requestAnimationFrame(function loop(){stats.update();requestAnimationFrame(loop)});};script.src='lib/stats.js';document.head.appendChild(script);})()
+//(function(){var script=document.createElement('script');script.onload=function(){var stats=new Stats();document.body.appendChild(stats.dom);requestAnimationFrame(function loop(){stats.update();requestAnimationFrame(loop)});};script.src='lib/stats.js';document.head.appendChild(script);})()

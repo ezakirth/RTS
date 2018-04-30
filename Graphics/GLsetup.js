@@ -5,7 +5,7 @@ var gl = null;
 
 function GLsetup()
 {
-    Menu.overlay.init();
+    Editor.overlay.init();
     gl = document.getElementById("canvas").getContext("webgl",{ alpha: false, premultipliedAlpha: true });
     gl.canvas.width = 1920;
     gl.canvas.height = 1080;
