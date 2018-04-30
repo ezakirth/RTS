@@ -40,16 +40,16 @@ var Game = {
 
     move : function(x, y)
     {
-        if (Game.target)
+        if (Menu.editMode && Game.target)
         {
             if (Game.target == Game.world.sun.sun)
             {
-                Game.world.sun.move(x, y);
+                Game.world.sun.move(x/Game.world.speed, y/Game.world.speed);
             }
             else
             {
-                Game.target.x -= x;
-                Game.target.y += y;
+                Game.target.x -= x/Game.world.speed;
+                Game.target.y += y/Game.world.speed;
             }
         }
     }

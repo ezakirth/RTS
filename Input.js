@@ -101,8 +101,8 @@ var Input = {
 	{
 		if (event.touches)
 		{
-			point.x = (event.touches[0].pageX + Menu.overlay.offsetX) * Game.ratioX;
-			point.y = (event.touches[0].pageY + Menu.overlay.offsetY) * Game.ratioY;
+			point.x = (event.touches[0].pageX - Menu.overlay.offsetX) * Game.ratioX;
+			point.y = (event.touches[0].pageY - Menu.overlay.offsetY) * Game.ratioY;
 		}
 		else
 		{

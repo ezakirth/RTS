@@ -13,7 +13,7 @@ Menu.overlay = {
         var ctx = Menu.overlay.ctx;
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
-        if (Menu.selected)
+        if (Menu.editMode && Menu.selected)
         {
             var sprite = Menu.selected;
             sprite.updateOverlayPos();            

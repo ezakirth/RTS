@@ -148,7 +148,11 @@ class Sprite {
                 this.screenX = spriteX - this.w/2;
                 this.screenY = Game.height - (spriteY + this.h/2);
                 Game.target = this;
-                Menu.loadItem(this);
+
+                if (Menu.editMode)
+                {
+                    Menu.loadItem(this);
+                }
             }
         }
 

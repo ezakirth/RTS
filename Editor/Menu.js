@@ -1,6 +1,7 @@
 var Menu = {
     elem : null,
     selected : null,
+    editMode : true,
 
     palette : {
         canvas : null,
@@ -14,10 +15,11 @@ var Menu = {
         $("#saveButton").click(function(e){e.preventDefault();console.log(JSON.stringify(Game.world.map))});
         
         Menu.addItem({lib : "General"});
-        Menu.addItem({items : [{type : "text", label: "Texture set:", id : "textures", readonly : true, value : ""}]});
+        Menu.addItem({items : [{type : "text", label: "Texture set", id : "textures", readonly : true, value : ""}]});
 
         Menu.addItem({lib : "Options"});
-        Menu.addItem({items : [{type : "checkbox", label: "Show wireframe:", name: "wireFrame", id : "wireFrame", value : 1, checked : false}]});
+        Menu.addItem({items : [{type : "checkbox", label: "Edit mode", id : "editMode", value : 1, checked : true}]});
+        Menu.addItem({items : [{type : "checkbox", label: "Show wireframe", name: "wireFrame", id : "wireFrame", value : 1, checked : false}]});
 
 /*
         Menu.addItem({lib: "Wireframe", items : [
@@ -43,13 +45,13 @@ var Menu = {
         $("#itemInfo").empty();
         Menu.addItem({itemInfo : true, lib : "Item information"});
 
-        Menu.addItem({itemInfo : true, items : [{type : "text", label : "x:", id : "item_x", readonly : true, value : item.x}]});
-        Menu.addItem({itemInfo : true, items : [{type : "text", label : "y:", id : "item_y", readonly : true, value : item.y}]});
-        Menu.addItem({itemInfo : true, items : [{type : "text", label : "r:", id : "item_r", readonly : true, value : item.r}]});
-        Menu.addItem({itemInfo : true, items : [{type : "text", label : "width:", id : "item_w", readonly : true, value : item.w}]});
-        Menu.addItem({itemInfo : true, items : [{type : "text", label : "height:", id : "item_h", readonly : true, value : item.h}]});
-        Menu.addItem({itemInfo : true, items : [{type : "text", label : "zindex:", id : "item_zindex", readonly : false, value : item.zindex}]});
-        Menu.addItem({itemInfo : true, items : [{type : "color", label : "color:", id : "item_color", value : item.color, onchange: "Menu.selected.color = this.value;" }]});
+        Menu.addItem({itemInfo : true, items : [{type : "text", label : "x", id : "item_x", readonly : true, value : item.x}]});
+        Menu.addItem({itemInfo : true, items : [{type : "text", label : "y", id : "item_y", readonly : true, value : item.y}]});
+        Menu.addItem({itemInfo : true, items : [{type : "text", label : "r", id : "item_r", readonly : true, value : item.r}]});
+        Menu.addItem({itemInfo : true, items : [{type : "text", label : "width", id : "item_w", readonly : true, value : item.w}]});
+        Menu.addItem({itemInfo : true, items : [{type : "text", label : "height", id : "item_h", readonly : true, value : item.h}]});
+        Menu.addItem({itemInfo : true, items : [{type : "text", label : "zindex", id : "item_zindex", readonly : false, value : item.zindex}]});
+        Menu.addItem({itemInfo : true, items : [{type : "color", label : "color", id : "item_color", value : item.color, onchange: "Menu.selected.color = this.value;" }]});
 
 
         //return "rgb(" + "#FF0000".match(/[A-Za-z0-9]{2}/g).map(function(v) { return parseInt(v, 16) }).join(",") + ")";
@@ -122,7 +124,8 @@ var Menu = {
     update : function()
     {
         $("#textures").val(textures.types[textures.style]);
-        Game.wireFrame = $("input[name='wireFrame']:checked").val();
+        Game.wireFrame = $("#wireFrame:checked").val();
+        Menu.editMode = $("#editMode:checked").val();
         
         Menu.overlay.update();        
     }
