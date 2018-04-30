@@ -5,6 +5,7 @@ var Input = {
     last : {x : 0, y : 0},
     origin: {x : 0, y : 0},
     pos : {x : 0, y : 0},
+    real : {x : 0, y : 0},
     delta : 0,
     inertia : 0,
     keyLeft : false,
@@ -45,7 +46,7 @@ var Input = {
         Input.active = false;
         Input.last.x = Input.pos.x;
         Input.last.y = Input.pos.y;
-        Game.target = null;
+        Game.selected = null;
     },
 
     inputDown : function(e)
@@ -56,7 +57,8 @@ var Input = {
         Input.origin.x = Input.pos.x;
         Input.origin.y = Input.pos.y;
         Input.getPosition(Input.pos, e);
-        Game.touch(Input.pos.x, Game.height - Input.pos.y);
+        if (!Editor.active || Input.real.x > 276) 
+            Game.touch(Input.pos.x, Game.height - Input.pos.y);
     },
     
     inputMove : function(e)
@@ -69,12 +71,13 @@ var Input = {
         {
             var deltaX = (Input.last.x - Input.pos.x)*Game.world.speed;
             var deltaY = (Input.last.y - Input.pos.y)*Game.world.speed;
-            if (Game.target)
+            if (Editor.selected)
             {
-                Game.move(deltaX, deltaY);
+                Editor.moveObject(deltaX, deltaY);
             }
             else
             {
+
                 Input.viewPos -= deltaX;
                 Input.inertia = deltaX;
             }
@@ -101,15 +104,17 @@ var Input = {
 	{
 		if (event.touches)
 		{
-			point.x = (event.touches[0].pageX - Editor.overlay.offsetX) * Game.ratioX;
-			point.y = (event.touches[0].pageY - Editor.overlay.offsetY) * Game.ratioY;
+            Input.real.x = event.touches[0].pageX;
+            Input.real.y = event.touches[0].pageY;
 		}
 		else
 		{
-			point.x = (event.pageX - Editor.overlay.offsetX) * Game.ratioX;
-			point.y = (event.pageY - Editor.overlay.offsetY) * Game.ratioY;
+            Input.real.x = event.pageX;
+            Input.real.y = event.pageY;
         }
 
+        point.x = (Input.real.x - Editor.overlay.offsetX) * Game.ratioX;
+        point.y = (Input.real.y - Editor.overlay.offsetY) * Game.ratioY;
 	},    
 };
 

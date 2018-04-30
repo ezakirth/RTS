@@ -11,17 +11,18 @@ class Sprite {
      * @param {Object} {texture : WebGLTexture, x : float, y : float, w : float, h : float, type : string, align : string, scale : float}
      */
     constructor(param) {
-        this.static = param.static || false;
-        this.layer = param.layer || false;
+        this.type = param.type || "static";
         this.align = param.align;
         this.texture = param.texture;
-        Game.world.z ++;
-        this.zindex = Game.world.z;
+        if (param.zindex === undefined)
+            Game.world.z ++;
+        this.zindex = param.zindex || Game.world.z;
 
         this.layerViewMatrix = twgl.m4.identity();
         this.distance = param.distance;
 
-        this.scale = param.scale || 1;
+        this.wrapX = param.wrapX || 1;
+        this.wrapY = param.wrapY || 1;
 
         this.pos = twgl.v3.create(
             param.x || 0,
@@ -37,33 +38,7 @@ class Sprite {
 
         this.r = 0;
 
-        var bl = {x : -.5, y : -.5};
-        var br = {x : .5, y : -.5};
-        var tr = {x : .5, y : .5};
-        var tl = {x : -.5, y : .5};
-
-        // initialize the buffers
-        this.bufferInfo = twgl.createBufferInfoFromArrays(gl, {
-            position: {
-                data : [
-                    bl.x, bl.y, this.zindex,
-                    br.x, br.y, this.zindex,
-                    tl.x, tl.y, this.zindex,
-                    tl.x, tl.y, this.zindex,
-                    br.x, br.y, this.zindex,
-                    tr.x, tr.y, this.zindex
-                ]
-            },
-            texcoord: [
-                0, 1,
-                this.scale, 1,
-                0, 0,
-                0, 0,
-                this.scale, 1,
-                this.scale, 0
-            ],
-            indices: [0,1,2,3,4,5]
-        });
+        this.setBuffer();
 
         this.modelMatrix = twgl.m4.identity();
 
@@ -77,8 +52,6 @@ class Sprite {
         this.screenY = 0;
     }
 
-
-
     update()
     {
         this.modelMatrix =  twgl.m4.identity(this.modelMatrix);
@@ -88,18 +61,18 @@ class Sprite {
         
 
         // Projection*View*Model
-        if (this.static)
-            twgl.m4.multiply(Game.world.projectionMatrix, twgl.m4.identity(), this.uniforms.u_modelViewProjection);
+        if (this.type == "prop")
+        {
+            twgl.m4.multiply(Game.world.projectionMatrix, Game.world.ViewMatrix, this.uniforms.u_modelViewProjection);
+        }
         else
         {
-            if (this.layer)
+            if (this.type == "layer")
             {
                 this.layerViewMatrix = twgl.m4.identity(this.layerViewMatrix);
                 twgl.m4.translate(this.layerViewMatrix, twgl.v3.create(Input.viewPos/this.distance,0,0), this.layerViewMatrix);
-                twgl.m4.multiply(Game.world.projectionMatrix, this.layerViewMatrix, this.uniforms.u_modelViewProjection);
             }
-            else
-                twgl.m4.multiply(Game.world.projectionMatrix, Game.world.ViewMatrix, this.uniforms.u_modelViewProjection);
+            twgl.m4.multiply(Game.world.projectionMatrix, this.layerViewMatrix, this.uniforms.u_modelViewProjection);
         }
 
         twgl.m4.multiply(this.uniforms.u_modelViewProjection, this.modelMatrix, this.uniforms.u_modelViewProjection);
@@ -120,10 +93,10 @@ class Sprite {
     updateOverlayPos()
     {
         var layerPos = null;
-        if (this.layer || this.static)
-            layerPos = twgl.m4.getTranslation(this.layerViewMatrix);
-        else
+        if (this.type == "prop")
             layerPos = twgl.m4.getTranslation(Game.world.ViewMatrix);
+        else
+            layerPos = twgl.m4.getTranslation(this.layerViewMatrix);
 
         var screenPos = twgl.m4.getTranslation(this.modelMatrix);
         this.screenX = screenPos[0] - this.w/2 + layerPos[0];
@@ -133,21 +106,21 @@ class Sprite {
     touch(x, y)
     {
         var layerPos = null;
-        if (this.layer || this.static)
-            layerPos = twgl.m4.getTranslation(this.layerViewMatrix);
-        else
+        if (this.type == "prop")
             layerPos = twgl.m4.getTranslation(Game.world.ViewMatrix);
+        else
+            layerPos = twgl.m4.getTranslation(this.layerViewMatrix);
 
         var screenPos = twgl.m4.getTranslation(this.modelMatrix);
         var spriteX = screenPos[0] + layerPos[0];
         var spriteY = screenPos[1];
         if ( (x > spriteX - this.w/2 && x < spriteX + this.w/2) && (y > spriteY - this.h/2 && y < spriteY + this.h/2) )
         {
-            if (!Game.target || this.zindex > Game.target.zindex)
+            if (!Game.selected || this.zindex > Game.selected.zindex)
             {
                 this.screenX = spriteX - this.w/2;
                 this.screenY = Game.height - (spriteY + this.h/2);
-                Game.target = this;
+                Game.selected = this;
 
                 if (Editor.editMode)
                 {
@@ -156,6 +129,72 @@ class Sprite {
             }
         }
 
+    }
+
+    setBuffer()
+    {
+        var bl = {x : -.5, y : -.5};
+        var br = {x : .5, y : -.5};
+        var tr = {x : .5, y : .5};
+        var tl = {x : -.5, y : .5};
+
+        // initialize the buffers
+        this.bufferInfo = twgl.createBufferInfoFromArrays(gl, {
+            position: {
+                data : [
+                    bl.x, bl.y, this.zindex,
+                    br.x, br.y, this.zindex,
+                    tl.x, tl.y, this.zindex,
+                    tl.x, tl.y, this.zindex,
+                    br.x, br.y, this.zindex,
+                    tr.x, tr.y, this.zindex
+                ]
+            },
+            texcoord: [
+                0, this.wrapY,
+                this.wrapX, this.wrapY,
+                0, 0,
+                0, 0,
+                this.wrapX, this.wrapY,
+                this.wrapX, 0
+            ],
+            indices: [0,1,2,3,4,5]
+        });
+        
+    }
+
+    setBufferPosition()
+    {
+        var bl = {x : -.5, y : -.5};
+        var br = {x : .5, y : -.5};
+        var tr = {x : .5, y : .5};
+        var tl = {x : -.5, y : .5};
+
+        var position = [
+            bl.x, bl.y, this.zindex,
+            br.x, br.y, this.zindex,
+            tl.x, tl.y, this.zindex,
+            tl.x, tl.y, this.zindex,
+            br.x, br.y, this.zindex,
+            tr.x, tr.y, this.zindex
+        ];
+
+        twgl.setAttribInfoBufferFromArray(gl, this.bufferInfo.attribs.a_position, position);
+    }
+
+    setBufferTexcoord()
+    {
+
+        var texcoord = [
+            0, this.wrapY,
+            this.wrapX, this.wrapY,
+            0, 0,
+            0, 0,
+            this.wrapX, this.wrapY,
+            this.wrapX, 0
+        ];
+    
+        twgl.setAttribInfoBufferFromArray(gl, this.bufferInfo.attribs.a_texcoord, texcoord);
     }
 
     get x()
@@ -200,7 +239,7 @@ class Sprite {
 
     get color()
     {
-        var rgb = Math.floor(this.uniforms.u_color[2])*255 | (Math.floor(this.uniforms.u_color[1])*255 << 8) | (Math.floor(this.uniforms.u_color[0])*255 << 16);
+        var rgb = Math.floor(this.uniforms.u_color[2]*255) | (Math.floor(this.uniforms.u_color[1]*255) << 8) | (Math.floor(this.uniforms.u_color[0]*255) << 16);
         return "#" + (0x1000000 | rgb).toString(16).substring(1);
     }
 

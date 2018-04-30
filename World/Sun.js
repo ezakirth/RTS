@@ -17,7 +17,7 @@ class Sun {
 
 
         this.halo = new Sprite({
-            static : true,
+            type : "static",
             texture : textures.halo,
             x : this.x,
             y : this.y,
@@ -26,7 +26,7 @@ class Sun {
         });
     
         this.sun = new Sprite({
-            static : true,
+            type : "static",
             texture : textures.sun,
             x : this.x,
             y : this.y,
@@ -35,7 +35,7 @@ class Sun {
         });
     
         this.glow = new Sprite({
-            static : true,
+            type : "static",
             texture : textures.glow,
             x : this.x,
             y : this.y,

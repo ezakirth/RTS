@@ -1,4 +1,5 @@
 var Editor = {
+    active : true,
     elem : null,
     selected : null,
     editMode : true,
@@ -15,11 +16,11 @@ var Editor = {
         $("#saveButton").click(function(e){e.preventDefault();console.log(JSON.stringify(Game.world.map))});
         
         Editor.addItem({lib : "General"});
-        Editor.addItem({items : [{type : "text", label: "Texture set", id : "textures", readonly : true, value : ""}]});
+        Editor.addItem({type : "text", label: "Texture set", id : "textures", readonly : true, value : ""});
 
         Editor.addItem({lib : "Options"});
-        Editor.addItem({items : [{type : "checkbox", label: "Edit mode", id : "editMode", value : 1, checked : true}]});
-        Editor.addItem({items : [{type : "checkbox", label: "Show wireframe", name: "wireFrame", id : "wireFrame", value : 1, checked : false}]});
+        Editor.addItem({type : "checkbox", label: "Edit mode", id : "editMode", value : 1, checked : true});
+        Editor.addItem({type : "checkbox", label: "Show wireframe", name: "wireFrame", id : "wireFrame", value : 1, checked : false});
 
 /*
         Editor.addItem({lib: "Wireframe", items : [
@@ -45,74 +46,103 @@ var Editor = {
         $("#itemInfo").empty();
         Editor.addItem({itemInfo : true, lib : "Item information"});
 
-        Editor.addItem({itemInfo : true, items : [{type : "text", label : "x", id : "item_x", readonly : true, value : item.x}]});
-        Editor.addItem({itemInfo : true, items : [{type : "text", label : "y", id : "item_y", readonly : true, value : item.y}]});
-        Editor.addItem({itemInfo : true, items : [{type : "text", label : "r", id : "item_r", readonly : true, value : item.r}]});
-        Editor.addItem({itemInfo : true, items : [{type : "text", label : "width", id : "item_w", readonly : true, value : item.w}]});
-        Editor.addItem({itemInfo : true, items : [{type : "text", label : "height", id : "item_h", readonly : true, value : item.h}]});
-        Editor.addItem({itemInfo : true, items : [{type : "text", label : "zindex", id : "item_zindex", readonly : false, value : item.zindex}]});
-        Editor.addItem({itemInfo : true, items : [{type : "color", label : "color", id : "item_color", value : item.color, onchange: "Editor.selected.color = this.value;" }]});
+        Editor.addItem({itemInfo : true, type : "select", label : "type", list : ["static", "prop", "layer"] });
+        Editor.addItem({itemInfo : true, type : "text", label : "x" });
+        Editor.addItem({itemInfo : true, type : "text", label : "y" });
+        Editor.addItem({itemInfo : true, type : "text", label : "r" });
+        Editor.addItem({itemInfo : true, type : "text", label : "w" });
+        Editor.addItem({itemInfo : true, type : "text", label : "h" });
+        Editor.addItem({itemInfo : true, type : "text", label : "zindex" });
+        Editor.addItem({itemInfo : true, type : "text", label : "wrapX" });
+        Editor.addItem({itemInfo : true, type : "text", label : "wrapY" });
 
+        Editor.addItem({itemInfo : true, type : "color", label : "color" });
 
-        //return "rgb(" + "#FF0000".match(/[A-Za-z0-9]{2}/g).map(function(v) { return parseInt(v, 16) }).join(",") + ")";
-/*        for(var key in item) {
-            var value = item[key];
-            if ($.inArray( typeof value, ["string", "boolean", "number"]) !== -1)
-            {
-                Editor.addItem({itemInfo : true, lib : key, items : [{type : "text", id : "item_" + key, readonly : true, value : value}]});
-            }
-        }*/
     },
 
-    addItem(params)
+    addItem(item)
     {
         var div = document.createElement("div");
         div.className = "menuItem";
 
-        if (params.lib)
+        if (item.lib)
         {
             var lib = document.createElement("label");
             lib.className = "menuItem";
-            lib.innerText = params.lib || "Item";
+            lib.innerText = item.lib || "Item";
             div.appendChild(lib);
         }
-
-        if (params.items)
+        else
         {
-            for (var i=0; i<params.items.length; i++)
+            
+            if (item.itemInfo)
             {
-                var item = params.items[i];
-                
-                if (item.label)
+                item.id = item.label + "_id";
+                item.value = Editor.selected[item.label];
+                item.onchange = "Editor.selected." + item.label + " = this.value;";
+                if (item.label == "zindex")
                 {
-                    var label = document.createElement("label");
-                    label.className = "itemLabel";
-                    label.appendChild(document.createTextNode(item.label));
-                    label.setAttribute("for", item.id);
-                    div.appendChild(label);
+                    item.onchange += "Editor.selected.setBufferPosition();";
+                }                
+                if (item.label == "wrapX" || item.label == "wrapY")
+                {
+                    item.onchange += "Editor.selected.setBufferTexcoord();";
                 }
+            }
+                
+            var label = document.createElement("label");
+            label.className = "itemLabel";
+            label.appendChild(document.createTextNode(item.label));
+            label.setAttribute("for", item.id);
+            div.appendChild(label);
 
-                var input = document.createElement("input");
+            var input;
+
+            if (item.type == "select")
+            {
+                input = document.createElement("select");
+
+                for (var i = 0; i < item.list.length; i++) {
+                    var opt = document.createElement("option");
+                    var option = item.list[i];
+                    opt.value = option;
+                    opt.text = option;
+                    opt.selected = (opt.value == item.value);
+                    input.appendChild(opt);
+                }                
+            }
+            else
+            {
+                input = document.createElement("input");
 
                 input.id = item.id;
                 input.setAttribute("type", item.type);
-                input.setAttribute("value", item.value);
-                input.setAttribute("name", item.name);
-                if (item.onchange)
-                {
-                    input.setAttribute("onchange", item.onchange);
-                }
-                if (item.checked)
-                {
-                    input.defaultChecked = item.checked;
-                }            
-                input.readOnly = item.readonly;
 
-                div.appendChild(input);
+                input.setAttribute("value", item.value);
             }
+
+            if (item.onchange)
+            {
+                input.setAttribute("onkeyup", item.onchange);
+                input.setAttribute("onchange", item.onchange);
+            }
+            if (item.checked)
+            {
+                input.defaultChecked = item.checked;
+            }            
+            if (item.readonly)
+                input.readOnly = item.readonly;
+            else
+            {
+                if (item.type != "select")
+                    input.setAttribute("onclick", "this.select()");
+            }
+
+            div.appendChild(input);
         }
 
-        if (params.itemInfo)
+
+        if (item.itemInfo)
         {
             $("#itemInfo").append(div);
         }
@@ -128,6 +158,23 @@ var Editor = {
         Editor.editMode = $("#editMode:checked").val();
         
         Editor.overlay.update();        
+    },
+
+    moveObject : function(x, y)
+    {
+        if (Editor.editMode && Editor.selected)
+        {
+            if (Editor.selected == Game.world.sun.sun)
+            {
+                Game.world.sun.move(x/Game.world.speed, y/Game.world.speed);
+            }
+            else
+            {
+                Editor.selected.x -= x/Game.world.speed;
+                Editor.selected.y += y/Game.world.speed;
+            }
+        }
     }
+    
 
 };

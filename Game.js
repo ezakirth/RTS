@@ -4,7 +4,7 @@ var Game = {
     width : 1920,
     height : 1080,
     ratio : 16/9,
-    target : null,
+    selected : null,
 
     scaleTo : function(screenWidth, screenHeight)
     {
@@ -42,21 +42,11 @@ var Game = {
     touch : function(x, y)
     {
         Game.world.touch(x, y);
-    },
-
-    move : function(x, y)
-    {
-        if (Editor.editMode && Game.target)
+        if (!Game.selected) 
         {
-            if (Game.target == Game.world.sun.sun)
-            {
-                Game.world.sun.move(x/Game.world.speed, y/Game.world.speed);
-            }
-            else
-            {
-                Game.target.x -= x/Game.world.speed;
-                Game.target.y += y/Game.world.speed;
-            }
-        }
+            Editor.selected = null;
+            $("#itemInfo").empty();
+        }        
     }
+
 };

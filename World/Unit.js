@@ -18,8 +18,7 @@ class Unit {
 
 
         this.sprite = new Sprite({
-            align : "center",
-            type : "unit",
+            type : "prop",
             texture : textures.unit,
             w : 100,
             h : 100

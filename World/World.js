@@ -31,7 +31,8 @@ class World {
             x : Game.width/2,
             y : Game.height/2,
             w : Game.width,
-            h : Game.height
+            h : Game.height,
+            zindex : 0
         });
     }
 
@@ -58,25 +59,25 @@ class World {
         this.sun = new Sun({ size : 350, x: Game.width -  400, y: Game.height - 300 });
 
         this.addLayer({
-            layer : true,
+            type : "layer",
             texture : textures.bg2,
             x : (1024*4)/2,
             y : 96 + 512/2,
             w : 1024*4,
             h : 512,
             distance: 8,
-            scale : 4
+            wrapX : 4
         });
 
         this.addLayer({
-            layer : true,
+            type : "layer",
             texture : textures.bg2,
             x : (1024*8)/2,
             y : 148 + 512/2,
             w : 1024*8,
             h : 512,
             distance: 4,
-            scale : 8
+            wrapX : 8
         });
 
         this.setTerrain();
@@ -154,8 +155,6 @@ class World {
         {
             this.units[i].touch(x, y);
         }
-
-       // if (!Game.target) Editor.selected = null;
     }
     
 }
