@@ -11,11 +11,6 @@ class Unit extends Sprite {
      * @param {Object} {texture : WebGLTexture, x : float, y : float, x2 : float, y2 : float, x3 : float, y3 : float, x4 : float, y4 : float}
      */
     constructor(param) {
-        param.type = "prop";
-        param.texture = textures.unit;
-        param.w = 100;
-        param.h = 100;
-
         super(param);
 
         this.fighting = false;

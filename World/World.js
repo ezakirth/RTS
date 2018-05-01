@@ -87,7 +87,12 @@ class World {
         
         for (var i=0;i<10;i++)
         {
-            this.objects.push(new Unit({}));
+            this.objects.push(new Unit({
+                type : "prop",
+                texture : textures.unit,
+                w : 100,
+                h : 100                        
+            }));
         }
     }
 

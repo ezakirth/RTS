@@ -14,6 +14,7 @@ class Sprite {
         this.type = param.type || "static";
         this.align = param.align;
         this.texture = param.texture;
+        this.locked = false;
         this.visible = false;
         if (param.zindex === undefined)
             Game.world.z ++;

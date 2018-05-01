@@ -19,8 +19,8 @@ var Editor = {
         Editor.addItem({type : "text", label: "Texture set", id : "textures", readonly : true, value : ""});
 
         Editor.addItem({lib : "Options"});
-        Editor.addItem({type : "checkbox", label: "Edit mode", id : "editMode", value : 1, checked : true});
-        Editor.addItem({type : "checkbox", label: "Show wireframe", name: "wireFrame", id : "wireFrame", value : 1, checked : false});
+        Editor.addItem({type : "checkbox", label: "Edit mode", id : "editMode", onchange : "Editor.editMode = this.checked;", checked : true});
+        Editor.addItem({type : "checkbox", label: "Show wireframe", id : "wireFrame", onchange : "Game.wireFrame = this.checked;", checked : false});
 
 /*
         Editor.addItem({lib: "Wireframe", items : [
@@ -46,17 +46,18 @@ var Editor = {
         $("#itemInfo").empty();
         Editor.addItem({itemInfo : true, lib : "Item information"});
 
-        Editor.addItem({itemInfo : true, type : "select", label : "type", list : ["static", "prop", "layer"] });
-        Editor.addItem({itemInfo : true, type : "text", label : "x" });
-        Editor.addItem({itemInfo : true, type : "text", label : "y" });
-        Editor.addItem({itemInfo : true, type : "text", label : "r" });
-        Editor.addItem({itemInfo : true, type : "text", label : "w" });
-        Editor.addItem({itemInfo : true, type : "text", label : "h" });
-        Editor.addItem({itemInfo : true, type : "text", label : "zindex" });
-        Editor.addItem({itemInfo : true, type : "text", label : "wrapX" });
-        Editor.addItem({itemInfo : true, type : "text", label : "wrapY" });
+        Editor.addItem({itemInfo : true, type : "checkbox", label : "locked", checked : item.locked });
+        Editor.addItem({itemInfo : true, type : "select", label : "type", list : ["static", "prop", "layer"], readonly : item.locked});
+        Editor.addItem({itemInfo : true, type : "text", label : "x", readonly : item.locked });
+        Editor.addItem({itemInfo : true, type : "text", label : "y", readonly : item.locked });
+        Editor.addItem({itemInfo : true, type : "text", label : "r", readonly : item.locked });
+        Editor.addItem({itemInfo : true, type : "text", label : "w", readonly : item.locked });
+        Editor.addItem({itemInfo : true, type : "text", label : "h", readonly : item.locked });
+        Editor.addItem({itemInfo : true, type : "text", label : "zindex", readonly : item.locked });
+        Editor.addItem({itemInfo : true, type : "text", label : "wrapX", readonly : item.locked });
+        Editor.addItem({itemInfo : true, type : "text", label : "wrapY", readonly : item.locked });
 
-        Editor.addItem({itemInfo : true, type : "color", label : "color" });
+        Editor.addItem({itemInfo : true, type : "color", label : "color", readonly : item.locked });
 
     },
 
@@ -80,16 +81,13 @@ var Editor = {
                 item.id = item.label + "_id";
                 item.value = Editor.selected[item.label];
                 item.onchange = "Editor.selected." + item.label + " = this.value;";
-                if (item.label == "zindex")
-                {
-                    item.onchange += "Editor.selected.setBufferPosition();";
-                }                
-                if (item.label == "wrapX" || item.label == "wrapY")
-                {
-                    item.onchange += "Editor.selected.setBufferTexcoord();";
-                }
+
+                if (item.type == "checkbox") item.onchange = "Editor.selected." + item.label + " = this.checked;";
+                if (item.label == "zindex") item.onchange += "Editor.selected.setBufferPosition();";
+                if (item.label == "wrapX" || item.label == "wrapY") item.onchange += "Editor.selected.setBufferTexcoord();";
+
             }
-                
+            
             var label = document.createElement("label");
             label.className = "itemLabel";
             label.appendChild(document.createTextNode(item.label));
@@ -154,15 +152,13 @@ var Editor = {
     update : function()
     {
         $("#textures").val(textures.types[textures.style]);
-        Game.wireFrame = $("#wireFrame:checked").val();
-        Editor.editMode = $("#editMode:checked").val();
         
         Editor.overlay.update();        
     },
 
     moveObject : function(x, y)
     {
-        if (Editor.editMode && Editor.selected)
+        if (Editor.editMode && Editor.selected && !Editor.selected.locked)
         {
             if (Editor.selected == Game.world.sun.sun)
             {
