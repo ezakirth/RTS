@@ -55,7 +55,10 @@ class Terrain {
         }
 
 
-        this.zindex = 6;
+        if (param.zindex === undefined)
+            Game.world.z ++;
+        this.zindex = param.zindex || Game.world.z;
+
         this.position = [];
         this.indices = [];
         var index = 0;

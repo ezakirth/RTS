@@ -47,7 +47,7 @@ var Editor = {
         Editor.addItem({itemInfo : true, type : "text", label : "r", readonly : item.locked });
         Editor.addItem({itemInfo : true, type : "text", label : "w", readonly : item.locked });
         Editor.addItem({itemInfo : true, type : "text", label : "h", readonly : item.locked });
-        Editor.addItem({itemInfo : true, type : "text", label : "zindex", readonly : item.locked });
+        Editor.addItem({itemInfo : true, type : "number", label : "zindex", readonly : item.locked });
         Editor.addItem({itemInfo : true, type : "text", label : "wrapX", readonly : item.locked });
         Editor.addItem({itemInfo : true, type : "text", label : "wrapY", readonly : item.locked });
 
@@ -77,6 +77,7 @@ var Editor = {
                 item.onchange = "Editor.selected." + item.label + " = this.value;";
 
                 if (item.type == "checkbox") item.onchange = "Editor.selected." + item.label + " = this.checked;";
+                if (item.label == "locked") item.onchange += "Editor.lockItem(this.checked);";
                 if (item.label == "zindex") item.onchange += "Editor.selected.setBufferPosition();";
                 if (item.label == "wrapX" || item.label == "wrapY") item.onchange += "Editor.selected.setBufferTexcoord();";
 
@@ -125,7 +126,10 @@ var Editor = {
                 input.defaultChecked = item.checked;
             }            
             if (item.readonly)
+            {
+                if (item.type == "select") input.disabled = item.readonly;
                 input.readOnly = item.readonly;
+            }
             else
             {
                 if (item.type != "select")
@@ -149,8 +153,16 @@ var Editor = {
     {
         for (var i=0; i<Game.world.objects.length; i++)
         {
-            Game.world.objects[i].uniforms.u_texture = textures[Game.world.objects[i].texture.split("_")[0] + "_" + tex];
+            var texture = textures[Game.world.objects[i].texture.split("_")[0] + "_" + tex];
+            if (texture === undefined) texture = textures[Game.world.objects[i].texture];
+            Game.world.objects[i].uniforms.u_texture = texture;
         }
+    },
+
+    lockItem(lock)
+    {
+        $("div#itemInfo :input").attr("readonly", lock);
+        $("div#itemInfo select").attr("disabled", lock);
     },
 
     update : function()

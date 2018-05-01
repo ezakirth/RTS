@@ -31,13 +31,12 @@ class World {
             y : Game.height/2,
             w : Game.width,
             h : Game.height,
-            locked : true,
-            zindex : 0
+            locked : true
         }));
 
         this.objects.push(new Sprite({
             type : "static",
-            texture : "halo_"+Game.world.texture,
+            texture : "halo",
             x: Game.width -  400,
             y: Game.height - 300,
             w : 1.75 * 350,
@@ -46,7 +45,7 @@ class World {
 
         this.objects.push(new Sprite({
             type : "static",
-            texture : "sun_"+Game.world.texture,
+            texture : "sun",
             x: Game.width -  400,
             y: Game.height - 300,
             w : 350,
@@ -55,7 +54,7 @@ class World {
 
         this.objects.push(new Sprite({
             type : "static",
-            texture : "glow_"+Game.world.texture,
+            texture : "glow",
             x: Game.width -  400,
             y: Game.height - 300,
             w : 350,
@@ -103,7 +102,7 @@ class World {
         {
             this.objects.push(new Unit({
                 type : "prop",
-                texture : "unit_"+Game.world.texture,
+                texture : "unit",
                 w : 100,
                 h : 100                        
             }));

@@ -64,32 +64,33 @@ function loadTextures()
             wrap: gl.CLAMP_TO_EDGE,
             src: "assets/textures/doodad4_" + type + ".png"
         }
-
-        tex["sun_"+type] = {
-            minMag : gl.LINEAR,
-            wrap: gl.CLAMP_TO_EDGE,
-            src: "assets/textures/sun.png"
-        }
-
-        tex["glow_"+type] = {
-            minMag : gl.LINEAR,
-            wrap: gl.CLAMP_TO_EDGE,
-            src: "assets/textures/glow.png"
-        }
-
-        tex["halo_"+type] = {
-            minMag : gl.LINEAR,
-            wrap: gl.CLAMP_TO_EDGE,
-            src: "assets/textures/halo.png"
-        }
-
-
-        tex["unit_"+type] = {
-            minMag : gl.LINEAR,
-            wrap: gl.CLAMP_TO_EDGE,
-            src: "assets/textures/unit.png"
-        }       
     }
+
+    tex["sun"] = {
+        minMag : gl.LINEAR,
+        wrap: gl.CLAMP_TO_EDGE,
+        src: "assets/textures/sun.png"
+    }
+
+    tex["glow"] = {
+        minMag : gl.LINEAR,
+        wrap: gl.CLAMP_TO_EDGE,
+        src: "assets/textures/glow.png"
+    }
+
+    tex["halo"] = {
+        minMag : gl.LINEAR,
+        wrap: gl.CLAMP_TO_EDGE,
+        src: "assets/textures/halo.png"
+    }
+
+
+    tex["unit"] = {
+        minMag : gl.LINEAR,
+        wrap: gl.CLAMP_TO_EDGE,
+        src: "assets/textures/unit.png"
+    }       
+
 
     textures = twgl.createTextures(gl, tex, function()
     {

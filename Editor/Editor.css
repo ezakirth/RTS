@@ -65,7 +65,7 @@ input[type="text"], input[type="number"] {
 }
 
 
-input[type="text"]:read-only, input[type="number"]:read-only {
+select:disabled, input[type="text"]:read-only, input[type="number"]:read-only {
     cursor: default;
     color: #94c0dc;
     background-color:transparent;
