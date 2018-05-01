@@ -14,7 +14,7 @@ class Sprite {
         this.type = param.type || "static";
         this.align = param.align;
         this.texture = param.texture;
-        this.locked = false;
+        this.locked = param.locked || false;
         this.visible = false;
         if (param.zindex === undefined)
             Game.world.z ++;
@@ -46,7 +46,7 @@ class Sprite {
 
         this.uniforms = {
             u_modelViewProjection: twgl.m4.identity(),
-            u_texture: this.texture,
+            u_texture: textures[this.texture],
             u_color:  new Float32Array([1, 1, 1])
         };
 

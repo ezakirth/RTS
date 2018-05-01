@@ -101,7 +101,7 @@ class Terrain {
 
         this.uniforms = {
             u_modelViewProjection: twgl.m4.identity(),
-            u_texture: this.texture,
+            u_texture: textures[this.texture],
             u_color:  new Float32Array([1, 1, 1])
         };
 

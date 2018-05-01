@@ -4,95 +4,95 @@ var textures = null;
 function loadTextures()
 {
     var types = ["grass", "asian", "desert", "jungle", "rock", "snow"];
-    var style = Math.floor(Math.random()*6);
 
-    textures = twgl.createTextures(gl,
+    var tex = {};
+    for (var i=0; i<types.length; i++)
     {
-        ground : {
+        var type = types[i];
+        tex["ground_"+type] = {
             minMag: gl.LINEAR,
             wrapS: gl.REPEAT,
             wrapT: gl.CLAMP_TO_EDGE,
-            src: "assets/textures/ground_" + types[style] + ".png"
-        },
+            src: "assets/textures/ground_" + type + ".png"            
+        }
 
-        bg : {
+        tex["bg_"+type] = {
             minMag : gl.NEAREST,
-            src: "assets/textures/bg_" + types[style] + ".png"
-        },
+            src: "assets/textures/bg_" + type + ".png"
+        }
 
-        bg2 : {
+        tex["bg2_"+type] = {
             minMag : gl.LINEAR,
             wrapS: gl.REPEAT,
             wrapT: gl.CLAMP_TO_EDGE,
-            src: "assets/textures/bg2_" + types[style] + ".png"
-        },
+            src: "assets/textures/bg2_" + type + ".png"
+        }
 
-        bg3 : {
+        tex["bg3_"+type] = {
             minMag : gl.LINEAR,
             wrapS: gl.REPEAT,
             wrapT: gl.CLAMP_TO_EDGE,
             src: "assets/textures/bg_small2.png"
-        },
+        }
 
-        doodad_corner : {
+        tex["doodad_corner_"+type] = {
             minMag : gl.LINEAR,
             wrap: gl.CLAMP_TO_EDGE,
-            src: "assets/textures/doodad_corner_" + types[style] + ".png"
-        },
+            src: "assets/textures/doodad_corner_" + type + ".png"
+        }
 
-        doodad1 : {
+        tex["doodad1_"+type] = {
             minMag : gl.LINEAR,
             wrap: gl.CLAMP_TO_EDGE,
-            src: "assets/textures/doodad1_" + types[style] + ".png"
-        },
+            src: "assets/textures/doodad1_" + type + ".png"
+        }
 
-        doodad2 : {
+        tex["doodad2_"+type] = {
             minMag : gl.LINEAR,
             wrap: gl.CLAMP_TO_EDGE,
-            src: "assets/textures/doodad2_" + types[style] + ".png"
-        },
+            src: "assets/textures/doodad2_" + type + ".png"
+        }
 
-        doodad3 : {
+        tex["doodad3_"+type] = {
             minMag : gl.LINEAR,
             wrap: gl.CLAMP_TO_EDGE,
-            src: "assets/textures/doodad3_" + types[style] + ".png"
-        },
+            src: "assets/textures/doodad3_" + type + ".png"
+        }
 
-        doodad4 : {
+        tex["doodad4_"+type] = {
             minMag : gl.LINEAR,
             wrap: gl.CLAMP_TO_EDGE,
-            src: "assets/textures/doodad4_" + types[style] + ".png"
-        },
-        
-        sun : {
+            src: "assets/textures/doodad4_" + type + ".png"
+        }
+
+        tex["sun_"+type] = {
             minMag : gl.LINEAR,
             wrap: gl.CLAMP_TO_EDGE,
             src: "assets/textures/sun.png"
-        },
+        }
 
-        glow : {
+        tex["glow_"+type] = {
             minMag : gl.LINEAR,
             wrap: gl.CLAMP_TO_EDGE,
             src: "assets/textures/glow.png"
-        },
+        }
 
-        halo : {
+        tex["halo_"+type] = {
             minMag : gl.LINEAR,
             wrap: gl.CLAMP_TO_EDGE,
             src: "assets/textures/halo.png"
-        },
+        }
 
 
-        unit : {
+        tex["unit_"+type] = {
             minMag : gl.LINEAR,
             wrap: gl.CLAMP_TO_EDGE,
             src: "assets/textures/unit.png"
-        },
+        }       
+    }
 
-    }, function()
+    textures = twgl.createTextures(gl, tex, function()
     {
-        textures.types = types;
-        textures.style = style;
         setup();
         resizeCanvas();
         render();

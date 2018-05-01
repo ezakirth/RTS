@@ -16,18 +16,12 @@ var Editor = {
         $("#saveButton").click(function(e){e.preventDefault();console.log(JSON.stringify(Game.world.map))});
         
         Editor.addItem({lib : "General"});
-        Editor.addItem({type : "text", label: "Texture set", id : "textures", readonly : true, value : ""});
+        Editor.addItem({type : "select", label : "Texture set", id : "textures", list : ["grass", "asian", "desert", "jungle", "rock", "snow"] });
+        
 
         Editor.addItem({lib : "Options"});
         Editor.addItem({type : "checkbox", label: "Edit mode", id : "editMode", onchange : "Editor.editMode = this.checked;", checked : true});
         Editor.addItem({type : "checkbox", label: "Show wireframe", id : "wireFrame", onchange : "Game.wireFrame = this.checked;", checked : false});
-
-/*
-        Editor.addItem({lib: "Wireframe", items : [
-            {type : "radio", name : "wireFrame", id : "wireFrame1", label : "On", value : 1},
-            {type : "radio", name : "wireFrame", id : "wireFrame0", label : "Off", value : 0, checked : true},
-        ]});
-*/        
         
         Editor.update();
     },
@@ -87,6 +81,8 @@ var Editor = {
                 if (item.label == "wrapX" || item.label == "wrapY") item.onchange += "Editor.selected.setBufferTexcoord();";
 
             }
+
+            if (item.id == "textures") item.onchange = "Editor.setTexture(this.value);";
             
             var label = document.createElement("label");
             label.className = "itemLabel";
@@ -149,10 +145,16 @@ var Editor = {
         
     },
 
+    setTexture(tex)
+    {
+        for (var i=0; i<Game.world.objects.length; i++)
+        {
+            Game.world.objects[i].uniforms.u_texture = textures[Game.world.objects[i].texture.split("_")[0] + "_" + tex];
+        }
+    },
+
     update : function()
     {
-        $("#textures").val(textures.types[textures.style]);
-        
         Editor.overlay.update();        
     },
 
@@ -160,15 +162,8 @@ var Editor = {
     {
         if (Editor.editMode && Editor.selected && !Editor.selected.locked)
         {
-            if (Editor.selected == Game.world.sun.sun)
-            {
-                Game.world.sun.move(x/Game.world.speed, y/Game.world.speed);
-            }
-            else
-            {
-                Editor.selected.x -= x/Game.world.speed;
-                Editor.selected.y += y/Game.world.speed;
-            }
+            Editor.selected.x -= x/Game.world.speed;
+            Editor.selected.y += y/Game.world.speed;
         }
     }
     

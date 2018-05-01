@@ -13,83 +13,97 @@ class World {
     constructor(param) {
         this.ViewMatrix = twgl.m4.identity();
         this.projectionMatrix = twgl.m4.ortho(0, Game.width, 0, Game.height, -100, 100);
-
+        this.texture = "grass";
         this.z = 0;
         this.time = 1;
         this.speed = 1;
         this.lastTime = 1;
-        this.units = [];
-
-        this.layers = [];
-
         this.objects = [];
     }
 
-    setBG()
+
+    init()
     {
-        this.bg = new Sprite({
+        this.objects.push(new Sprite({
             static : true,
-            texture : textures.bg,
+            texture : "bg_"+Game.world.texture,
             x : Game.width/2,
             y : Game.height/2,
             w : Game.width,
             h : Game.height,
+            locked : true,
             zindex : 0
-        });
-    }
+        }));
 
-    setTerrain()
-    {
-        this.terrain = new Terrain({
-            texture : textures.ground,
-            offsetY : 256,
-            texWidth : 192,
-            texHeight : 384,
-            noise : 64
-        });
-        this.objects.push(this.terrain);        
-    }
+        this.objects.push(new Sprite({
+            type : "static",
+            texture : "halo_"+Game.world.texture,
+            x: Game.width -  400,
+            y: Game.height - 300,
+            w : 1.75 * 350,
+            h : 1.75 * 350,
+        }));
 
-    addLayer(params)
-    {
-        this.objects.push(new Sprite(params));
-    }
+        this.objects.push(new Sprite({
+            type : "static",
+            texture : "sun_"+Game.world.texture,
+            x: Game.width -  400,
+            y: Game.height - 300,
+            w : 350,
+            h : 350
+        }));
 
-    init()
-    {
-        this.setBG();
+        this.objects.push(new Sprite({
+            type : "static",
+            texture : "glow_"+Game.world.texture,
+            x: Game.width -  400,
+            y: Game.height - 300,
+            w : 350,
+            h : 350
+        }));
+        
 
-        this.sun = new Sun({ size : 350, x: Game.width -  400, y: Game.height - 300 });
+//        this.sun = new Sun({ size : 350, x: Game.width -  400, y: Game.height - 300 });
 
-        this.addLayer({
+
+
+        this.objects.push(new Sprite({
             type : "layer",
-            texture : textures.bg2,
+            texture : "bg2_"+Game.world.texture,
             x : (1024*4)/2,
             y : 96 + 512/2,
             w : 1024*4,
             h : 512,
             distance: 8,
             wrapX : 4
-        });
-
-        this.addLayer({
+        }));
+        
+        this.objects.push(new Sprite({
             type : "layer",
-            texture : textures.bg2,
+            texture : "bg2_"+Game.world.texture,
             x : (1024*8)/2,
             y : 148 + 512/2,
             w : 1024*8,
             h : 512,
             distance: 4,
             wrapX : 8
+        }));
+
+        this.terrain = new Terrain({
+            texture : "ground_"+Game.world.texture,
+            offsetY : 256,
+            texWidth : 192,
+            texHeight : 384,
+            noise : 64
         });
 
-        this.setTerrain();
+        this.objects.push(this.terrain);        
         
         for (var i=0;i<10;i++)
         {
             this.objects.push(new Unit({
                 type : "prop",
-                texture : textures.unit,
+                texture : "unit_"+Game.world.texture,
                 w : 100,
                 h : 100                        
             }));
@@ -108,10 +122,6 @@ class World {
 
         twgl.m4.translate(this.ViewMatrix, twgl.v3.create(Input.viewPos,0,0), this.ViewMatrix);
 
-        this.bg.update();
-        
-        this.sun.update();
-
         for (var i=0; i<this.objects.length; i++)
         {
             this.objects[i].update();
@@ -124,10 +134,6 @@ class World {
     {
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-        this.bg.draw();
-
-        this.sun.draw();
-
         for (var i=0; i<this.objects.length; i++)
         {
             this.objects[i].draw();
@@ -138,8 +144,6 @@ class World {
 
     touch(x, y)
     {
-        this.sun.touch(x, y);
-
         for (var i=0; i<this.objects.length; i++)
         {
             this.objects[i].touch(x, y);
