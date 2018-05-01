@@ -14,6 +14,7 @@ class Sprite {
         this.type = param.type || "static";
         this.align = param.align;
         this.texture = param.texture;
+        this.visible = false;
         if (param.zindex === undefined)
             Game.world.z ++;
         this.zindex = param.zindex || Game.world.z;
@@ -77,17 +78,31 @@ class Sprite {
 
         twgl.m4.multiply(this.uniforms.u_modelViewProjection, this.modelMatrix, this.uniforms.u_modelViewProjection);
 
+        // Visibility test
+        this.visible = true;
+/*        var currentMatrix = this.modelMatrix;
+        if (this.type == "prop") currentMatrix = Game.world.ViewMatrix;
+        if (this.type == "layer") currentMatrix = this.layerViewMatrix;
+        var min = -(twgl.m4.getTranslation(currentMatrix)[0] + 256);
+        var max = min + Game.width + 512;
+        if (this.x > min && this.x < max)
+            this.visible = true;
+        if (this.type == "static") this.visible = true;
+*/
     }
 
     draw()
     {
-        twgl.setBuffersAndAttributes(gl, gl.programInfo, this.bufferInfo);
-        twgl.setUniforms(gl.programInfo, this.uniforms);
+        if (this.visible)
+        {
+            twgl.setBuffersAndAttributes(gl, gl.programInfo, this.bufferInfo);
+            twgl.setUniforms(gl.programInfo, this.uniforms);
 
-        if (Game.wireFrame == "1")
-            gl.drawElements(gl.LINE_STRIP, this.bufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
-        else
-            gl.drawElements(gl.TRIANGLES, this.bufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
+            if (Game.wireFrame == "1")
+                gl.drawElements(gl.LINE_STRIP, this.bufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
+            else
+                gl.drawElements(gl.TRIANGLES, this.bufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
+        }
     }
 
     updateOverlayPos()
@@ -148,7 +163,8 @@ class Sprite {
                     tl.x, tl.y, this.zindex,
                     br.x, br.y, this.zindex,
                     tr.x, tr.y, this.zindex
-                ]
+                ],
+                drawType: gl.DYNAMIC_DRAW
             },
             texcoord: [
                 0, this.wrapY,

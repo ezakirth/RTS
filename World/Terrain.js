@@ -55,9 +55,7 @@ class Terrain {
         }
 
 
-
-        Game.world.z ++;
-        this.zindex = Game.world.z;
+        this.zindex = 6;
         this.position = [];
         this.indices = [];
         var index = 0;
@@ -129,6 +127,11 @@ class Terrain {
             gl.drawElements(gl.LINES, this.bufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
         else
             gl.drawElements(gl.TRIANGLE_STRIP, this.bufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
+    }
+
+    touch(x, y)
+    {
+
     }
 }
 

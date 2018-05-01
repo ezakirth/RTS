@@ -6,7 +6,7 @@ var gl = null;
 function GLsetup()
 {
     Editor.overlay.init();
-    gl = document.getElementById("canvas").getContext("experimental-webgl",{ alpha: false, premultipliedAlpha: true });
+    gl = document.getElementById("canvas").getContext("experimental-webgl",{ alpha: false, premultipliedAlpha: false });
     gl.canvas.width = 1920;
     gl.canvas.height = 1080;
 
@@ -21,7 +21,6 @@ function GLsetup()
     gl.enable(gl.CULL_FACE);
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-
     gl.clearColor(0, 0, 0, 1);
 //    gl.clearColor(0.180, 0.105, 0.086, 1);
 

@@ -21,6 +21,8 @@ class World {
         this.units = [];
 
         this.layers = [];
+
+        this.objects = [];
     }
 
     setBG()
@@ -45,11 +47,12 @@ class World {
             texHeight : 384,
             noise : 64
         });
+        this.objects.push(this.terrain);        
     }
 
     addLayer(params)
     {
-        this.layers.push(new Sprite(params));
+        this.objects.push(new Sprite(params));
     }
 
     init()
@@ -84,7 +87,7 @@ class World {
         
         for (var i=0;i<10;i++)
         {
-            this.units[i] = new Unit();
+            this.objects.push(new Unit({}));
         }
     }
 
@@ -104,18 +107,12 @@ class World {
         
         this.sun.update();
 
-        for (var i=0; i<this.layers.length; i++)
+        for (var i=0; i<this.objects.length; i++)
         {
-            this.layers[i].update();
+            this.objects[i].update();
         }
 
-        this.terrain.update();
-        
-        for (var i=0; i<this.units.length; i++)
-        {
-            this.units[i].update();
-        }        
-
+        this.objects.sort(Utils.compare);
     }
 
     draw()
@@ -126,18 +123,10 @@ class World {
 
         this.sun.draw();
 
-        for (var i=0; i<this.layers.length; i++)
+        for (var i=0; i<this.objects.length; i++)
         {
-            this.layers[i].draw();
-        }
-        
-        this.terrain.draw();
-            
-        for (var i=0; i<this.units.length; i++)
-        {
-            this.units[i].draw();
-        }
-    
+            this.objects[i].draw();
+        }    
         
         this.lastTime = this.time;
     }
@@ -146,14 +135,9 @@ class World {
     {
         this.sun.touch(x, y);
 
-        for (var i=0; i<this.layers.length; i++)
+        for (var i=0; i<this.objects.length; i++)
         {
-            this.layers[i].touch(x, y);
-        }
-        
-        for (var i=0; i<this.units.length; i++)
-        {
-            this.units[i].touch(x, y);
+            this.objects[i].touch(x, y);
         }
     }
     
