@@ -64,6 +64,40 @@ input[type="text"], input[type="number"] {
     box-sizing : border-box;   
 }
 
+#load {
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+label.load {
+    display: inline-block;
+    border-radius: 15px;
+    border: 1px solid rgba(41, 128, 185, 0.3);
+    padding: 2px 40px 2px;
+    margin-top: 5px;
+    background-color: transparent;
+   
+}
+
+button:hover, label.load:hover {
+    background-color: rgba(22, 47, 73, 0.7);
+    cursor: pointer;
+}
+
+button {
+    display: inline-block;
+    border-radius: 15px;
+    border: 1px solid rgba(41, 128, 185, 0.3);
+    padding: 2px 40px 2px;
+    background-color: transparent;
+    margin-top: 5px;
+    line-height:23px;
+    font-size: 1em;
+    
+}
 
 select:disabled, input[type="text"]:read-only, input[type="number"]:read-only {
     cursor: default;
@@ -106,54 +140,9 @@ select {
     box-sizing : border-box;   
 }
 
-input:focus, select:focus {
+input:focus, select:focus, button:focus {
     outline: none;
 }
 
-input[type="radio"] {
-    border: none;
-    background: inherit;
-    border: 1px solid rgba(41, 128, 185, 0.3);
-    color: #94c0dc;
-    margin-top:20px;
-}
 
-
-
-
-
-
-
-
-button, input[type="button"]
-{
-    position: relative;
-    display: block;
-   /* padding: 15px;*/
-    color: #94c0dc;
-    margin: 0 auto;
-    background: rgba(41, 128, 185, 0.3);
-    font-size: 18px;
-    text-align: center;
-    font-style: normal;
-    width: 100%;
-    border: 1px solid rgba(41, 128, 185, 0.5);
-    border-width: 1px 1px 3px;
-    margin-bottom: 10px;
-}
-
-button:hover, input[type="button"]:hover
-{
-    background: rgba(41, 127, 185, 0.5);
-    color : white;
-}
-
-button:active, input[type="button"]:active
-{
-    background: #2980b9;
-}
-
-button:focus, input[type="button"]:focus {
-    background: rgba(41, 127, 185, 0.5);
-}
 

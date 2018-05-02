@@ -12,9 +12,7 @@ var Editor = {
     {
         Editor.elem = document.getElementById("Editor");
 
-//        $("#saveButton").attr("href", "data:application/xml;charset=utf-8," + JSON.stringify(Game.world.map));
-        $("#saveButton").click(function(e){e.preventDefault();console.log(JSON.stringify(Game.world.map))});
-        
+        Editor.addItem({type : "file", label : "Load", id : "load" });
         Editor.addItem({lib : "General"});
         Editor.addItem({type : "select", label : "Texture set", id : "textures", list : ["grass", "asian", "desert", "jungle", "rock", "snow"] });
         
@@ -80,13 +78,13 @@ var Editor = {
                 if (item.label == "locked") item.onchange += "Editor.lockItem(this.checked);";
                 if (item.label == "zindex") item.onchange += "Editor.selected.setBufferPosition();";
                 if (item.label == "wrapX" || item.label == "wrapY") item.onchange += "Editor.selected.setBufferTexcoord();";
-
             }
 
             if (item.id == "textures") item.onchange = "Editor.setTexture(this.value);";
             
             var label = document.createElement("label");
             label.className = "itemLabel";
+            if (item.label == "Load") label.className += " load";
             label.appendChild(document.createTextNode(item.label));
             label.setAttribute("for", item.id);
             div.appendChild(label);
@@ -137,6 +135,29 @@ var Editor = {
             }
 
             div.appendChild(input);
+        }
+
+        if (item.type == "file")
+        {
+            input.setAttribute("accept", ".json");
+            $(input).change(function(e) {
+                if (e.target.files[0])
+                {
+                    var tmppath = URL.createObjectURL(e.target.files[0]);
+                    $.getJSON( tmppath, function( data ) {
+                        Game.world.load(data);
+                    });
+                }
+            });
+            var button = document.createElement("button");
+            button.style.float = "right";
+            var a = document.createElement("a");
+            a.id = "saveButton";
+            a.setAttribute("download", "map.json");
+            a.innerText = "Save";
+            a.setAttribute("href", "data:application/xml;charset=utf-8," + JSON.stringify(Game.world));
+            button.appendChild(a);
+            div.appendChild(button);    
         }
 
 

@@ -21,11 +21,57 @@ class World {
         this.objects = [];
     }
 
+    load(data)
+    {
+        if (data)
+        {
+            this.objects = [];
+            this.terrain = null;
+            this.texture = data.texture;
+            for (var i=0; i<data.objects.length;i++)
+            {
+                var object = data.objects[i];
+
+                if (object.type == "terrain")
+                {
+                    this.terrain = new Terrain({
+                        texture : object.texture,
+                        offsetY : object.offsetY,
+                        terrain : object.terrain,
+                        texWidth : object.texWidth,
+                        texHeight : object.texHeight,
+                        noise : object.noise,
+                        zindex : object.zindex
+                    });
+                    this.objects.push(this.terrain);
+                }
+                else
+                {
+                    if (object.type != "prop")
+                    {
+                        this.objects.push(new Sprite({
+                            type : object.type,
+                            texture : object.texture,
+                            x : object.pos[0],
+                            y : object.pos[1],
+                            w : object.size[0],
+                            h : object.size[1],
+                            locked : object.locked,
+                            distance : object.distance,
+                            wrapX : object.wrapX,
+                            wrapY : object.wrapY,
+                            zindex : object.zindex
+                        }));
+                    }
+                }
+            }
+        }
+    }
 
     init()
     {
         this.objects.push(new Sprite({
-            static : true,
+            type : "static",
             texture : "bg_"+Game.world.texture,
             x : Game.width/2,
             y : Game.height/2,

@@ -2,9 +2,9 @@
 
 function setup()
 {
-    Editor.init();
     Game.world = new World();
     Game.world.init();
+    Editor.init();
 }
 
 function render()

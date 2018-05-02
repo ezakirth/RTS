@@ -12,7 +12,7 @@ class Terrain {
      */
     constructor(param) {
 
-
+        this.type = param.type || "terrain";
         var Simplex = new SimplexNoise();
 
         this.blockWidth = Math.floor(Game.width/32);
@@ -25,35 +25,40 @@ class Terrain {
         this.noise = param.noise;
 
         this.offsetY = param.offsetY;
-        this.terrain = [];
-        var xa, xb, ya, yb;
 
-        var flatWidth = 20;
-        var smoothWidth = 10;
-
-        for (var i=0; i<=this.mapSize; i++)
+        if (param.terrain)
+            this.terrain = param.terrain;
+        else
         {
-            var noiseVal = i/(Game.width/this.blockWidth);
-            this.terrain[i] = Simplex.noise(noiseVal, 0)*this.noise;
-            // Flatten left side and right side
-            if (i <= flatWidth || i >= this.mapSize - flatWidth)
+            this.terrain = [];
+            var xa, xb, ya, yb;
+
+            var flatWidth = 20;
+            var smoothWidth = 10;
+
+            for (var i=0; i<=this.mapSize; i++)
             {
-                this.terrain[i] = 0;
+                var noiseVal = i/(Game.width/this.blockWidth);
+                this.terrain[i] = Simplex.noise(noiseVal, 0)*this.noise;
+                // Flatten left side and right side
+                if (i <= flatWidth || i >= this.mapSize - flatWidth)
+                {
+                    this.terrain[i] = 0;
+                }
+            }
+            
+
+            for (var i=1; i<=smoothWidth ;i++)
+            {
+                this.terrain[flatWidth + i] = Utils.cerp(0, this.terrain[flatWidth + smoothWidth], i/smoothWidth); 
+            }
+
+            var j=1;
+            for (var i=this.mapSize - flatWidth - smoothWidth; i<=this.mapSize - flatWidth; i++)
+            {
+                this.terrain[i] = Utils.cerp(this.terrain[this.mapSize - flatWidth - smoothWidth - 1], 0, ((i+1)-(this.mapSize - flatWidth - smoothWidth))/smoothWidth);
             }
         }
-        
-
-        for (var i=1; i<=smoothWidth ;i++)
-        {
-            this.terrain[flatWidth + i] = Utils.cerp(0, this.terrain[flatWidth + smoothWidth], i/smoothWidth); 
-        }
-
-        var j=1;
-        for (var i=this.mapSize - flatWidth - smoothWidth; i<=this.mapSize - flatWidth; i++)
-        {
-            this.terrain[i] = Utils.cerp(this.terrain[this.mapSize - flatWidth - smoothWidth - 1], 0, ((i+1)-(this.mapSize - flatWidth - smoothWidth))/smoothWidth);
-        }
-
 
         if (param.zindex === undefined)
             Game.world.z ++;
