@@ -155,9 +155,11 @@ var Editor = {
                     }, function() {
                         textures[textureName] = textures.loading[textureName];
                         textures.loading = null;
-                        Game.world.objects.push(new Sprite({
+                        var sprite = new Sprite({
                             texture : textureName
-                        }));
+                        });
+                        Editor.loadObjectInfo(sprite);
+                        Game.world.objects.push(sprite);
                     });
                 }
             });
