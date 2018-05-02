@@ -12,19 +12,17 @@ var Editor = {
     {
         Editor.elem = document.getElementById("Editor");
 
-        Editor.addItem({type : "file", label : "Load", id : "load" });
-        Editor.addItem({lib : "General"});
-        Editor.addItem({type : "select", label : "Texture set", id : "textures", list : ["grass", "asian", "desert", "jungle", "rock", "snow"] });
+        Editor.addMenuItem({type : "file", label : "Load", id : "load" });
+        Editor.addMenuItem({lib : "General"});
+        Editor.addMenuItem({type : "select", label : "Texture set", id : "textures", list : ["grass", "asian", "desert", "jungle", "rock", "snow"] });
         
 
-        Editor.addItem({lib : "Options"});
-        Editor.addItem({type : "checkbox", label: "Edit mode", id : "editMode", onchange : "Editor.editMode = this.checked;", checked : true});
-        Editor.addItem({type : "checkbox", label: "Show wireframe", id : "wireFrame", onchange : "Game.wireFrame = this.checked;", checked : false});
-        
-        Editor.update();
+        Editor.addMenuItem({lib : "Options"});
+        Editor.addMenuItem({type : "checkbox", label: "Edit mode", id : "editMode", onchange : "Editor.editMode = this.checked;", checked : Editor.editMode});
+        Editor.addMenuItem({type : "checkbox", label: "Show wireframe", id : "wireFrame", onchange : "Game.wireFrame = this.checked;", checked : Game.wireFrame});
     },
 
-    loadItem(item)
+    loadObjectInfo(item)
     {
         Editor.selected = item;
 
@@ -36,24 +34,22 @@ var Editor = {
         }
 
         $("#itemInfo").empty();
-        Editor.addItem({itemInfo : true, lib : "Item information"});
-
-        Editor.addItem({itemInfo : true, type : "checkbox", label : "locked", checked : item.locked });
-        Editor.addItem({itemInfo : true, type : "select", label : "type", list : ["static", "prop", "layer"], readonly : item.locked});
-        Editor.addItem({itemInfo : true, type : "text", label : "x", readonly : item.locked });
-        Editor.addItem({itemInfo : true, type : "text", label : "y", readonly : item.locked });
-        Editor.addItem({itemInfo : true, type : "text", label : "r", readonly : item.locked });
-        Editor.addItem({itemInfo : true, type : "text", label : "w", readonly : item.locked });
-        Editor.addItem({itemInfo : true, type : "text", label : "h", readonly : item.locked });
-        Editor.addItem({itemInfo : true, type : "number", label : "zindex", readonly : item.locked });
-        Editor.addItem({itemInfo : true, type : "text", label : "wrapX", readonly : item.locked });
-        Editor.addItem({itemInfo : true, type : "text", label : "wrapY", readonly : item.locked });
-
-        Editor.addItem({itemInfo : true, type : "color", label : "color", readonly : item.locked });
+        Editor.addMenuItem({itemInfo : true, lib : "Object information (" + item.type + ")"});
+        Editor.addMenuItem({itemInfo : true, type : "checkbox", label : "locked", checked : item.locked });
+        Editor.addMenuItem({itemInfo : true, type : "select", label : "type", list : ["static", "prop", "layer"], disabled : item.locked});
+        Editor.addMenuItem({itemInfo : true, type : "text", label : "x", disabled : item.locked });
+        Editor.addMenuItem({itemInfo : true, type : "text", label : "y", disabled : item.locked });
+        Editor.addMenuItem({itemInfo : true, type : "text", label : "r", disabled : item.locked });
+        Editor.addMenuItem({itemInfo : true, type : "text", label : "w", disabled : item.locked });
+        Editor.addMenuItem({itemInfo : true, type : "text", label : "h", disabled : item.locked });
+        Editor.addMenuItem({itemInfo : true, type : "number", label : "zindex", disabled : item.locked });
+        Editor.addMenuItem({itemInfo : true, type : "text", label : "wrapX", disabled : item.locked });
+        Editor.addMenuItem({itemInfo : true, type : "text", label : "wrapY", disabled : item.locked });
+        Editor.addMenuItem({itemInfo : true, type : "color", label : "color", disabled : item.locked });
 
     },
 
-    addItem(item)
+    addMenuItem(item)
     {
         var div = document.createElement("div");
         div.className = "menuItem";
@@ -75,7 +71,7 @@ var Editor = {
                 item.onchange = "Editor.selected." + item.label + " = this.value;";
 
                 if (item.type == "checkbox") item.onchange = "Editor.selected." + item.label + " = this.checked;";
-                if (item.label == "locked") item.onchange += "Editor.lockItem(this.checked);";
+                if (item.label == "locked") item.onchange += "Editor.foundLocked = null;if (this.checked){Editor.foundLocked = Editor.selected;} Editor.lockItem(this.checked);";
                 if (item.label == "zindex") item.onchange += "Editor.selected.setBufferPosition();";
                 if (item.label == "wrapX" || item.label == "wrapY") item.onchange += "Editor.selected.setBufferTexcoord();";
             }
@@ -123,10 +119,9 @@ var Editor = {
             {
                 input.defaultChecked = item.checked;
             }            
-            if (item.readonly)
+            if (item.disabled)
             {
-                if (item.type == "select") input.disabled = item.readonly;
-                input.readOnly = item.readonly;
+                input.disabled = item.disabled;
             }
             else
             {
@@ -182,8 +177,9 @@ var Editor = {
 
     lockItem(lock)
     {
-        $("div#itemInfo :input").attr("readonly", lock);
-        $("div#itemInfo select").attr("disabled", lock);
+        $("div#itemInfo :input").prop("disabled", lock);
+        $("div#itemInfo select").prop("disabled", lock);
+        $("#locked_id").prop("disabled", false);
     },
 
     update : function()

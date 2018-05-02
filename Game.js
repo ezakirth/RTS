@@ -5,6 +5,7 @@ var Game = {
     height : 1080,
     ratio : 16/9,
     selected : null,
+    wireFrame : true,
 
     scaleTo : function(screenWidth, screenHeight)
     {
@@ -41,12 +42,28 @@ var Game = {
 
     touch : function(x, y)
     {
+        Editor.selected = null;
+        Editor.foundLocked = null;
+        $("#itemInfo").empty();
+
+
         Game.world.touch(x, y);
-        if (!Game.selected) 
+        if (Game.selected) 
         {
-            Editor.selected = null;
-            $("#itemInfo").empty();
-        }        
+            Editor.loadObjectInfo(Game.selected);
+        }
+        else
+        {
+            if (Editor.foundLocked)
+            {
+                Editor.loadObjectInfo(Editor.foundLocked);
+            }
+            else
+            {
+                Editor.selected = null;
+                $("#itemInfo").empty();
+            }
+        }
     }
 
 };

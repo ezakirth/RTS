@@ -136,13 +136,29 @@ class Sprite {
             {
                 this.screenX = spriteX - this.w/2;
                 this.screenY = Game.height - (spriteY + this.h/2);
-                Game.selected = this;
-
-                if (Editor.editMode)
+                
+                if (this.locked)
                 {
-                    Editor.loadItem(this);
+                    Editor.foundLocked = this;
+                }
+                else
+                {
+                    Game.selected = this;
                 }
             }
+            
+            if (Editor.foundLocked && this.zindex < Editor.foundLocked.zindex)
+            {
+                if (this.locked)
+                {
+                    Editor.foundLocked = this;
+                    Game.selected = this;
+                    this.screenX = spriteX - this.w/2;
+                    this.screenY = Game.height - (spriteY + this.h/2);
+                }
+            }
+
+
         }
 
     }

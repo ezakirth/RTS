@@ -6,7 +6,7 @@ Editor.overlay = {
         var ctx = Editor.overlay.ctx;
         ctx.canvas.width = Game.width;
         ctx.canvas.height = Game.height;
-        ctx.fillStyle = "#FFFFFF";
+
         ctx.strokeStyle = "#000000";
         ctx.lineWidth = 2;
     
@@ -27,7 +27,11 @@ Editor.overlay = {
 
             ctx.beginPath();
             ctx.setLineDash([30, 30]);
-            ctx.strokeStyle = "#FFFFFF";
+            if (Editor.foundLocked == Editor.selected)
+                ctx.strokeStyle = "#666666";
+            else
+                ctx.strokeStyle = "#FFFFFF";
+
             ctx.moveTo(sprite.screenX, sprite.screenY);
             ctx.lineTo(sprite.screenX + sprite.w, sprite.screenY);
             ctx.lineTo(sprite.screenX + sprite.w, sprite.screenY + sprite.h);
@@ -39,6 +43,11 @@ Editor.overlay = {
 
             ctx.strokeStyle = "#000000";
             ctx.lineWidth = 2;
+
+            if (Editor.foundLocked == Editor.selected)
+                ctx.fillStyle = "#666666";
+            else
+                ctx.fillStyle = "#FFFFFF";
 
             ctx.fillText("╔", sprite.screenX - 75, sprite.screenY);
             ctx.fillText("╗", sprite.screenX - 12 + sprite.w, sprite.screenY);
