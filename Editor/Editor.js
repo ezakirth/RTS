@@ -2,7 +2,7 @@ var Editor = {
     active : true,
     elem : null,
     selected : null,
-    editMode : true,
+    editMode : false,
     wireFrame : false,
 
     palette : {
@@ -179,12 +179,8 @@ var Editor = {
             });
             var button = document.createElement("button");
             button.style.float = "right";
-            var a = document.createElement("a");
-            a.id = "saveButton";
-            a.setAttribute("download", "map.json");
-            a.innerText = "Save";
-            a.setAttribute("href", "data:application/xml;charset=utf-8," + JSON.stringify(Game.world));
-            button.appendChild(a);
+            $(button).click(function(e){Editor.saveData(Game.world, 'map.json');});
+            button.textContent = "Save";
             div.appendChild(button);    
         }
 
@@ -196,6 +192,22 @@ var Editor = {
         else
             Editor.elem.appendChild(div);
         
+    },
+
+    saveData(data, filename)
+    {
+        var json = JSON.stringify(data);
+        var blob = new Blob([json], {type: "octet/stream"});
+        var url = window.URL.createObjectURL(blob);
+
+        var a = document.createElement('a');
+        document.body.append(a);
+        a.href = url;
+        a.download = filename;
+        a.click();
+        $(a).remove();
+        window.URL.revokeObjectURL(url);
+    
     },
 
     setTexture(tex)
@@ -231,3 +243,5 @@ var Editor = {
     
 
 };
+
+

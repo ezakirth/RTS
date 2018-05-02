@@ -17,7 +17,7 @@ function loadTextures()
         }
 
         tex["bg_"+type] = {
-            minMag : gl.NEAREST,
+            minMag : gl.LINEAR,
             src: "assets/textures/bg_" + type + ".png"
         }
 

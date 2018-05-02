@@ -11,65 +11,101 @@ class World {
      * @param {Object} {texture : WebGLTexture, x : float, y : float, x2 : float, y2 : float, x3 : float, y3 : float, x4 : float, y4 : float}
      */
     constructor(param) {
+        this.loaded = false;
         this.ViewMatrix = twgl.m4.identity();
         this.projectionMatrix = twgl.m4.ortho(0, Game.width, 0, Game.height, -100, 100);
         this.texture = "grass";
-        this.z = 0;
+        this.z = 1;
         this.time = 1;
         this.speed = 1;
         this.lastTime = 1;
         this.objects = [];
     }
 
-    load(data)
+    load(world)
     {
-        if (data)
+        if (world)
         {
-            this.objects = [];
-            this.terrain = null;
-            this.texture = data.texture;
-            for (var i=0; i<data.objects.length;i++)
+            Game.world.loaded = false;
+            var textureList = [];
+            for (var i=0; i<world.objects.length;i++)
             {
-                var object = data.objects[i];
+                var object = world.objects[i];
+                textureList.push(object.texture);
+            }
 
-                if (object.type == "terrain")
-                {
-                    this.terrain = new Terrain({
-                        texture : object.texture,
-                        offsetY : object.offsetY,
-                        terrain : object.terrain,
-                        texWidth : object.texWidth,
-                        texHeight : object.texHeight,
-                        noise : object.noise,
-                        zindex : object.zindex
-                    });
-                    this.objects.push(this.terrain);
-                }
-                else
-                {
-                    if (object.type != "prop")
-                    {
-                        this.objects.push(new Sprite({
-                            type : object.type,
-                            texture : object.texture,
-                            x : object.pos[0],
-                            y : object.pos[1],
-                            w : object.size[0],
-                            h : object.size[1],
-                            locked : object.locked,
-                            distance : object.distance,
-                            wrapX : object.wrapX,
-                            wrapY : object.wrapY,
-                            zindex : object.zindex
-                        }));
-                    }
+            textureList = [...new Set(textureList)];
+            var tex = {};
+
+            for (var i=0;i<textureList.length; i++)
+            {
+                var textureName = textureList[i];
+                tex[textureName] = {
+                    minMag: gl.LINEAR,
+                    wrapS: gl.REPEAT,
+                    wrapT: gl.CLAMP_TO_EDGE,
+                    src: "./assets/textures/"+textureName+".png"         
                 }
             }
+
+            textures = {};
+            textures = twgl.createTextures(gl, tex, function()
+            {
+                
+                Game.world.objects = [];
+                Game.world.terrain = null;
+                Game.world.texture = world.texture;
+                for (var i=0; i<world.objects.length;i++)
+                {
+                    var object = world.objects[i];
+    
+                    if (object.type == "terrain")
+                    {
+                        Game.world.terrain = new Terrain({
+                            texture : object.texture,
+                            offsetY : object.offsetY,
+                            terrain : object.terrain,
+                            texWidth : object.texWidth,
+                            texHeight : object.texHeight,
+                            noise : object.noise,
+                            zindex : object.zindex
+                        });
+                        Game.world.objects.push(Game.world.terrain);
+                    }
+                    else
+                    {
+                        if (object.type != "prop")
+                        {
+                            Game.world.objects.push(new Sprite({
+                                type : object.type,
+                                texture : object.texture,
+                                x : object.pos[0],
+                                y : object.pos[1],
+                                w : object.size[0],
+                                h : object.size[1],
+                                locked : object.locked,
+                                distance : object.distance,
+                                wrapX : object.wrapX,
+                                wrapY : object.wrapY,
+                                zindex : object.zindex
+                            }));
+                        }
+                    }
+                }
+                Game.world.loaded = true;
+            });                
+
+
         }
     }
 
     init()
     {
+        $.getJSON( "./assets/map.json", function( data ) {
+            Game.world.load(data);
+        });
+
+/*
         this.objects.push(new Sprite({
             type : "static",
             texture : "bg_"+Game.world.texture,
@@ -152,27 +188,30 @@ class World {
                 w : 100,
                 h : 100                        
             }));
-        }
+        }*/
     }
 
     update()
     {
-        this.time = Date.now();
-        // Normalize game speed
-        this.speed = 60/(1000/(this.time - this.lastTime));
-        if (this.speed > 5) this.speed = 5;
-        Input.update();
-
-        this.ViewMatrix = twgl.m4.identity(this.ViewMatrix);
-
-        twgl.m4.translate(this.ViewMatrix, twgl.v3.create(Input.viewPos,0,0), this.ViewMatrix);
-
-        for (var i=0; i<this.objects.length; i++)
+        if (this.loaded)
         {
-            this.objects[i].update();
-        }
+            this.time = Date.now();
+            // Normalize game speed
+            this.speed = 60/(1000/(this.time - this.lastTime));
+            if (this.speed > 5) this.speed = 5;
+            Input.update();
 
-        this.objects.sort(Utils.compare);
+            this.ViewMatrix = twgl.m4.identity(this.ViewMatrix);
+
+            twgl.m4.translate(this.ViewMatrix, twgl.v3.create(Input.viewPos,0,0), this.ViewMatrix);
+
+            for (var i=0; i<this.objects.length; i++)
+            {
+                this.objects[i].update();
+            }
+
+            this.objects.sort(Utils.compare);
+        }
     }
 
     draw()

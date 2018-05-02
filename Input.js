@@ -71,15 +71,18 @@ var Input = {
         {
             var deltaX = (Input.last.x - Input.pos.x)*Game.world.speed;
             var deltaY = (Input.last.y - Input.pos.y)*Game.world.speed;
-            if (Editor.editMode && Editor.selected)
+            if (!Editor.active || Input.real.x > 276)
             {
-                Editor.moveObject(deltaX, deltaY);
-            }
-            else
-            {
+                if (Editor.editMode && Editor.selected)
+                {
+                    Editor.moveObject(deltaX, deltaY);
+                }
+                else
+                {
 
-                Input.viewPos -= deltaX;
-                Input.inertia = deltaX;
+                    Input.viewPos -= deltaX;
+                    Input.inertia = deltaX;
+                }
             }
         }
     },
