@@ -3,6 +3,7 @@ var Editor = {
     elem : null,
     selected : null,
     editMode : true,
+    wireFrame : false,
 
     palette : {
         canvas : null,
@@ -16,10 +17,12 @@ var Editor = {
         Editor.addMenuItem({lib : "General"});
         Editor.addMenuItem({type : "select", label : "Texture set", id : "textures", list : ["grass", "asian", "desert", "jungle", "rock", "snow"] });
         
+        Editor.addMenuItem({type : "file", label : "Add Sprite", id : "add" });
+
 
         Editor.addMenuItem({lib : "Options"});
         Editor.addMenuItem({type : "checkbox", label: "Edit mode", id : "editMode", onchange : "Editor.editMode = this.checked;", checked : Editor.editMode});
-        Editor.addMenuItem({type : "checkbox", label: "Show wireframe", id : "wireFrame", onchange : "Game.wireFrame = this.checked;", checked : Game.wireFrame});
+        Editor.addMenuItem({type : "checkbox", label: "Show wireframe", id : "wireFrame", onchange : "Editor.wireFrame = this.checked;", checked : Editor.wireFrame});
     },
 
     loadObjectInfo(item)
@@ -43,6 +46,7 @@ var Editor = {
         Editor.addMenuItem({itemInfo : true, type : "text", label : "w", disabled : item.locked });
         Editor.addMenuItem({itemInfo : true, type : "text", label : "h", disabled : item.locked });
         Editor.addMenuItem({itemInfo : true, type : "number", label : "zindex", disabled : item.locked });
+        Editor.addMenuItem({itemInfo : true, type : "number", label : "distance", disabled : item.locked });
         Editor.addMenuItem({itemInfo : true, type : "text", label : "wrapX", disabled : item.locked });
         Editor.addMenuItem({itemInfo : true, type : "text", label : "wrapY", disabled : item.locked });
         Editor.addMenuItem({itemInfo : true, type : "color", label : "color", disabled : item.locked });
@@ -80,7 +84,7 @@ var Editor = {
             
             var label = document.createElement("label");
             label.className = "itemLabel";
-            if (item.label == "Load") label.className += " load";
+            if (item.type == "file") label.className += " file";
             label.appendChild(document.createTextNode(item.label));
             label.setAttribute("for", item.id);
             div.appendChild(label);
@@ -132,7 +136,36 @@ var Editor = {
             div.appendChild(input);
         }
 
-        if (item.type == "file")
+        if (item.label == "Add Sprite")
+        {
+            input.setAttribute("accept", ".png");
+            $(input).change(function(e) {
+                if (e.target.files[0] && e.target.files[0].name != "")
+                {
+                    var src = "./assets/textures/" + e.target.files[0].name;
+                    textures.last = e.target.files[0].name.slice(0, -4);
+                    textures[textures.last] = twgl.createTextures(gl, {
+                        [textures.last] : {
+                            minMag : gl.LINEAR,
+                            wrap: gl.CLAMP_TO_EDGE,
+                            src: src
+                        }
+                    }, function() {
+                        Game.world.objects.push(new Sprite({
+                            type : "static",
+                            texture : textures.last,
+                            x: Game.width /2,
+                            y: Game.height /2,
+                            w : 300,
+                            h : 300,
+                            zindex : ++Game.world.z
+                        }));
+                    })[textures.last];
+                }
+            });
+        }
+
+        if (item.label == "Load")
         {
             input.setAttribute("accept", ".json");
             $(input).change(function(e) {

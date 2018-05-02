@@ -64,7 +64,7 @@ input[type="text"], input[type="number"] {
     box-sizing : border-box;   
 }
 
-#load {
+input[type="file"] {
 	width: 0.1px;
 	height: 0.1px;
 	opacity: 0;
@@ -72,7 +72,7 @@ input[type="text"], input[type="number"] {
 	position: absolute;
 	z-index: -1;
 }
-label.load {
+label.file {
     display: inline-block;
     border-radius: 15px;
     border: 1px solid rgba(41, 128, 185, 0.3);
@@ -82,7 +82,7 @@ label.load {
    
 }
 
-button:hover, label.load:hover {
+button:hover, label.file:hover {
     background-color: rgba(22, 47, 73, 0.7);
     cursor: pointer;
 }

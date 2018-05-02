@@ -99,7 +99,7 @@ class Sprite {
             twgl.setBuffersAndAttributes(gl, gl.programInfo, this.bufferInfo);
             twgl.setUniforms(gl.programInfo, this.uniforms);
 
-            if (Game.wireFrame == "1")
+            if (Editor.wireFrame == "1")
                 gl.drawElements(gl.LINE_STRIP, this.bufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
             else
                 gl.drawElements(gl.TRIANGLES, this.bufferInfo.numElements, gl.UNSIGNED_SHORT, 0);

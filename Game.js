@@ -5,7 +5,6 @@ var Game = {
     height : 1080,
     ratio : 16/9,
     selected : null,
-    wireFrame : true,
 
     scaleTo : function(screenWidth, screenHeight)
     {
@@ -42,26 +41,32 @@ var Game = {
 
     touch : function(x, y)
     {
-        Editor.selected = null;
-        Editor.foundLocked = null;
-        $("#itemInfo").empty();
-
+        if (Editor.editMode)
+        {
+            Editor.selected = null;
+            Editor.foundLocked = null;
+            $("#itemInfo").empty();
+        }
 
         Game.world.touch(x, y);
-        if (Game.selected) 
+
+        if (Editor.editMode)
         {
-            Editor.loadObjectInfo(Game.selected);
-        }
-        else
-        {
-            if (Editor.foundLocked)
+            if (Game.selected) 
             {
-                Editor.loadObjectInfo(Editor.foundLocked);
+                Editor.loadObjectInfo(Game.selected);
             }
             else
             {
-                Editor.selected = null;
-                $("#itemInfo").empty();
+                if (Editor.foundLocked)
+                {
+                    Editor.loadObjectInfo(Editor.foundLocked);
+                }
+                else
+                {
+                    Editor.selected = null;
+                    $("#itemInfo").empty();
+                }
             }
         }
     }
