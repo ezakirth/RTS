@@ -40,6 +40,7 @@ var Editor = {
         Editor.addMenuItem({itemInfo : true, lib : "Object information (" + item.type + ")"});
         Editor.addMenuItem({itemInfo : true, type : "checkbox", label : "locked", checked : item.locked });
         Editor.addMenuItem({itemInfo : true, type : "select", label : "type", list : ["static", "prop", "layer"], disabled : item.locked});
+        Editor.addMenuItem({itemInfo : true, type : "checkbox", label : "mirrorX", disabled : item.locked });
         Editor.addMenuItem({itemInfo : true, type : "text", label : "x", disabled : item.locked });
         Editor.addMenuItem({itemInfo : true, type : "text", label : "y", disabled : item.locked });
         Editor.addMenuItem({itemInfo : true, type : "text", label : "r", disabled : item.locked });
@@ -76,8 +77,8 @@ var Editor = {
 
                 if (item.type == "checkbox") item.onchange = "Editor.selected." + item.label + " = this.checked;";
                 if (item.label == "locked") item.onchange += "Editor.foundLocked = null;if (this.checked){Editor.foundLocked = Editor.selected;} Editor.lockItem(this.checked);";
-                if (item.label == "zindex") item.onchange += "Editor.selected.setBufferPosition();";
-                if (item.label == "wrapX" || item.label == "wrapY") item.onchange += "Editor.selected.setBufferTexcoord();";
+                if (item.label == "zindex") item.onchange += "Editor.selected.updateBufferPosition();";
+                if (item.label == "mirrorX" || item.label == "wrapX" || item.label == "wrapY") item.onchange += "Editor.selected.updateBufferTexcoord();";
             }
 
             if (item.id == "textures") item.onchange = "Editor.setTexture(this.value);";
@@ -143,24 +144,21 @@ var Editor = {
                 if (e.target.files[0] && e.target.files[0].name != "")
                 {
                     var src = "./assets/textures/" + e.target.files[0].name;
-                    textures.last = e.target.files[0].name.slice(0, -4);
-                    textures[textures.last] = twgl.createTextures(gl, {
-                        [textures.last] : {
+                    var textureName = e.target.files[0].name.slice(0, -4);
+
+                    textures.loading = twgl.createTextures(gl, {
+                        [textureName] : {
                             minMag : gl.LINEAR,
                             wrap: gl.CLAMP_TO_EDGE,
                             src: src
                         }
                     }, function() {
+                        textures[textureName] = textures.loading[textureName];
+                        textures.loading = null;
                         Game.world.objects.push(new Sprite({
-                            type : "static",
-                            texture : textures.last,
-                            x: Game.width /2,
-                            y: Game.height /2,
-                            w : 300,
-                            h : 300,
-                            zindex : ++Game.world.z
+                            texture : textureName
                         }));
-                    })[textures.last];
+                    });
                 }
             });
         }

@@ -15,33 +15,34 @@ class Sprite {
         this.align = param.align;
         this.texture = param.texture;
         this.locked = param.locked || false;
-        this.visible = false;
-        if (param.zindex === undefined)
-            Game.world.z ++;
-        this.zindex = param.zindex || Game.world.z;
+        this.zindex = param.zindex || Game.world.z++;
 
-        this.layerViewMatrix = twgl.m4.identity();
-        this.distance = param.distance;
+        this.mirrorX = param.mirrorX || false;
+        this.mirrorY = param.mirrorY || false;
 
+        this.distance = param.distance || 1;
         this.wrapX = param.wrapX || 1;
         this.wrapY = param.wrapY || 1;
 
         this.pos = twgl.v3.create(
-            param.x || 0,
-            param.y || 0,
+            param.x || Game.width/2,
+            param.y || Game.height/2,
             0
         );
 
         this.size = twgl.v3.create(
-            param.w || 100,
-            param.h || 100,
+            param.w || 300,
+            param.h || 300,
             1
         );
 
-        this.r = 0;
+        this.r = param.r || 0;
+
+        this.visible = false;
 
         this.setBuffer();
 
+        this.layerViewMatrix = twgl.m4.identity();
         this.modelMatrix = twgl.m4.identity();
 
         this.uniforms = {
@@ -119,116 +120,9 @@ class Sprite {
         this.screenY = Game.height - (screenPos[1] + this.h/2);
     }
     
-    touch(x, y)
-    {
-        var layerPos = null;
-        if (this.type == "prop")
-            layerPos = twgl.m4.getTranslation(Game.world.ViewMatrix);
-        else
-            layerPos = twgl.m4.getTranslation(this.layerViewMatrix);
-
-        var screenPos = twgl.m4.getTranslation(this.modelMatrix);
-        var spriteX = screenPos[0] + layerPos[0];
-        var spriteY = screenPos[1];
-        if ( (x > spriteX - this.w/2 && x < spriteX + this.w/2) && (y > spriteY - this.h/2 && y < spriteY + this.h/2) )
-        {
-            if (!Game.selected || this.zindex > Game.selected.zindex)
-            {
-                this.screenX = spriteX - this.w/2;
-                this.screenY = Game.height - (spriteY + this.h/2);
-                
-                if (this.locked)
-                {
-                    Editor.foundLocked = this;
-                }
-                else
-                {
-                    Game.selected = this;
-                }
-            }
-            
-            if (Editor.foundLocked && this.zindex < Editor.foundLocked.zindex)
-            {
-                if (this.locked)
-                {
-                    Editor.foundLocked = this;
-                    Game.selected = this;
-                    this.screenX = spriteX - this.w/2;
-                    this.screenY = Game.height - (spriteY + this.h/2);
-                }
-            }
 
 
-        }
-
-    }
-
-    setBuffer()
-    {
-        var bl = {x : -.5, y : -.5};
-        var br = {x : .5, y : -.5};
-        var tr = {x : .5, y : .5};
-        var tl = {x : -.5, y : .5};
-
-        // initialize the buffers
-        this.bufferInfo = twgl.createBufferInfoFromArrays(gl, {
-            position: {
-                data : [
-                    bl.x, bl.y, this.zindex,
-                    br.x, br.y, this.zindex,
-                    tl.x, tl.y, this.zindex,
-                    tl.x, tl.y, this.zindex,
-                    br.x, br.y, this.zindex,
-                    tr.x, tr.y, this.zindex
-                ],
-                drawType: gl.DYNAMIC_DRAW
-            },
-            texcoord: [
-                0, this.wrapY,
-                this.wrapX, this.wrapY,
-                0, 0,
-                0, 0,
-                this.wrapX, this.wrapY,
-                this.wrapX, 0
-            ],
-            indices: [0,1,2,3,4,5]
-        });
-        
-    }
-
-    setBufferPosition()
-    {
-        var bl = {x : -.5, y : -.5};
-        var br = {x : .5, y : -.5};
-        var tr = {x : .5, y : .5};
-        var tl = {x : -.5, y : .5};
-
-        var position = [
-            bl.x, bl.y, this.zindex,
-            br.x, br.y, this.zindex,
-            tl.x, tl.y, this.zindex,
-            tl.x, tl.y, this.zindex,
-            br.x, br.y, this.zindex,
-            tr.x, tr.y, this.zindex
-        ];
-
-        twgl.setAttribInfoBufferFromArray(gl, this.bufferInfo.attribs.a_position, position);
-    }
-
-    setBufferTexcoord()
-    {
-
-        var texcoord = [
-            0, this.wrapY,
-            this.wrapX, this.wrapY,
-            0, 0,
-            0, 0,
-            this.wrapX, this.wrapY,
-            this.wrapX, 0
-        ];
     
-        twgl.setAttribInfoBufferFromArray(gl, this.bufferInfo.attribs.a_texcoord, texcoord);
-    }
 
     get x()
     {

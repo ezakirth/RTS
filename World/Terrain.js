@@ -13,23 +13,17 @@ class Terrain {
     constructor(param) {
 
         this.type = param.type || "terrain";
-        var Simplex = new SimplexNoise();
+        this.texture = param.texture;
 
         this.blockWidth = Math.floor(Game.width/32);
         this.mapSize = 4*this.blockWidth;
-
-        this.texWidth = param.texWidth;
-        this.texHeight = param.texHeight;
-        this.maxViewWidth = (this.mapSize*(Game.width/this.blockWidth) - this.texWidth) - Game.width;
-
-        this.noise = param.noise;
-
-        this.offsetY = param.offsetY;
 
         if (param.terrain)
             this.terrain = param.terrain;
         else
         {
+            var Simplex = new SimplexNoise();
+            this.noise = param.noise;
             this.terrain = [];
             var xa, xb, ya, yb;
 
@@ -46,7 +40,6 @@ class Terrain {
                     this.terrain[i] = 0;
                 }
             }
-            
 
             for (var i=1; i<=smoothWidth ;i++)
             {
@@ -60,15 +53,17 @@ class Terrain {
             }
         }
 
-        if (param.zindex === undefined)
-            Game.world.z ++;
-        this.zindex = param.zindex || Game.world.z;
-
+        this.texWidth = param.texWidth;
+        this.texHeight = param.texHeight;
+        this.maxViewWidth = (this.mapSize*(Game.width/this.blockWidth) - this.texWidth) - Game.width;
+        this.offsetY = param.offsetY;
+        this.zindex = param.zindex || Game.world.z++;
         this.position = [];
         this.indices = [];
+        this.textcoord = [];
+
         var index = 0;
 
-        this.textcoord = [];
         for (var i=0; i<this.mapSize; i+=2)
         {
             xa = (i)*(Game.width/this.blockWidth);
@@ -91,21 +86,19 @@ class Terrain {
         }
 
 
-        this.texture = param.texture;
+        
 
         // initialize the buffers
         this.bufferInfo = twgl.createBufferInfoFromArrays(gl, {
             position: {
                 data : this.position,
-                drawType: gl.STATIC_DRAW
+                //drawType: gl.STATIC_DRAW//gl.DYNAMIC_DRAW
             },
             texcoord: this.textcoord,
             indices: this.indices
         });
-
         
         this.modelMatrix = twgl.m4.identity();
-
 
         this.uniforms = {
             u_modelViewProjection: twgl.m4.identity(),
