@@ -12,10 +12,9 @@ class World {
      */
     constructor(param) {
         this.loaded = false;
+        this.textures = null;
         this.ViewMatrix = twgl.m4.identity();
         this.projectionMatrix = twgl.m4.ortho(0, Game.width, 0, Game.height, -100, 100);
-        this.texture = "grass";
-        this.z = 1;
         this.time = 1;
         this.speed = 1;
         this.lastTime = 1;
@@ -28,10 +27,12 @@ class World {
         {
             Game.world.loaded = false;
             var textureList = [];
+            var textureSettings = {};
             for (var i=0; i<world.objects.length;i++)
             {
                 var object = world.objects[i];
                 textureList.push(object.texture);
+                textureSettings[object.texture] = { min : object.textureSettings.min, max : object.textureSettings.max, wrapS : object.textureSettings.wrapS, wrapT : object.textureSettings.wrapT};
             }
 
             textureList = [...new Set(textureList)];
@@ -41,20 +42,19 @@ class World {
             {
                 var textureName = textureList[i];
                 tex[textureName] = {
-                    minMag: gl.LINEAR,
-                    wrapS: gl.REPEAT,
-                    wrapT: gl.CLAMP_TO_EDGE,
+                    min : textureSettings[textureName].min,
+                    max : textureSettings[textureName].max,
+                    wrapS: textureSettings[textureName].wrapS,
+                    wrapT: textureSettings[textureName].wrapT,
                     src: "./assets/textures/"+textureName+".png"         
                 }
             }
 
-            textures = {};
-            textures = twgl.createTextures(gl, tex, function()
+            Game.world.textures = null;
+            Game.world.textures = twgl.createTextures(gl, tex, function()
             {
-                
                 Game.world.objects = [];
                 Game.world.terrain = null;
-                Game.world.texture = world.texture;
                 for (var i=0; i<world.objects.length;i++)
                 {
                     var object = world.objects[i];
@@ -70,13 +70,14 @@ class World {
                             noise : object.noise,
                             zindex : object.zindex
                         });
+                        Game.world.terrain.textureSettings = { min : gl.LINEAR, max :gl.LINEAR, wrapS : gl.REPEAT, wrapT : gl.CLAMP_TO_EDGE};
                         Game.world.objects.push(Game.world.terrain);
                     }
                     else
                     {
                         if (object.type != "prop")
                         {
-                            Game.world.objects.push(new Sprite({
+                            var sprite = new Sprite({
                                 type : object.type,
                                 texture : object.texture,
                                 x : object.pos[0],
@@ -87,8 +88,11 @@ class World {
                                 distance : object.distance,
                                 wrapX : object.wrapX,
                                 wrapY : object.wrapY,
+                                mirrorX : object.mirrorX,
                                 zindex : object.zindex
-                            }));
+                            });
+                            sprite.textureSettings = { min : gl.LINEAR, max :gl.LINEAR, wrapS : gl.REPEAT, wrapT : gl.CLAMP_TO_EDGE};
+                            Game.world.objects.push(sprite);
                         }
                     }
                 }

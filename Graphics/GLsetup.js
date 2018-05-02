@@ -24,6 +24,7 @@ function GLsetup()
     gl.clearColor(0, 0, 0, 1);
 //    gl.clearColor(0.180, 0.105, 0.086, 1);
 
+//loadTextures();
     setup();
     resizeCanvas();
     render();

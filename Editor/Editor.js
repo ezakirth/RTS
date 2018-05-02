@@ -146,18 +146,27 @@ var Editor = {
                     var src = "./assets/textures/" + e.target.files[0].name;
                     var textureName = e.target.files[0].name.slice(0, -4);
 
-                    textures.loading = twgl.createTextures(gl, {
+                    var min = gl.LINEAR;
+                    var max = gl.LINEAR;
+                    var wrapS = gl.REPEAT;
+                    var wrapT = gl.CLAMP_TO_EDGE;
+                    Game.world.textures.loading = twgl.createTextures(gl, {
                         [textureName] : {
-                            minMag : gl.LINEAR,
-                            wrap: gl.CLAMP_TO_EDGE,
+                            min : min,
+                            max : max,
+                            wrapS : wrapS,
+                            wrapT : wrapT,
                             src: src
                         }
                     }, function() {
-                        textures[textureName] = textures.loading[textureName];
-                        textures.loading = null;
+                        Game.world.textures[textureName] = Game.world.textures.loading[textureName];
+                        Game.world.textures.loading = null;
+
                         var sprite = new Sprite({
                             texture : textureName
                         });
+                        sprite.textureSettings = { min : min, max : max, wrapS : wrapS, wrapT : wrapT};
+                        
                         Editor.loadObjectInfo(sprite);
                         Game.world.objects.push(sprite);
                     });
@@ -214,8 +223,8 @@ var Editor = {
     {
         for (var i=0; i<Game.world.objects.length; i++)
         {
-            var texture = textures[Game.world.objects[i].texture.split("_")[0] + "_" + tex];
-            if (texture === undefined) texture = textures[Game.world.objects[i].texture];
+            var texture = Game.world.textures[Game.world.objects[i].texture.split("_")[0] + "_" + tex];
+            if (texture === undefined) texture = Game.world.textures[Game.world.objects[i].texture];
             Game.world.objects[i].uniforms.u_texture = texture;
         }
     },

@@ -14,6 +14,7 @@ class Terrain {
 
         this.type = param.type || "terrain";
         this.texture = param.texture;
+        this.textureSettings = {};
 
         this.blockWidth = Math.floor(Game.width/32);
         this.mapSize = 4*this.blockWidth;
@@ -57,7 +58,7 @@ class Terrain {
         this.texHeight = param.texHeight;
         this.maxViewWidth = (this.mapSize*(Game.width/this.blockWidth) - this.texWidth) - Game.width;
         this.offsetY = param.offsetY;
-        this.zindex = param.zindex || Game.world.z++;
+        this.zindex = param.zindex || 1;
         this.position = [];
         this.indices = [];
         this.textcoord = [];
@@ -102,7 +103,7 @@ class Terrain {
 
         this.uniforms = {
             u_modelViewProjection: twgl.m4.identity(),
-            u_texture: textures[this.texture],
+            u_texture: Game.world.textures[this.texture],
             u_color:  new Float32Array([1, 1, 1])
         };
 
