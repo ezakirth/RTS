@@ -13,16 +13,22 @@ var Editor = {
     {
         Editor.elem = document.getElementById("Editor");
 
-        Editor.addMenuItem({type : "file", label : "Load", id : "load" });
         Editor.addMenuItem({lib : "General"});
-        Editor.addMenuItem({type : "select", label : "Texture set", id : "textures", list : ["grass", "asian", "desert", "jungle", "rock", "snow"] });
-        
+        Editor.addMenuItem({type : "checkbox", label: "Edit mode", id : "editMode", onchange : "Editor.editMode = this.checked;", checked : Editor.editMode});
+        Editor.addMenuItem({type : "checkbox", label: "Show wireframe", id : "wireFrame", onchange : "Editor.wireFrame = this.checked;", checked : Editor.wireFrame});
+        Editor.addMenuItem({lib : "Map"});
+        Editor.addMenuItem({type : "file", label : "Load", id : "load" });
+
+        Editor.addMenuItem({lib : "Environment"});
+        Editor.addMenuItem({type : "select", label : "Sprite type", id : "spriteType", list : ["static", "prop", "layer"]});
+        Editor.addMenuItem({type : "select", label : "Texture wrapS", id : "textureWrapS", list : ["CLAMP_TO_EDGE", "REPEAT"] });
+        Editor.addMenuItem({type : "select", label : "Texture wrapT", id : "textureWrapT", list : ["CLAMP_TO_EDGE", "REPEAT"] });
+        Editor.addMenuItem({type : "number", label : "zIndex", id : "zIndex", value : 1 });
+        Editor.addMenuItem({type : "number", label : "Distance", id : "Distance", value : 1 });
+
         Editor.addMenuItem({type : "file", label : "Add Sprite", id : "add" });
 
 
-        Editor.addMenuItem({lib : "Options"});
-        Editor.addMenuItem({type : "checkbox", label: "Edit mode", id : "editMode", onchange : "Editor.editMode = this.checked;", checked : Editor.editMode});
-        Editor.addMenuItem({type : "checkbox", label: "Show wireframe", id : "wireFrame", onchange : "Editor.wireFrame = this.checked;", checked : Editor.wireFrame});
     },
 
     loadObjectInfo(item)
@@ -39,12 +45,11 @@ var Editor = {
         $("#itemInfo").empty();
         Editor.addMenuItem({itemInfo : true, lib : "Object information (" + item.type + ")"});
         Editor.addMenuItem({itemInfo : true, type : "checkbox", label : "locked", checked : item.locked });
-        Editor.addMenuItem({itemInfo : true, type : "select", label : "type", list : ["static", "prop", "layer"], disabled : item.locked});
         Editor.addMenuItem({itemInfo : true, type : "checkbox", label : "mirrorX", disabled : item.locked });
         Editor.addMenuItem({itemInfo : true, type : "text", label : "x", disabled : item.locked });
         Editor.addMenuItem({itemInfo : true, type : "text", label : "y", disabled : item.locked });
         Editor.addMenuItem({itemInfo : true, type : "number", label : "z", disabled : item.locked });
-        Editor.addMenuItem({itemInfo : true, type : "text", label : "r", disabled : item.locked });
+        Editor.addMenuItem({itemInfo : true, type : "number", label : "r", disabled : item.locked });
         Editor.addMenuItem({itemInfo : true, type : "text", label : "w", disabled : item.locked });
         Editor.addMenuItem({itemInfo : true, type : "text", label : "h", disabled : item.locked });
         Editor.addMenuItem({itemInfo : true, type : "number", label : "distance", disabled : item.locked });
@@ -78,10 +83,9 @@ var Editor = {
                 if (item.type == "checkbox") item.onchange = "Editor.selected." + item.label + " = this.checked;";
                 if (item.label == "locked") item.onchange += "Editor.foundLocked = null;if (this.checked){Editor.foundLocked = Editor.selected;} Editor.lockItem(this.checked);";
                 if (item.label == "mirrorX" || item.label == "wrapX" || item.label == "wrapY") item.onchange += "Editor.selected.updateBufferTexcoord();";
+                if (item.label == "r") item.onchange = "Editor.selected." + item.label + " = this.value*Math.PI/180;";
             }
 
-            if (item.id == "textures") item.onchange = "Editor.setTexture(this.value);";
-            
             var label = document.createElement("label");
             label.className = "itemLabel";
             if (item.type == "file") label.className += " file";
@@ -102,6 +106,7 @@ var Editor = {
                     opt.text = option;
                     opt.selected = (opt.value == item.value);
                     input.appendChild(opt);
+                    input.id = item.id;
                 }                
             }
             else
@@ -145,30 +150,69 @@ var Editor = {
                     var src = "./assets/textures/" + e.target.files[0].name;
                     var textureName = e.target.files[0].name.slice(0, -4);
 
-                    var min = gl.LINEAR;
-                    var max = gl.LINEAR;
-                    var wrapS = gl.REPEAT;
-                    var wrapT = gl.CLAMP_TO_EDGE;
-                    Game.world.textures.loading = twgl.createTextures(gl, {
-                        [textureName] : {
-                            min : min,
-                            max : max,
-                            wrapS : wrapS,
-                            wrapT : wrapT,
-                            src: src
-                        }
-                    }, function() {
-                        Game.world.textures[textureName] = Game.world.textures.loading[textureName];
-                        Game.world.textures.loading = null;
+                    var type = $("#spriteType").val();
+                    var x = Game.width/2;
+                    var y = Game.height/2;
+                    var z = $("#zIndex").val();;
+                    var distance = $("#Distance").val();;
 
+                    if (type == "prop")
+                        x = -Input.viewPos + Game.width/2
+
+                    if (type == "layer")
+                        x = -Input.viewPos/.5 + Game.width/2
+
+                    if (Game.world.textures[textureName])
+                    {
                         var sprite = new Sprite({
-                            texture : textureName
-                        });
+                            type : type,
+                            texture : textureName,
+                            x : x,
+                            y : y,
+                            z : z,
+                            distance : distance,
+                    });
                         sprite.textureSettings = { min : min, max : max, wrapS : wrapS, wrapT : wrapT};
                         
                         Editor.loadObjectInfo(sprite);
                         Game.world.objects.push(sprite);
-                    });
+                    }
+                    else
+                    {
+                        var wrapS, wrapT;
+                        if ($("#textureWrapS").val() == "REPEAT") wrapS = gl.REPEAT; else wrapS = gl.CLAMP_TO_EDGE;
+                        if ($("#textureWrapT").val() == "REPEAT") wrapT = gl.REPEAT; else wrapT = gl.CLAMP_TO_EDGE;
+                        var min = gl.LINEAR;
+                        var max = gl.LINEAR;
+                        Game.world.textures.loading = twgl.createTextures(gl, {
+                            [textureName] : {
+                                min : min,
+                                max : max,
+                                wrapS : wrapS,
+                                wrapT : wrapT,
+                                src: src
+                            }
+                        }, function() {
+                            Game.world.textures[textureName] = Game.world.textures.loading[textureName];
+                            Game.world.textures.loading = null;
+
+                            var sprite = new Sprite({
+                                type : type,
+                                texture : textureName,
+                                x : x,
+                                y : y,
+                                z : z,
+                                distance : distance
+                            });
+                            sprite.textureSettings = { min : min, max : max, wrapS : wrapS, wrapT : wrapT};
+                            
+                            Editor.loadObjectInfo(sprite);
+                            Game.world.objects.push(sprite);
+                        });
+                    }
+                    $("#add").attr("type", "text");
+                    $("#add").attr("type", "file");
+
                 }
             });
         }

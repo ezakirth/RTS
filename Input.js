@@ -73,7 +73,7 @@ var Input = {
             var deltaY = (Input.last.y - Input.pos.y)*Game.world.speed;
             if (!Editor.active || Input.real.x > 276)
             {
-                if (Editor.editMode && Editor.selected)
+                if (Editor.editMode && Editor.selected && !Editor.selected.locked)
                 {
                     Editor.moveObject(deltaX, deltaY);
                 }
