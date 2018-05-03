@@ -17,7 +17,6 @@ class Sprite {
         this.textureSettings = {};
 
         this.locked = param.locked || false;
-        this.zindex = param.zindex || 1;
 
         this.mirrorX = param.mirrorX || false;
         this.mirrorY = param.mirrorY || false;
@@ -26,10 +25,11 @@ class Sprite {
         this.wrapX = param.wrapX || 1;
         this.wrapY = param.wrapY || 1;
 
+        if (!param.z) param.z = 0;
         this.pos = twgl.v3.create(
             param.x || Game.width/2,
             param.y || Game.height/2,
-            0
+            param.z
         );
 
         this.size = twgl.v3.create(
@@ -66,7 +66,7 @@ class Sprite {
         
 
         // Projection*View*Model
-        if (this.type == "prop")
+        if (this.type == "prop" || this.type == "terrain")
         {
             twgl.m4.multiply(Game.world.projectionMatrix, Game.world.ViewMatrix, this.uniforms.u_modelViewProjection);
         }
@@ -93,6 +93,7 @@ class Sprite {
             this.visible = true;
         if (this.type == "static") this.visible = true;
 */
+
     }
 
     draw()
@@ -112,7 +113,7 @@ class Sprite {
     updateOverlayPos()
     {
         var layerPos = null;
-        if (this.type == "prop")
+        if (this.type == "prop" || this.type == "prop")
             layerPos = twgl.m4.getTranslation(Game.world.ViewMatrix);
         else
             layerPos = twgl.m4.getTranslation(this.layerViewMatrix);
@@ -144,6 +145,16 @@ class Sprite {
     set y(y)
     {
         this.pos[1] = y;
+    }
+
+    get z()
+    {
+        return this.pos[2];
+    }
+
+    set z(z)
+    {
+        this.pos[2] = z;
     }
 
     get w()

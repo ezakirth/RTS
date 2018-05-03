@@ -13,6 +13,7 @@ class Unit extends Sprite {
     constructor(param) {
         super(param);
 
+        this.z = ++Game.world.zindex;
         this.fighting = false;
         this.dying = false;
 

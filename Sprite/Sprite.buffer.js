@@ -23,18 +23,18 @@ Sprite.prototype.updateBufferTexcoord = function()
 
 Sprite.prototype.getBufferPosition = function()
 {
-    var bl = {x : -.5, y : -.5};
-    var br = {x : .5, y : -.5};
-    var tr = {x : .5, y : .5};
-    var tl = {x : -.5, y : .5};
+    var bl = {x : -.5, y : -.5, z : 0};
+    var br = {x : .5, y : -.5, z : 0};
+    var tr = {x : .5, y : .5, z : 0};
+    var tl = {x : -.5, y : .5, z : 0};
 
     return [
-        bl.x, bl.y, this.zindex,
-        br.x, br.y, this.zindex,
-        tl.x, tl.y, this.zindex,
-        tl.x, tl.y, this.zindex,
-        br.x, br.y, this.zindex,
-        tr.x, tr.y, this.zindex
+        bl.x, bl.y, bl.z,
+        br.x, br.y, br.z,
+        tl.x, tl.y, tl.z,
+        tl.x, tl.y, tl.z,
+        br.x, br.y, br.z,
+        tr.x, tr.y, tr.z
     ];
 }
 

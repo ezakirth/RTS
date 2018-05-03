@@ -10,8 +10,8 @@ class Terrain {
      * Creates a Terrain object
      * @param {Object} {texture : WebGLTexture, x : float, y : float, x2 : float, y2 : float, x3 : float, y3 : float, x4 : float, y4 : float}
      */
-    constructor(param) {
-
+    constructor(param){
+     //   super(param);
         this.type = param.type || "terrain";
         this.texture = param.texture;
         this.textureSettings = {};
@@ -58,11 +58,10 @@ class Terrain {
         this.texHeight = param.texHeight;
         this.maxViewWidth = (this.mapSize*(Game.width/this.blockWidth) - this.texWidth) - Game.width;
         this.offsetY = param.offsetY;
-        this.zindex = param.zindex || 1;
         this.position = [];
         this.indices = [];
         this.textcoord = [];
-
+        this.z = 10;
         var index = 0;
 
         for (var i=0; i<this.mapSize; i+=2)
@@ -72,9 +71,9 @@ class Terrain {
             ya = this.terrain[i] + this.offsetY;
             yb = this.terrain[i+1] + this.offsetY;
 
-            this.position.push(xa, ya, this.zindex);
+            this.position.push(xa, ya, this.z);
             this.indices.push(index++);
-            this.position.push(xb, yb - this.texHeight, this.zindex);
+            this.position.push(xb, yb - this.texHeight, this.z);
             this.indices.push(index++);
 
             var ratio = (i/this.blockWidth)*Math.floor(Game.width/this.texWidth);
@@ -133,7 +132,8 @@ class Terrain {
 
     touch(x, y)
     {
-
+        
     }
+
 }
 

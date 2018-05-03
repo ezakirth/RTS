@@ -11,7 +11,7 @@ Sprite.prototype.touch = function(x, y)
     var spriteY = screenPos[1];
     if ( (x > spriteX - this.w/2 && x < spriteX + this.w/2) && (y > spriteY - this.h/2 && y < spriteY + this.h/2) )
     {
-        if (!Game.selected || this.zindex > Game.selected.zindex)
+        if (!Game.selected || this.z > Game.selected.z)
         {
             this.screenX = spriteX - this.w/2;
             this.screenY = Game.height - (spriteY + this.h/2);
@@ -26,7 +26,7 @@ Sprite.prototype.touch = function(x, y)
             }
         }
         
-        if (Editor.foundLocked && this.zindex < Editor.foundLocked.zindex)
+        if (Editor.foundLocked && this.z < Editor.foundLocked.z)
         {
             if (this.locked)
             {

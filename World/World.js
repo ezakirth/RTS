@@ -15,6 +15,7 @@ class World {
         this.textures = null;
         this.ViewMatrix = twgl.m4.identity();
         this.projectionMatrix = twgl.m4.ortho(0, Game.width, 0, Game.height, -100, 100);
+        this.zindex = 10;
         this.time = 1;
         this.speed = 1;
         this.lastTime = 1;
@@ -34,8 +35,9 @@ class World {
                 textureList.push(object.texture);
                 textureSettings[object.texture] = { min : object.textureSettings.min, max : object.textureSettings.max, wrapS : object.textureSettings.wrapS, wrapT : object.textureSettings.wrapT};
             }
-
             textureList = [...new Set(textureList)];
+            textureList.push("unit");
+            textureSettings["unit"] = {};
             var tex = {};
 
             for (var i=0;i<textureList.length; i++)
@@ -67,8 +69,7 @@ class World {
                             terrain : object.terrain,
                             texWidth : object.texWidth,
                             texHeight : object.texHeight,
-                            noise : object.noise,
-                            zindex : object.zindex
+                            noise : object.noise
                         });
                         Game.world.terrain.textureSettings = { min : gl.LINEAR, max :gl.LINEAR, wrapS : gl.REPEAT, wrapT : gl.CLAMP_TO_EDGE};
                         Game.world.objects.push(Game.world.terrain);
@@ -82,14 +83,14 @@ class World {
                                 texture : object.texture,
                                 x : object.pos[0],
                                 y : object.pos[1],
+                                z : object.pos[2],
                                 w : object.size[0],
                                 h : object.size[1],
                                 locked : object.locked,
                                 distance : object.distance,
                                 wrapX : object.wrapX,
                                 wrapY : object.wrapY,
-                                mirrorX : object.mirrorX,
-                                zindex : object.zindex
+                                mirrorX : object.mirrorX
                             });
                             sprite.textureSettings = { min : gl.LINEAR, max :gl.LINEAR, wrapS : gl.REPEAT, wrapT : gl.CLAMP_TO_EDGE};
                             Game.world.objects.push(sprite);
@@ -97,6 +98,15 @@ class World {
                     }
                 }
                 Game.world.loaded = true;
+                for (var i=0;i<10;i++)
+                {
+                    Game.world.objects.push(new Unit({
+                        type : "prop",
+                        texture : "unit",
+                        w : 100,
+                        h : 100                        
+                    }));
+                }
             });                
 
 
@@ -108,8 +118,8 @@ class World {
         $.getJSON( "./assets/map.json", function( data ) {
             Game.world.load(data);
         });
-
 /*
+        Game.world.texture = "grass";
         this.objects.push(new Sprite({
             type : "static",
             texture : "bg_"+Game.world.texture,
@@ -183,16 +193,8 @@ class World {
         });
 
         this.objects.push(this.terrain);        
-        
-        for (var i=0;i<10;i++)
-        {
-            this.objects.push(new Unit({
-                type : "prop",
-                texture : "unit",
-                w : 100,
-                h : 100                        
-            }));
-        }*/
+       */
+
     }
 
     update()

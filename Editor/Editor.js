@@ -2,7 +2,7 @@ var Editor = {
     active : true,
     elem : null,
     selected : null,
-    editMode : false,
+    editMode : true,
     wireFrame : false,
 
     palette : {
@@ -43,10 +43,10 @@ var Editor = {
         Editor.addMenuItem({itemInfo : true, type : "checkbox", label : "mirrorX", disabled : item.locked });
         Editor.addMenuItem({itemInfo : true, type : "text", label : "x", disabled : item.locked });
         Editor.addMenuItem({itemInfo : true, type : "text", label : "y", disabled : item.locked });
+        Editor.addMenuItem({itemInfo : true, type : "number", label : "z", disabled : item.locked });
         Editor.addMenuItem({itemInfo : true, type : "text", label : "r", disabled : item.locked });
         Editor.addMenuItem({itemInfo : true, type : "text", label : "w", disabled : item.locked });
         Editor.addMenuItem({itemInfo : true, type : "text", label : "h", disabled : item.locked });
-        Editor.addMenuItem({itemInfo : true, type : "number", label : "zindex", disabled : item.locked });
         Editor.addMenuItem({itemInfo : true, type : "number", label : "distance", disabled : item.locked });
         Editor.addMenuItem({itemInfo : true, type : "text", label : "wrapX", disabled : item.locked });
         Editor.addMenuItem({itemInfo : true, type : "text", label : "wrapY", disabled : item.locked });
@@ -77,7 +77,6 @@ var Editor = {
 
                 if (item.type == "checkbox") item.onchange = "Editor.selected." + item.label + " = this.checked;";
                 if (item.label == "locked") item.onchange += "Editor.foundLocked = null;if (this.checked){Editor.foundLocked = Editor.selected;} Editor.lockItem(this.checked);";
-                if (item.label == "zindex") item.onchange += "Editor.selected.updateBufferPosition();";
                 if (item.label == "mirrorX" || item.label == "wrapX" || item.label == "wrapY") item.onchange += "Editor.selected.updateBufferTexcoord();";
             }
 
