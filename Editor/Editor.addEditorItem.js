@@ -77,34 +77,30 @@ Editor.addEditorItem = function(item)
                 input.setAttribute("onclick", "this.select()");
         }
 
+        if (item.label == "Add Sprite")
+        {
+            input.setAttribute("accept", ".png");
+            $(input).change(Editor.addSprite);
+        }
+    
+        if (item.label == "Load")
+        {
+            input.setAttribute("accept", ".json");
+            $(input).change(Editor.loadMap);
+            var button = document.createElement("button");
+            button.style.float = "right";
+            $(button).click(Editor.saveMap);
+            button.textContent = "Save";
+            div.appendChild(button);    
+        }
+
         div.appendChild(input);
     }
 
-    if (item.label == "Add Sprite")
-    {
-        input.setAttribute("accept", ".png");
-        $(input).change(Editor.addSprite);
-    }
-
-    if (item.label == "Load")
-    {
-        input.setAttribute("accept", ".json");
-        $(input).change(Editor.loadMap);
-        var button = document.createElement("button");
-        button.style.float = "right";
-        $(button).click(Editor.saveMap);
-        button.textContent = "Save";
-        div.appendChild(button);    
-    }
-
-
     if (item.itemInfo)
-    {
         $("#itemInfo").append(div);
-    }
     else
         Editor.elem.appendChild(div);
-    
 }
 
 Editor.loadMap = function(e)
