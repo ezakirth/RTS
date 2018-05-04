@@ -12,7 +12,6 @@ Editor.addEditorItem = function(item)
     }
     else
     {
-        
         if (item.itemInfo)
         {
             item.id = item.label + "_id";
@@ -140,6 +139,12 @@ Editor.addSprite = function(e)
 
         if (Game.world.textures[textureName])
         {
+            var wrapS, wrapT;
+            if ($("#textureWrapS").val() == "REPEAT") wrapS = gl.REPEAT; else wrapS = gl.CLAMP_TO_EDGE;
+            if ($("#textureWrapT").val() == "REPEAT") wrapT = gl.REPEAT; else wrapT = gl.CLAMP_TO_EDGE;
+            var min = gl.LINEAR;
+            var max = gl.LINEAR;
+
             var sprite = new Sprite({
                 type : type,
                 texture : textureName,
