@@ -4,7 +4,7 @@ Editor.addSprite = function(e)
     if (e.target.files[0] && e.target.files[0].name != "")
     {
         var src = "./assets/textures/" + e.target.files[0].name;
-        var textureName = e.target.files[0].name.slice(0, -4) + "_" + $("#textureWrapS").val() + "_" + $("#textureWrapTS").val();
+        var textureName = e.target.files[0].name.slice(0, -4) + "_" + $("#textureWrapS").val() + "_" + $("#textureWrapT").val();
 
         var type = $("#spriteType").val();
         var x = Game.width/2;
@@ -67,6 +67,7 @@ Editor.addSprite = function(e)
                     distance : distance
                 });
                 Game.world.texturesSettings[textureName] = { min : min, max : max, wrapS : wrapS, wrapT : wrapT};
+                console.log(Game.world.texturesSettings[textureName]);
                 
                 Editor.loadObjectInfo(sprite);
                 Game.world.objects.push(sprite);

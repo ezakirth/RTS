@@ -12,7 +12,7 @@ class World {
      */
     constructor(param) {
         this.loaded = false;
-        this.textures = null;
+        this.textures = {};
         this.texturesSettings = {};
         this.ViewMatrix = twgl.m4.identity();
         this.projectionMatrix = twgl.m4.ortho(0, Game.width, 0, Game.height, -100, 100);
@@ -26,9 +26,10 @@ class World {
 
     init()
     {
-        $.getJSON( "./assets/map.json", function( data ) {
+        this.loaded = true;
+     /*   $.getJSON( "./assets/map.json", function( data ) {
             Game.world.load(data);
-        });
+        });*/
 /*
         Game.world.texture = "grass";
         this.objects.push(new Sprite({
