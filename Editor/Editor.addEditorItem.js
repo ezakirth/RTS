@@ -24,12 +24,22 @@ Editor.addEditorItem = function(item)
             if (item.label == "r") item.onchange = "Editor.selected." + item.label + " = this.value*Math.PI/180;";
         }
 
-        var label = document.createElement("label");
-        label.className = "itemLabel";
-        if (item.type == "file") label.className += " file";
-        label.appendChild(document.createTextNode(item.label));
-        label.setAttribute("for", item.id);
-        div.appendChild(label);
+        if (item.type == "button")
+        {
+            var button = document.createElement("button");
+            $(button).click(Editor.deleteItem);
+            button.textContent = item.label;
+            div.appendChild(button);
+        }
+        else
+        {
+            var label = document.createElement("label");
+            label.className = "itemLabel";
+            if (item.type == "file") label.className += " file";
+            label.appendChild(document.createTextNode(item.label));
+            label.setAttribute("for", item.id);
+            div.appendChild(label);
+        }
 
         var input;
 
@@ -57,43 +67,47 @@ Editor.addEditorItem = function(item)
             input.setAttribute("value", item.value);
         }
 
-        if (item.onchange)
+        if (item.type != "button")
         {
-            input.setAttribute("onkeyup", item.onchange);
-            input.setAttribute("onchange", item.onchange);
-        }
-        if (item.checked)
-        {
-            input.defaultChecked = item.checked;
-        }            
-        if (item.disabled)
-        {
-            input.disabled = item.disabled;
-        }
-        else
-        {
-            if (item.type != "select")
-                input.setAttribute("onclick", "this.select()");
-        }
+            if (item.onchange)
+            {
+                input.setAttribute("onkeyup", item.onchange);
+                input.setAttribute("onchange", item.onchange);
+            }
+            if (item.checked)
+            {
+                input.defaultChecked = item.checked;
+            }            
+            if (item.disabled)
+            {
+                input.disabled = item.disabled;
+            }
+            else
+            {
+                if (item.type != "select")
+                    input.setAttribute("onclick", "this.select()");
+            }
 
-        if (item.label == "Add Sprite")
-        {
-            input.setAttribute("accept", ".png");
-            $(input).change(Editor.addSprite);
-        }
-    
-        if (item.label == "Load")
-        {
-            input.setAttribute("accept", ".json");
-            $(input).change(Editor.loadMap);
-            var button = document.createElement("button");
-            button.style.float = "right";
-            $(button).click(Editor.saveMap);
-            button.textContent = "Save";
-            div.appendChild(button);    
-        }
+            if (item.label == "Add Sprite")
+            {
+                input.setAttribute("accept", ".png");
+                $(input).change(Editor.addSprite);
+            }
+        
+            
+            if (item.label == "Load")
+            {
+                input.setAttribute("accept", ".json");
+                $(input).change(Editor.loadMap);
+                var button = document.createElement("button");
+                button.style.float = "right";
+                $(button).click(Editor.saveMap);
+                button.textContent = "Save";
+                div.appendChild(button);    
+            }
 
-        div.appendChild(input);
+            div.appendChild(input);
+        }
     }
 
     if (item.itemInfo)
