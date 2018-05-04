@@ -42,10 +42,10 @@ Editor.loadObjectInfo = function(item)
     Editor.addEditorItem({itemInfo : true, type : "text", label : "h", disabled : item.locked });
     if (item.type == "layer")
         Editor.addEditorItem({itemInfo : true, type : "number", label : "distance", disabled : item.locked });
-    if (Game.world.texturesSettings[item.texture].wrapS = gl.REPEAT)
+    if (Game.world.texturesInfos[item.texture].wrapS == gl.REPEAT)
         Editor.addEditorItem({itemInfo : true, type : "text", label : "wrapX", disabled : item.locked });
-    if (Game.world.texturesSettings[item.texture].wrapT = gl.REPEAT)
+    if (Game.world.texturesInfos[item.texture].wrapT == gl.REPEAT)
         Editor.addEditorItem({itemInfo : true, type : "text", label : "wrapY", disabled : item.locked });
-    Editor.addEditorItem({itemInfo : true, type : "color", label : "color", disabled : item.locked });
+    Editor.addEditorItem({itemInfo : true, type : "color", label : "tint", disabled : item.locked });
 
 }

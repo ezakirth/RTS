@@ -4,30 +4,29 @@ World.prototype.load = function(map)
     if (map)
     {
         Game.world.loaded = false;
-        Game.world.texturesSettings = {};
+        Game.world.texturesInfos = {};
 
         var textureList = [];
         for (var i=0; i<map.objects.length;i++)
         {
             var object = map.objects[i];
             textureList.push(object.texture);
-//            Game.world.texturesSettings[object.texture] = { min : map.texturesSettings[object.texture].min, max : map.texturesSettings[object.texture].max, wrapS : map.texturesSettings[object.texture].wrapS, wrapT : map.texturesSettings[object.texture].wrapT};
-            Game.world.texturesSettings[object.texture] = { min : object.textureSettings.min, max : object.textureSettings.max, wrapS : object.textureSettings.wrapS, wrapT : object.textureSettings.wrapT};
+            Game.world.texturesInfos[object.texture] = { src : map.texturesInfos[object.texture].src, min : map.texturesInfos[object.texture].min, max : map.texturesInfos[object.texture].max, wrapS : map.texturesInfos[object.texture].wrapS, wrapT : map.texturesInfos[object.texture].wrapT};
         }
         textureList = [...new Set(textureList)];
      /*   textureList.push("unit");
-        Game.world.texturesSettings["unit"] = {};*/
+        Game.world.texturesInfos["unit"] = {};*/
         var tex = {};
 
         for (var i=0;i<textureList.length; i++)
         {
             var textureName = textureList[i];
             tex[textureName] = {
-                min : Game.world.texturesSettings[textureName].min,
-                max : Game.world.texturesSettings[textureName].max,
-                wrapS: Game.world.texturesSettings[textureName].wrapS,
-                wrapT: Game.world.texturesSettings[textureName].wrapT,
-                src: "./assets/textures/"+textureName+".png"         
+                min : Game.world.texturesInfos[textureName].min,
+                max : Game.world.texturesInfos[textureName].max,
+                wrapS: Game.world.texturesInfos[textureName].wrapS,
+                wrapT: Game.world.texturesInfos[textureName].wrapT,
+                src: Game.world.texturesInfos[textureName].src         
             }
         }
 
@@ -64,6 +63,7 @@ World.prototype.load = function(map)
                             z : object.pos[2],
                             w : object.size[0],
                             h : object.size[1],
+                            color : object.color,
                             locked : object.locked,
                             distance : object.distance,
                             wrapX : object.wrapX,

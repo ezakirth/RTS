@@ -4,7 +4,7 @@ Editor.addSprite = function(e)
     if (e.target.files[0] && e.target.files[0].name != "")
     {
         var src = "./assets/textures/" + e.target.files[0].name;
-        var textureName = e.target.files[0].name.slice(0, -4) + "_" + $("#textureWrapS").val() + "_" + $("#textureWrapT").val();
+        var texture = e.target.files[0].name.slice(0, -4) + "_" + $("#textureWrapS").val() + "_" + $("#textureWrapT").val();
 
         var type = $("#spriteType").val();
         var x = Game.width/2;
@@ -18,7 +18,7 @@ Editor.addSprite = function(e)
         if (type == "layer")
             x = -Input.viewPos/.5 + Game.width/2
 
-        if (Game.world.textures[textureName])
+        if (Game.world.textures[texture])
         {
             var wrapS, wrapT;
             if ($("#textureWrapS").val() == "REPEAT") wrapS = gl.REPEAT; else wrapS = gl.CLAMP_TO_EDGE;
@@ -28,13 +28,13 @@ Editor.addSprite = function(e)
 
             var sprite = new Sprite({
                 type : type,
-                texture : textureName,
+                texture : texture,
                 x : x,
                 y : y,
                 z : z,
                 distance : distance,
             });
-            Game.world.texturesSettings[textureName] = { min : min, max : max, wrapS : wrapS, wrapT : wrapT};
+            Game.world.texturesInfos[texture] = { src: src, min : min, max : max, wrapS : wrapS, wrapT : wrapT};
             
             Editor.loadObjectInfo(sprite);
             Game.world.objects.push(sprite);
@@ -47,28 +47,27 @@ Editor.addSprite = function(e)
             var min = gl.LINEAR;
             var max = gl.LINEAR;
             Game.world.textures.loading = twgl.createTextures(gl, {
-                [textureName] : {
+                [texture] : {
                     min : min,
                     max : max,
                     wrapS : wrapS,
                     wrapT : wrapT,
-                    src: src
+                    src : src
                 }
             }, function() {
-                Game.world.textures[textureName] = Game.world.textures.loading[textureName];
+                Game.world.textures[texture] = Game.world.textures.loading[texture];
                 Game.world.textures.loading = null;
 
                 var sprite = new Sprite({
                     type : type,
-                    texture : textureName,
+                    texture : texture,
                     x : x,
                     y : y,
                     z : z,
                     distance : distance
                 });
-                Game.world.texturesSettings[textureName] = { min : min, max : max, wrapS : wrapS, wrapT : wrapT};
-                console.log(Game.world.texturesSettings[textureName]);
-                
+                Game.world.texturesInfos[texture] = { src : src, min : min, max : max, wrapS : wrapS, wrapT : wrapT};
+                console.log(Game.world.texturesInfos[texture]);
                 Editor.loadObjectInfo(sprite);
                 Game.world.objects.push(sprite);
             });

@@ -12,9 +12,7 @@ class Sprite {
      */
     constructor(param) {
         this.type = param.type || "static";
-        this.align = param.align;
         this.texture = param.texture;
-
         this.locked = param.locked || false;
 
         this.mirrorX = param.mirrorX || false;
@@ -52,6 +50,8 @@ class Sprite {
             u_color:  new Float32Array([1, 1, 1])
         };
 
+        this.tint = param.color || "#FFFFFF";
+        this.color = param.color || "#FFFFFF";
         this.screenX = 0;
         this.screenY = 0;
     }
@@ -176,18 +176,19 @@ class Sprite {
         this.size[1] = h;
     }
 
-    get color()
+    get tint()
     {
         var rgb = Math.floor(this.uniforms.u_color[2]*255) | (Math.floor(this.uniforms.u_color[1]*255) << 8) | (Math.floor(this.uniforms.u_color[0]*255) << 16);
         return "#" + (0x1000000 | rgb).toString(16).substring(1);
     }
 
-    set color(hex)
+    set tint(hex)
     {
         var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
         this.uniforms.u_color[0] = parseInt(result[1], 16)/255;
         this.uniforms.u_color[1] = parseInt(result[2], 16)/255;
         this.uniforms.u_color[2] = parseInt(result[3], 16)/255;
+        this.color = hex;
     }
 
 }
