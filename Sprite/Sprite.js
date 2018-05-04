@@ -14,7 +14,6 @@ class Sprite {
         this.type = param.type || "static";
         this.align = param.align;
         this.texture = param.texture;
-        this.textureSettings = {};
 
         this.locked = param.locked || false;
 

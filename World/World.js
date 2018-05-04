@@ -13,6 +13,7 @@ class World {
     constructor(param) {
         this.loaded = false;
         this.textures = null;
+        this.texturesSettings = {};
         this.ViewMatrix = twgl.m4.identity();
         this.projectionMatrix = twgl.m4.ortho(0, Game.width, 0, Game.height, -100, 100);
         this.zindex = 10;
@@ -22,96 +23,6 @@ class World {
         this.objects = [];
     }
 
-    load(world)
-    {
-        if (world)
-        {
-            Game.world.loaded = false;
-            var textureList = [];
-            var textureSettings = {};
-            for (var i=0; i<world.objects.length;i++)
-            {
-                var object = world.objects[i];
-                textureList.push(object.texture);
-                textureSettings[object.texture] = { min : object.textureSettings.min, max : object.textureSettings.max, wrapS : object.textureSettings.wrapS, wrapT : object.textureSettings.wrapT};
-            }
-            textureList = [...new Set(textureList)];
-            textureList.push("unit");
-            textureSettings["unit"] = {};
-            var tex = {};
-
-            for (var i=0;i<textureList.length; i++)
-            {
-                var textureName = textureList[i];
-                tex[textureName] = {
-                    min : textureSettings[textureName].min,
-                    max : textureSettings[textureName].max,
-                    wrapS: textureSettings[textureName].wrapS,
-                    wrapT: textureSettings[textureName].wrapT,
-                    src: "./assets/textures/"+textureName+".png"         
-                }
-            }
-
-            Game.world.textures = null;
-            Game.world.textures = twgl.createTextures(gl, tex, function()
-            {
-                Game.world.objects = [];
-                Game.world.terrain = null;
-                for (var i=0; i<world.objects.length;i++)
-                {
-                    var object = world.objects[i];
-    
-                    if (object.type == "terrain")
-                    {
-                        Game.world.terrain = new Terrain({
-                            texture : object.texture,
-                            offsetY : object.offsetY,
-                            terrain : object.terrain,
-                            texWidth : object.texWidth,
-                            texHeight : object.texHeight,
-                            noise : object.noise
-                        });
-                        Game.world.terrain.textureSettings = { min : gl.LINEAR, max :gl.LINEAR, wrapS : gl.REPEAT, wrapT : gl.CLAMP_TO_EDGE};
-                        Game.world.objects.push(Game.world.terrain);
-                    }
-                    else
-                    {
-                        if (object.type != "prop")
-                        {
-                            var sprite = new Sprite({
-                                type : object.type,
-                                texture : object.texture,
-                                x : object.pos[0],
-                                y : object.pos[1],
-                                z : object.pos[2],
-                                w : object.size[0],
-                                h : object.size[1],
-                                locked : object.locked,
-                                distance : object.distance,
-                                wrapX : object.wrapX,
-                                wrapY : object.wrapY,
-                                mirrorX : object.mirrorX
-                            });
-                            sprite.textureSettings = { min : gl.LINEAR, max :gl.LINEAR, wrapS : gl.REPEAT, wrapT : gl.CLAMP_TO_EDGE};
-                            Game.world.objects.push(sprite);
-                        }
-                    }
-                }
-                Game.world.loaded = true;
-                for (var i=0;i<10;i++)
-                {
-                    Game.world.objects.push(new Unit({
-                        type : "prop",
-                        texture : "unit",
-                        w : 100,
-                        h : 100                        
-                    }));
-                }
-            });                
-
-
-        }
-    }
 
     init()
     {

@@ -23,15 +23,11 @@ Editor.lockItem = function(lock)
 
 Editor.deleteItem = function()
 {
-    for (var i=0; i<Game.world.objects.length; i++)
-    {
-        if (Editor.selected == Game.world.objects[i])
-        {
-            Game.world.objects[i] = null;
-            break;
-        }
+    var confirmation = confirm("Are you sure ?");
+    if (confirmation) {
+        var index = Game.world.objects.indexOf(Editor.selected)
+        if (index > -1) Game.world.objects.splice(index, 1);
+        $("#itemInfo").empty();
+        Editor.selected = null;
     }
-    $("#itemInfo").empty();
-    Editor.selected = null;
-    
 }
