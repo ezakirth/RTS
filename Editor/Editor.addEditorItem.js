@@ -34,7 +34,7 @@ Editor.addEditorItem = function(items)
             item.onkeyup = "Editor.selected." + item.label + " = this.value;";
             if (item.type == "checkbox") item.onchange = "Editor.selected." + item.label + " = this.checked;";
             if (item.label == "locked") item.onchange += "Editor.foundLocked = null;if (this.checked){Editor.foundLocked = Editor.selected;} Editor.lockItem(this.checked);";
-            if (item.label == "mirrorX" || item.label == "wrapX" || item.label == "wrapY") item.change += "Editor.selected.updateBufferTexcoord();";
+            if (item.label == "mirrorX" || item.label == "wrapX" || item.label == "wrapY") item.onchange += "Editor.selected.updateBufferTexcoord();";
             if (item.label == "r") item.onchange = "Editor.selected." + item.label + " = this.value*Math.PI/180;";
         }
 

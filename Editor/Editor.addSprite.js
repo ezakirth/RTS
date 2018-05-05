@@ -16,7 +16,7 @@ Editor.addSprite = function(e)
             x = -Input.viewPos + Game.width/2
 
         if (type == "layer")
-            x = -Input.viewPos/.5 + Game.width/2
+            x = -Input.viewPos/distance + Game.width/2
 
         if (Game.world.textures[texture])
         {
