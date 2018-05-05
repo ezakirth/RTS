@@ -1,4 +1,3 @@
-
 #Editor {
     position:fixed;
     top:0px;
@@ -23,7 +22,7 @@ a {
     width: 100%;
 }
 
-#itemInfo {
+#block_info {
     clear:both;
     position: relative;
 }
@@ -33,6 +32,7 @@ div.menuItem {
     position: relative;
     width: 100%;
     box-sizing : border-box;
+    text-align:center;
 }
 
 label.menuItem {
@@ -44,10 +44,25 @@ label.menuItem {
     display: block;
     margin-bottom: 3px;
     margin-top: 10px;
+    text-align: left;
+    cursor : pointer;
+}
+
+label.menuItem.hiding {
+    background-color: rgba(9, 46, 71, 0.7);    
+}
+
+label.menuItem:before {
+    content : "▼ ";
+}
+
+label.menuItem.hiding:before {
+    content : "▶ ";
 }
 
 label.itemLabel {
     line-height: 23px;
+    float:left;
 }
 
 input[type="text"], input[type="number"] {
@@ -77,27 +92,32 @@ label.file {
     border-radius: 15px;
     border: 1px solid rgba(41, 128, 185, 0.3);
     padding: 2px 40px 2px;
-    margin-top: 5px;
     background-color: transparent;
-   
+    float:none;
+    margin:3px;
 }
 
-button:hover, label.file:hover {
+input[type="button"]:hover, label.file:hover {
     background-color: rgba(22, 47, 73, 0.7);
     cursor: pointer;
 }
 
-button {
+input[type="button"] {
     display: inline-block;
     border-radius: 15px;
     border: 1px solid rgba(41, 128, 185, 0.3);
     padding: 2px 40px 2px;
     background-color: transparent;
-    margin-top: 5px;
+    margin: 3px;
     line-height:23px;
     font-size: 1em;
     color: #94c0dc;
-    
+}
+
+input[type="button"]:disabled {
+    cursor: default;
+    color: #2c4657;
+    background-color:transparent;
 }
 
 select:disabled, input:disabled, input:read-only {
@@ -141,7 +161,7 @@ select {
     box-sizing : border-box;   
 }
 
-input:focus, select:focus, button:focus {
+input:focus, select:focus {
     outline: none;
 }
 

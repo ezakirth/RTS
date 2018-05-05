@@ -75,6 +75,7 @@ World.prototype.load = function(map)
                 }
             }
             Game.world.loaded = true;
+            Editor.init();
          /*   for (var i=0;i<10;i++)
             {
                 Game.world.objects.push(new Unit({

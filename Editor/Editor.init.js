@@ -2,50 +2,85 @@ Editor.init = function()
 {
         Editor.elem = document.getElementById("Editor");
 
-        Editor.addEditorItem({lib : "General"});
-        Editor.addEditorItem({type : "checkbox", label: "Edit mode", id : "editMode", onchange : "Editor.editMode = this.checked;", checked : Editor.editMode});
-        Editor.addEditorItem({type : "checkbox", label: "Show wireframe", id : "wireFrame", onchange : "Editor.wireFrame = this.checked;", checked : Editor.wireFrame});
-        Editor.addEditorItem({lib : "Map"});
-        Editor.addEditorItem({type : "file", label : "Load", id : "load" });
+        Editor.addEditorItem([{block : "General", block_id : "block_general"}]);
+        Editor.addEditorItem([{block_id : "block_general", type : "checkbox", label: "Edit mode", onchange : "Editor.editMode = this.checked;", checked : Editor.editMode}]);
+        Editor.addEditorItem([{block_id : "block_general", type : "checkbox", label: "Show wireframe", onchange : "Editor.wireFrame = this.checked;", checked : Editor.wireFrame}]);
 
-        Editor.addEditorItem({lib : "Environment"});
-        Editor.addEditorItem({type : "select", label : "Sprite type", id : "spriteType", list : ["static", "prop", "layer"]});
-        Editor.addEditorItem({type : "select", label : "Texture wrap X", id : "textureWrapS", list : ["CLAMP", "REPEAT"] });
-        Editor.addEditorItem({type : "select", label : "Texture wrap Y", id : "textureWrapT", list : ["CLAMP", "REPEAT"] });
-        Editor.addEditorItem({type : "number", label : "zIndex", id : "zIndex", value : 1 });
-        Editor.addEditorItem({type : "number", label : "Distance", id : "Distance", value : 1 });
+        Editor.addEditorItem([{block : "Map", block_id : "block_map"}]);
+        Editor.addEditorItem([
+            {block_id : "block_map", type : "file", label : "Load", accept : ".json", onchangeEvent : Editor.loadMap },
+            {block_id : "block_map", type : "button", value : "Save", onclick : "Editor.saveMap()" }
+        ]);
 
-        Editor.addEditorItem({type : "file", label : "Add Sprite", id : "add" });
+        Editor.addEditorItem([{block : "Terrain", block_id : "block_terrain"}]);
+        Editor.addEditorItem([{block_id : "block_terrain", type : "number", label : "offsetY", value : 256 }]);
+        Editor.addEditorItem([{block_id : "block_terrain", type : "number", label : "texWidth", value : 192 }]);
+        Editor.addEditorItem([{block_id : "block_terrain", type : "number", label : "texHeight", value : 384 }]);
+        Editor.addEditorItem([{block_id : "block_terrain", type : "number", label : "noise", value : 64 }]);
+        Editor.addEditorItem([{block_id : "block_terrain", type : "file", label : "Add Terrain", accept : ".png", onchangeEvent : Editor.addTerrain }]);
 
-        // Object information
-        var div = document.createElement("div");
-        div.id = "itemInfo";
-        Editor.elem.appendChild(div);
+
+        Editor.addEditorItem([{block : "Sprite", block_id : "block_sprite"}]);
+        Editor.addEditorItem([{block_id : "block_sprite", type : "select", label : "Sprite type", list : ["static", "prop", "layer"]}]);
+        Editor.addEditorItem([{block_id : "block_sprite", type : "select", label : "Texture wrap X", list : ["CLAMP", "REPEAT"] }]);
+        Editor.addEditorItem([{block_id : "block_sprite", type : "select", label : "Texture wrap Y", list : ["CLAMP", "REPEAT"] }]);
+        Editor.addEditorItem([{block_id : "block_sprite", type : "number", label : "zIndex", value : 1 }]);
+        Editor.addEditorItem([{block_id : "block_sprite", type : "number", label : "Distance", value : 1 }]);
+        Editor.addEditorItem([{block_id : "block_sprite", type : "file", label : "Add Sprite", accept : ".png", onchangeEvent : Editor.addSprite }]);
+
+        $("label.menuItem").click(function(){
+            if ($(this).hasClass("hiding"))
+            {
+                $(this).removeClass("hiding");
+                $(this).parent().find("div").show();
+            }
+            else
+            {
+                $(this).addClass("hiding");
+                $(this).parent().find("div").hide();
+            }
+        });
+
+        if (Game.world.terrain)
+        {
+            $("#block_terrain").hide();
+            $("#block_sprite").show();
+        }
+        else
+        {
+            $("#block_sprite").hide();
+            $("#block_terrain").show();
+        }
 }
 
-Editor.loadObjectInfo = function(item)
+Editor.loadObjectInfo = function(sprite)
 {
-    Editor.selected = item;
+    Editor.selected = sprite;
 
-    $("#itemInfo").empty();
-    Editor.addEditorItem({itemInfo : true, lib : "Object information (" + item.type + ")"});
+    $("#block_info").empty();
+    
+    Editor.addEditorItem([{block : "Object Information", block_id : "block_info"}]);
 
-    Editor.addEditorItem({itemInfo : true, type : "button", label : "Delete sprite", disabled : item.locked });
-    Editor.addEditorItem({itemInfo : true, type : "checkbox", label : "locked", checked : item.locked });
-    Editor.addEditorItem({itemInfo : true, type : "checkbox", label : "mirrorX", disabled : item.locked });
-    Editor.addEditorItem({itemInfo : true, type : "text", label : "x", disabled : item.locked });
-    Editor.addEditorItem({itemInfo : true, type : "text", label : "y", disabled : item.locked });
-    Editor.addEditorItem({itemInfo : true, type : "number", label : "z", disabled : item.locked });
-    if (item.type == "static")
-        Editor.addEditorItem({itemInfo : true, type : "number", label : "r", disabled : item.locked });
-    Editor.addEditorItem({itemInfo : true, type : "text", label : "w", disabled : item.locked });
-    Editor.addEditorItem({itemInfo : true, type : "text", label : "h", disabled : item.locked });
-    if (item.type == "layer")
-        Editor.addEditorItem({itemInfo : true, type : "number", label : "distance", disabled : item.locked });
-    if (Game.world.texturesInfos[item.texture].wrapS == gl.REPEAT)
-        Editor.addEditorItem({itemInfo : true, type : "text", label : "wrapX", disabled : item.locked });
-    if (Game.world.texturesInfos[item.texture].wrapT == gl.REPEAT)
-        Editor.addEditorItem({itemInfo : true, type : "text", label : "wrapY", disabled : item.locked });
-    Editor.addEditorItem({itemInfo : true, type : "color", label : "tint", disabled : item.locked });
+    Editor.addEditorItem([{block_id : "block_info", type : "button", value : "Delete sprite", onclick : "Editor.deleteItem()", disabled : sprite.locked }]);
+    Editor.addEditorItem([{block_id : "block_info", type : "checkbox", label : "locked", checked : sprite.locked }]);
+    if (sprite.type != "terrain")
+        Editor.addEditorItem([{block_id : "block_info", type : "checkbox", label : "mirrorX", disabled : sprite.locked }]);
+    Editor.addEditorItem([{block_id : "block_info", type : "text", label : "x", disabled : sprite.locked }]);
+    Editor.addEditorItem([{block_id : "block_info", type : "text", label : "y", disabled : sprite.locked }]);
+    Editor.addEditorItem([{block_id : "block_info", type : "number", label : "z", disabled : sprite.locked }]);
+    if (sprite.type == "static")
+        Editor.addEditorItem([{block_id : "block_info", type : "number", label : "r", disabled : sprite.locked }]);
 
+    if (sprite.type != "terrain")
+    {
+        Editor.addEditorItem([{block_id : "block_info", type : "text", label : "w", disabled : sprite.locked }]);
+        Editor.addEditorItem([{block_id : "block_info", type : "text", label : "h", disabled : sprite.locked }]);
+        if (sprite.type == "layer")
+            Editor.addEditorItem([{block_id : "block_info", type : "number", label : "distance", disabled : sprite.locked }]);
+        if (Game.world.texturesInfos[sprite.texture].wrapS == gl.REPEAT)
+            Editor.addEditorItem([{block_id : "block_info", type : "text", label : "wrapX", disabled : sprite.locked }]);
+        if (Game.world.texturesInfos[sprite.texture].wrapT == gl.REPEAT)
+            Editor.addEditorItem([{block_id : "block_info", type : "text", label : "wrapY", disabled : sprite.locked }]);
+        Editor.addEditorItem([{block_id : "block_info", type : "color", label : "tint", disabled : sprite.locked }]);
+    }
 }

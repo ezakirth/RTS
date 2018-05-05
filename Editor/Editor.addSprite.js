@@ -4,13 +4,13 @@ Editor.addSprite = function(e)
     if (e.target.files[0] && e.target.files[0].name != "")
     {
         var src = "./assets/textures/" + e.target.files[0].name;
-        var texture = e.target.files[0].name.slice(0, -4) + "_" + $("#textureWrapS").val() + "_" + $("#textureWrapT").val();
+        var texture = e.target.files[0].name.slice(0, -4) + "_" + $("#editor_Texture_wrap_X_id").val() + "_" + $("#editor_Texture_wrap_Y_id").val();
 
-        var type = $("#spriteType").val();
+        var type = $("#editor_Sprite_type_id").val();
         var x = Game.width/2;
         var y = Game.height/2;
-        var z = $("#zIndex").val();
-        var distance = $("#Distance").val();;
+        var z = $("#editor_zIndex_id").val();
+        var distance = $("#editor_Distance_id").val();;
 
         if (type == "prop")
             x = -Input.viewPos + Game.width/2
@@ -21,8 +21,8 @@ Editor.addSprite = function(e)
         if (Game.world.textures[texture])
         {
             var wrapS, wrapT;
-            if ($("#textureWrapS").val() == "REPEAT") wrapS = gl.REPEAT; else wrapS = gl.CLAMP_TO_EDGE;
-            if ($("#textureWrapT").val() == "REPEAT") wrapT = gl.REPEAT; else wrapT = gl.CLAMP_TO_EDGE;
+            if ($("#editor_Texture_wrap_X_id").val() == "REPEAT") wrapS = gl.REPEAT; else wrapS = gl.CLAMP_TO_EDGE;
+            if ($("#editor_Texture_wrap_Y_id").val() == "REPEAT") wrapT = gl.REPEAT; else wrapT = gl.CLAMP_TO_EDGE;
             var min = gl.LINEAR;
             var max = gl.LINEAR;
 
@@ -42,8 +42,8 @@ Editor.addSprite = function(e)
         else
         {
             var wrapS, wrapT;
-            if ($("#textureWrapS").val() == "REPEAT") wrapS = gl.REPEAT; else wrapS = gl.CLAMP_TO_EDGE;
-            if ($("#textureWrapT").val() == "REPEAT") wrapT = gl.REPEAT; else wrapT = gl.CLAMP_TO_EDGE;
+            if ($("#editor_Texture_wrap_X_id").val() == "REPEAT") wrapS = gl.REPEAT; else wrapS = gl.CLAMP_TO_EDGE;
+            if ($("#editor_Texture_wrap_Y_id").val() == "REPEAT") wrapT = gl.REPEAT; else wrapT = gl.CLAMP_TO_EDGE;
             var min = gl.LINEAR;
             var max = gl.LINEAR;
             Game.world.textures.loading = twgl.createTextures(gl, {
@@ -67,13 +67,12 @@ Editor.addSprite = function(e)
                     distance : distance
                 });
                 Game.world.texturesInfos[texture] = { src : src, min : min, max : max, wrapS : wrapS, wrapT : wrapT};
-                console.log(Game.world.texturesInfos[texture]);
                 Editor.loadObjectInfo(sprite);
                 Game.world.objects.push(sprite);
             });
         }
-        $("#add").attr("type", "text");
-        $("#add").attr("type", "file");
+        $("#editor_Add_Sprite_id").attr("type", "text");
+        $("#editor_Add_Sprite_id").attr("type", "file");
 
     }
 }

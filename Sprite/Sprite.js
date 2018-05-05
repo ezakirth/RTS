@@ -67,7 +67,7 @@ class Sprite {
         // Projection*View*Model
         if (this.type == "prop" || this.type == "terrain")
         {
-            twgl.m4.multiply(Game.world.projectionMatrix, Game.world.ViewMatrix, this.uniforms.u_modelViewProjection);
+            twgl.m4.multiply(Game.world.projectionMatrix, Game.world.TerrainViewMatrix, this.uniforms.u_modelViewProjection);
         }
         else
         {
@@ -84,7 +84,7 @@ class Sprite {
         // Visibility test
         this.visible = true;
 /*        var currentMatrix = this.modelMatrix;
-        if (this.type == "prop") currentMatrix = Game.world.ViewMatrix;
+        if (this.type == "prop") currentMatrix = Game.world.TerrainViewMatrix;
         if (this.type == "layer") currentMatrix = this.layerViewMatrix;
         var min = -(twgl.m4.getTranslation(currentMatrix)[0] + 256);
         var max = min + Game.width + 512;
@@ -112,14 +112,19 @@ class Sprite {
     updateOverlayPos()
     {
         var layerPos = null;
-        if (this.type == "prop" || this.type == "prop")
-            layerPos = twgl.m4.getTranslation(Game.world.ViewMatrix);
+        if (this.type == "prop" || this.type == "terrain")
+            layerPos = twgl.m4.getTranslation(Game.world.TerrainViewMatrix);
         else
             layerPos = twgl.m4.getTranslation(this.layerViewMatrix);
 
         var screenPos = twgl.m4.getTranslation(this.modelMatrix);
         this.screenX = screenPos[0] - this.w/2 + layerPos[0];
         this.screenY = Game.height - (screenPos[1] + this.h/2);
+        if (this.type == "terrain")
+        {
+            this.screenX = screenPos[0] + layerPos[0];
+            this.screenY = Game.height - (screenPos[1]);
+        }
     }
     
 

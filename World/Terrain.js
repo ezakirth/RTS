@@ -5,19 +5,28 @@
  * @author Xavier de Boysson
  * @
  */
-class Terrain {
+class Terrain extends Sprite {
     /**
      * Creates a Terrain object
      * @param {Object} {texture : WebGLTexture, x : float, y : float, x2 : float, y2 : float, x3 : float, y3 : float, x4 : float, y4 : float}
      */
     constructor(param){
-     //   super(param);
-        this.type = param.type || "terrain";
+        super(param);
+        this.type = "terrain";
         this.texture = param.texture;
-        this.textureSettings = {};
 
         this.blockWidth = Math.floor(Game.width/32);
         this.mapSize = 4*this.blockWidth;
+        this.texWidth = param.texWidth;
+        this.texHeight = param.texHeight;
+        this.maxViewWidth = (this.mapSize*(Game.width/this.blockWidth) - this.texWidth) - Game.width;
+
+
+        this.x = -this.texWidth/2;
+        this.y = 256;
+        this.z = 10;
+        this.w = this.maxViewWidth + Game.width + this.texWidth;
+        this.h = this.texHeight;
 
         if (param.terrain)
             this.terrain = param.terrain;
@@ -54,26 +63,22 @@ class Terrain {
             }
         }
 
-        this.texWidth = param.texWidth;
-        this.texHeight = param.texHeight;
-        this.maxViewWidth = (this.mapSize*(Game.width/this.blockWidth) - this.texWidth) - Game.width;
-        this.offsetY = param.offsetY;
+
         this.position = [];
         this.indices = [];
         this.textcoord = [];
-        this.z = 10;
         var index = 0;
 
         for (var i=0; i<this.mapSize; i+=2)
         {
             xa = (i)*(Game.width/this.blockWidth);
             xb = (i+1)*(Game.width/this.blockWidth);
-            ya = this.terrain[i] + this.offsetY;
-            yb = this.terrain[i+1] + this.offsetY;
+            ya = this.terrain[i];
+            yb = this.terrain[i+1];
 
-            this.position.push(xa, ya, this.z);
+            this.position.push(xa, ya, 0);
             this.indices.push(index++);
-            this.position.push(xb, yb - this.texHeight, this.z);
+            this.position.push(xb, yb - this.texHeight, 0);
             this.indices.push(index++);
 
             var ratio = (i/this.blockWidth)*Math.floor(Game.width/this.texWidth);
@@ -106,16 +111,17 @@ class Terrain {
             u_color:  new Float32Array([1, 1, 1])
         };
 
-        twgl.m4.translate(this.modelMatrix, twgl.v3.create(-this.texWidth/2,0,0), this.modelMatrix);
-
-
+        twgl.m4.translate(this.modelMatrix, this.pos, this.modelMatrix);
     }
 
 
     update()
     {
+        this.modelMatrix =  twgl.m4.identity(this.modelMatrix);
+        twgl.m4.translate(this.modelMatrix, this.pos, this.modelMatrix);
+
         // Projection*View*Model
-        twgl.m4.multiply(Game.world.projectionMatrix, Game.world.ViewMatrix, this.uniforms.u_modelViewProjection);
+        twgl.m4.multiply(Game.world.projectionMatrix, Game.world.TerrainViewMatrix, this.uniforms.u_modelViewProjection);
         twgl.m4.multiply(this.uniforms.u_modelViewProjection, this.modelMatrix, this.uniforms.u_modelViewProjection);
     }
 
@@ -130,10 +136,6 @@ class Terrain {
             gl.drawElements(gl.TRIANGLE_STRIP, this.bufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
     }
 
-    touch(x, y)
-    {
-        
-    }
 
 }
 

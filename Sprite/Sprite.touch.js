@@ -1,21 +1,29 @@
 Sprite.prototype.touch = function(x, y)
 {
     var layerPos = null;
-    if (this.type == "prop")
-        layerPos = twgl.m4.getTranslation(Game.world.ViewMatrix);
+    if (this.type == "prop" || this.type == "terrain")
+        layerPos = twgl.m4.getTranslation(Game.world.TerrainViewMatrix);
     else
         layerPos = twgl.m4.getTranslation(this.layerViewMatrix);
 
     var screenPos = twgl.m4.getTranslation(this.modelMatrix);
     var spriteX = screenPos[0] + layerPos[0];
     var spriteY = screenPos[1];
-    if ( (x > spriteX - this.w/2 && x < spriteX + this.w/2) && (y > spriteY - this.h/2 && y < spriteY + this.h/2) )
+    var hit = false;
+
+    if (this.type == "terrain")
+    {
+        var i = Math.floor((-spriteX+x + this.texWidth/2)/(Game.width/this.blockWidth));
+        var h = this.terrain[i] + this.y;
+        hit = (y < h && y +384 > h);
+    }
+    else
+        hit = (x > spriteX - this.w/2 && x < spriteX + this.w/2) && (y > spriteY - this.h/2 && y < spriteY + this.h/2);
+
+    if ( hit )
     {
         if (!Game.selected || this.z > Game.selected.z)
-        {
-            this.screenX = spriteX - this.w/2;
-            this.screenY = Game.height - (spriteY + this.h/2);
-            
+        {            
             if (this.locked)
             {
                 Editor.foundLocked = this;
@@ -32,12 +40,8 @@ Sprite.prototype.touch = function(x, y)
             {
                 Editor.foundLocked = this;
                 Game.selected = this;
-                this.screenX = spriteX - this.w/2;
-                this.screenY = Game.height - (spriteY + this.h/2);
             }
         }
-
-
     }
 
 }

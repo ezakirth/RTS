@@ -45,7 +45,7 @@ var Game = {
         {
             Editor.selected = null;
             Editor.foundLocked = null;
-            $("#itemInfo").empty();
+            $("#block_info").empty();
         }
 
         Game.world.touch(x, y);
@@ -65,7 +65,7 @@ var Game = {
                 else
                 {
                     Editor.selected = null;
-                    $("#itemInfo").empty();
+                    $("#block_info").empty();
                 }
             }
         }
