@@ -14,6 +14,26 @@ Editor.overlay = {
         ctx.lineCap="round";
     },
 
+    touch : function(x, y)
+    {
+        y = Game.height - y;
+        Editor.resizing = false;
+        var sprite = Editor.selected;
+        if (sprite)
+        {
+            if (sprite.type == "terrain") return;
+            sprite.updateOverlayPos();
+
+            if (
+                (x>sprite.screenX - 55 && x<sprite.screenX + 20) && (y>sprite.screenY - 55 && y<sprite.screenY + 40) || // TL
+                (x>sprite.screenX + sprite.w - 25 && x<sprite.screenX + sprite.w + 50) && (y>sprite.screenY - 55 && y<sprite.screenY + 40) || // TR
+                (x>sprite.screenX - 55 && x<sprite.screenX + 20) && (y>sprite.screenY + sprite.h - 40 && y<sprite.screenY + sprite.h + 60) || // BL
+                (x>sprite.screenX + sprite.w - 25 && x<sprite.screenX + sprite.w + 50) && (y>sprite.screenY + sprite.h - 40 && y<sprite.screenY + sprite.h + 60) // BR
+            )
+                Editor.resizing = true;
+        }
+    },
+
     update : function()
     {
         var ctx = Editor.overlay.ctx;
@@ -41,6 +61,8 @@ Editor.overlay = {
             ctx.stroke();
             ctx.setLineDash([]);
 
+            if( sprite.type == "terrain") return
+            
             ctx.strokeStyle = "#000000";
             ctx.lineWidth = 2;
 

@@ -31,7 +31,10 @@ Editor.addEditorItem = function(items)
         if (item.block_id == "block_info" && item.type != "button")
         {
             item.value = Editor.selected[item.label];
-            item.onkeyup = "Editor.selected." + item.label + " = this.value;";
+            if (item.type == "color")
+                item.onchange = "Editor.selected." + item.label + " = this.value;";
+            else
+                item.onkeyup = "Editor.selected." + item.label + " = this.value;";
             if (item.type == "checkbox") item.onchange = "Editor.selected." + item.label + " = this.checked;";
             if (item.label == "locked") item.onchange += "Editor.foundLocked = null;if (this.checked){Editor.foundLocked = Editor.selected;} Editor.lockItem(this.checked);";
             if (item.label == "mirrorX" || item.label == "wrapX" || item.label == "wrapY") item.onchange += "Editor.selected.updateBufferTexcoord();";

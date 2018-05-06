@@ -81,6 +81,6 @@ Editor.loadObjectInfo = function(sprite)
             Editor.addEditorItem([{block_id : "block_info", type : "text", label : "wrapX", disabled : sprite.locked }]);
         if (Game.world.texturesInfos[sprite.texture].wrapT == gl.REPEAT)
             Editor.addEditorItem([{block_id : "block_info", type : "text", label : "wrapY", disabled : sprite.locked }]);
-        Editor.addEditorItem([{block_id : "block_info", type : "color", label : "tint", disabled : sprite.locked }]);
     }
+    Editor.addEditorItem([{block_id : "block_info", type : "color", label : "tint", disabled : sprite.locked }]);
 }

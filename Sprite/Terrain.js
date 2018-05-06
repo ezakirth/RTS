@@ -119,6 +119,7 @@ class Terrain extends Sprite {
     {
         this.modelMatrix =  twgl.m4.identity(this.modelMatrix);
         twgl.m4.translate(this.modelMatrix, this.pos, this.modelMatrix);
+//        twgl.m4.scale(this.modelMatrix, this.size, this.modelMatrix);
 
         // Projection*View*Model
         twgl.m4.multiply(Game.world.projectionMatrix, Game.world.TerrainViewMatrix, this.uniforms.u_modelViewProjection);

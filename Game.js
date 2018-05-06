@@ -41,31 +41,35 @@ var Game = {
 
     touch : function(x, y)
     {
-        if (Editor.editMode)
+        Editor.overlay.touch(x, y);
+        if (!Editor.resizing)
         {
-            Editor.selected = null;
-            Editor.foundLocked = null;
-            $("#block_info").empty();
-        }
-
-        Game.world.touch(x, y);
-
-        if (Editor.editMode)
-        {
-            if (Game.selected) 
+            if (Editor.editMode)
             {
-                Editor.loadObjectInfo(Game.selected);
+                Editor.selected = null;
+                Editor.foundLocked = null;
+                $("#block_info").empty();
             }
-            else
+
+            Game.world.touch(x, y);
+
+            if (Editor.editMode)
             {
-                if (Editor.foundLocked)
+                if (Game.selected) 
                 {
-                    Editor.loadObjectInfo(Editor.foundLocked);
+                    Editor.loadObjectInfo(Game.selected);
                 }
                 else
                 {
-                    Editor.selected = null;
-                    $("#block_info").empty();
+                    if (Editor.foundLocked)
+                    {
+                        Editor.loadObjectInfo(Editor.foundLocked);
+                    }
+                    else
+                    {
+                        Editor.selected = null;
+                        $("#block_info").empty();
+                    }
                 }
             }
         }
