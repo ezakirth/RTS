@@ -90,9 +90,6 @@ class Terrain extends Sprite {
 
         }
 
-
-        
-
         // initialize the buffers
         this.bufferInfo = twgl.createBufferInfoFromArrays(gl, {
             position: {
@@ -103,28 +100,7 @@ class Terrain extends Sprite {
             indices: this.indices
         });
         
-        this.modelMatrix = twgl.m4.identity();
-
-        this.uniforms = {
-            u_modelViewProjection: twgl.m4.identity(),
-            u_texture: Game.world.textures[this.texture],
-            u_color:  new Float32Array([1, 1, 1])
-        };
-
         twgl.m4.translate(this.modelMatrix, this.pos, this.modelMatrix);
-        
-    }
-
-
-    update()
-    {
-        this.modelMatrix =  twgl.m4.identity(this.modelMatrix);
-        twgl.m4.translate(this.modelMatrix, this.pos, this.modelMatrix);
-//        twgl.m4.scale(this.modelMatrix, this.size, this.modelMatrix);
-
-        // Projection*View*Model
-        twgl.m4.multiply(Game.world.projectionMatrix, Game.world.layerViewMatrix, this.uniforms.u_modelViewProjection);
-        twgl.m4.multiply(this.uniforms.u_modelViewProjection, this.modelMatrix, this.uniforms.u_modelViewProjection);
     }
 
     draw()

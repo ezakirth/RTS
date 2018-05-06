@@ -11,6 +11,7 @@ class Sprite {
      * @param {Object} {texture : WebGLTexture, x : float, y : float, w : float, h : float, type : string, align : string, scale : float}
      */
     constructor(param) {
+        Game.world.zindex += 0.00001;
         this.type = param.type || "static";
         this.texture = param.texture;
         this.locked = param.locked || false;
@@ -22,12 +23,12 @@ class Sprite {
         this.wrapX = param.wrapX || 1;
         this.wrapY = param.wrapY || 1;
 
-        if (!param.z) param.z = 0;
         this.pos = twgl.v3.create(
             param.x || Game.width/2,
             param.y || Game.height/2,
-            param.z
+            param.z || 1
         );
+        this.z += Game.world.zindex;
 
         this.size = twgl.v3.create(
             param.w || 300,
@@ -42,7 +43,7 @@ class Sprite {
         this.setBuffer();
 
         if (this.type == "prop")
-            this.layerViewMatrix = Game.world.layerViewMatrix;
+            this.layerViewMatrix = Game.world.terrain.layerViewMatrix;
         else
             this.layerViewMatrix = twgl.m4.identity();
             
@@ -66,7 +67,7 @@ class Sprite {
         this.visibilityTest();
         
         // Projection*View*Model
-        if (this.type == "layer")
+        if (this.type == "layer" || this.type == "terrain")
         {
             this.layerViewMatrix = twgl.m4.identity(this.layerViewMatrix);
             twgl.m4.translate(this.layerViewMatrix, twgl.v3.create(Input.viewPos/this.distance,0,0), this.layerViewMatrix);
@@ -76,9 +77,11 @@ class Sprite {
         {
             this.modelMatrix =  twgl.m4.identity(this.modelMatrix);
             twgl.m4.translate(this.modelMatrix, this.pos, this.modelMatrix);
-            twgl.m4.rotateZ(this.modelMatrix, this.r, this.modelMatrix);
-            twgl.m4.scale(this.modelMatrix, this.size, this.modelMatrix);
-            
+            if (this.type != "terrain")
+            {
+                twgl.m4.rotateZ(this.modelMatrix, this.r, this.modelMatrix);
+                twgl.m4.scale(this.modelMatrix, this.size, this.modelMatrix);
+            }
             twgl.m4.multiply(Game.world.projectionMatrix, this.layerViewMatrix, this.uniforms.u_modelViewProjection);
             twgl.m4.multiply(this.uniforms.u_modelViewProjection, this.modelMatrix, this.uniforms.u_modelViewProjection);
         }
@@ -86,7 +89,7 @@ class Sprite {
 
     visibilityTest()
     {
-        if (this.type == "static" )
+        if (this.type == "static" || this.type == "terrain")
             this.visible = true;
         else
         {
@@ -111,13 +114,9 @@ class Sprite {
 
     updateOverlayPos()
     {
-        var layerPos = null;
-        if (this.type == "prop" || this.type == "terrain")
-            layerPos = twgl.m4.getTranslation(Game.world.layerViewMatrix);
-        else
-            layerPos = twgl.m4.getTranslation(this.layerViewMatrix);
-
+        var layerPos = twgl.m4.getTranslation(this.layerViewMatrix);
         var screenPos = twgl.m4.getTranslation(this.modelMatrix);
+
         this.screenX = screenPos[0] - this.w/2 + layerPos[0];
         this.screenY = Game.height - (screenPos[1] + this.h/2);
         if (this.type == "terrain")

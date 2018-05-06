@@ -14,9 +14,8 @@ class World {
         this.loaded = false;
         this.textures = {};
         this.texturesInfos = {};
-        this.layerViewMatrix = twgl.m4.identity();
         this.projectionMatrix = twgl.m4.ortho(0, Game.width, 0, Game.height, -100, 100);
-        this.zindex = 10;
+        this.zindex = 0;
         this.time = 1;
         this.speed = 1;
         this.lastTime = 1;
@@ -41,9 +40,6 @@ class World {
             if (this.speed > 5) this.speed = 5;
             Input.update();
 
-            this.layerViewMatrix = twgl.m4.identity(this.layerViewMatrix);
-            twgl.m4.translate(this.layerViewMatrix, twgl.v3.create(Input.viewPos,0,0), this.layerViewMatrix);
-
             for (var i=0; i<this.objects.length; i++)
             {
                 this.objects[i].update();
@@ -55,8 +51,6 @@ class World {
 
     draw()
     {
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
         for (var i=0; i<this.objects.length; i++)
         {
             var sprite = this.objects[i];

@@ -29,16 +29,6 @@ var Game = {
 
     world : null,
 
-    update : function()
-    {
-        Game.world.update();
-    },
-
-    draw : function()
-    {
-        Game.world.draw();
-    },
-
     touch : function(x, y)
     {
         Editor.overlay.touch(x, y);

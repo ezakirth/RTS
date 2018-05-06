@@ -8,10 +8,13 @@ function setup()
 
 function render()
 {
-    Game.update();
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    
+    Game.world.update();
     Editor.update();
+    
+    Game.world.draw();
 
-    Game.draw();
 
     requestAnimationFrame(render);
 }

@@ -81,7 +81,7 @@ World.prototype.load = function(map)
                 }
             }
             Game.world.loaded = true;
-            for (var i=0;i<100;i++)
+            for (var i=0;i<10;i++)
             {
                 Game.world.objects.push(new Unit({
                     type : "prop",
