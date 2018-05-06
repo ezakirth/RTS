@@ -1,12 +1,11 @@
 "use strict";
 
 var gl = null;
-//Utils.loadShaders("shader.frag", "shader.vert", GLsetup);
 
 function GLsetup()
 {
     Editor.overlay.init();
-    gl = document.getElementById("canvas").getContext("experimental-webgl",{ alpha: false, premultipliedAlpha: false });
+    gl = document.getElementById("canvas").getContext("experimental-webgl",{ alpha: false });
     gl.canvas.width = 1920;
     gl.canvas.height = 1080;
 

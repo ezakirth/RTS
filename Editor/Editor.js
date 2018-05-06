@@ -4,7 +4,6 @@ var Editor = {
     selected : null,
     resizing : false,
     editMode : true,
-    wireFrame : false,
 
     showterrain : true,
     showprop : true,

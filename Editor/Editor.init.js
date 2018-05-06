@@ -4,7 +4,6 @@ Editor.init = function()
 
         Editor.addEditorItem([{block : "General", block_id : "block_general"}]);
         Editor.addEditorItem([{block_id : "block_general", type : "checkbox", label: "Edit mode", onchange : "Editor.editMode = this.checked;", checked : Editor.editMode}]);
-        Editor.addEditorItem([{block_id : "block_general", type : "checkbox", label: "Render as WireFrame", onchange : "Editor.wireFrame = this.checked;", checked : Editor.wireFrame}]);
         Editor.addEditorItem([{block_id : "block_general", type : "checkbox", label: "Show Terrain", onchange : "Editor.showterrain = this.checked;", checked : Editor.showterrain}]);
         Editor.addEditorItem([{block_id : "block_general", type : "checkbox", label: "Show Props", onchange : "Editor.showprop = this.checked;", checked : Editor.showprop}]);
         Editor.addEditorItem([{block_id : "block_general", type : "checkbox", label: "Show Layers", onchange : "Editor.showlayer = this.checked;", checked : Editor.showlayer}]);
