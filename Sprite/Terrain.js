@@ -112,6 +112,7 @@ class Terrain extends Sprite {
         };
 
         twgl.m4.translate(this.modelMatrix, this.pos, this.modelMatrix);
+        
     }
 
 
@@ -122,7 +123,7 @@ class Terrain extends Sprite {
 //        twgl.m4.scale(this.modelMatrix, this.size, this.modelMatrix);
 
         // Projection*View*Model
-        twgl.m4.multiply(Game.world.projectionMatrix, Game.world.TerrainViewMatrix, this.uniforms.u_modelViewProjection);
+        twgl.m4.multiply(Game.world.projectionMatrix, Game.world.layerViewMatrix, this.uniforms.u_modelViewProjection);
         twgl.m4.multiply(this.uniforms.u_modelViewProjection, this.modelMatrix, this.uniforms.u_modelViewProjection);
     }
 
@@ -130,11 +131,7 @@ class Terrain extends Sprite {
     {
         twgl.setBuffersAndAttributes(gl, gl.programInfo, this.bufferInfo);
         twgl.setUniforms(gl.programInfo, this.uniforms);
-
-        if (Editor.wireFrame == "1")
-            gl.drawElements(gl.LINES, this.bufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
-        else
-            gl.drawElements(gl.TRIANGLE_STRIP, this.bufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
+        gl.drawElements(gl.TRIANGLE_STRIP, this.bufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
     }
 
 

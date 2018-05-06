@@ -6,6 +6,11 @@ var Editor = {
     editMode : true,
     wireFrame : false,
 
+    showterrain : true,
+    showprop : true,
+    showlayer : true,
+    showstatic : true,
+
     palette : {
         canvas : null,
         ctx : null,

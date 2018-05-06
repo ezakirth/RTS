@@ -14,7 +14,7 @@ class World {
         this.loaded = false;
         this.textures = {};
         this.texturesInfos = {};
-        this.TerrainViewMatrix = twgl.m4.identity();
+        this.layerViewMatrix = twgl.m4.identity();
         this.projectionMatrix = twgl.m4.ortho(0, Game.width, 0, Game.height, -100, 100);
         this.zindex = 10;
         this.time = 1;
@@ -41,9 +41,8 @@ class World {
             if (this.speed > 5) this.speed = 5;
             Input.update();
 
-            this.TerrainViewMatrix = twgl.m4.identity(this.TerrainViewMatrix);
-
-            twgl.m4.translate(this.TerrainViewMatrix, twgl.v3.create(Input.viewPos,0,0), this.TerrainViewMatrix);
+            this.layerViewMatrix = twgl.m4.identity(this.layerViewMatrix);
+            twgl.m4.translate(this.layerViewMatrix, twgl.v3.create(Input.viewPos,0,0), this.layerViewMatrix);
 
             for (var i=0; i<this.objects.length; i++)
             {
@@ -60,8 +59,10 @@ class World {
 
         for (var i=0; i<this.objects.length; i++)
         {
-            this.objects[i].draw();
-        }    
+            var sprite = this.objects[i];
+            if (Editor["show" + sprite.type])
+                sprite.draw();
+        }
         
         this.lastTime = this.time;
     }
@@ -70,7 +71,9 @@ class World {
     {
         for (var i=0; i<this.objects.length; i++)
         {
-            this.objects[i].touch(x, y);
+            var sprite = this.objects[i];
+            if (Editor["show" + sprite.type])
+                sprite.touch(x, y);
         }
     }
     

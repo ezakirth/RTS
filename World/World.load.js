@@ -14,8 +14,14 @@ World.prototype.load = function(map)
             Game.world.texturesInfos[object.texture] = { src : map.texturesInfos[object.texture].src, min : map.texturesInfos[object.texture].min, max : map.texturesInfos[object.texture].max, wrapS : map.texturesInfos[object.texture].wrapS, wrapT : map.texturesInfos[object.texture].wrapT};
         }
         textureList = [...new Set(textureList)];
-     /*   textureList.push("unit");
-        Game.world.texturesInfos["unit"] = {};*/
+        textureList.push("unit");
+        Game.world.texturesInfos["unit"] = {
+            src : "./assets/textures/unit.png",
+            min : gl.LINEAR,
+            max : gl.LINEAR,
+            wrapS : gl.CLAMP_TO_EDGE,
+            wrapT : gl.CLAMP_TO_EDGE
+        };
         var tex = {};
 
         for (var i=0;i<textureList.length; i++)
@@ -75,16 +81,17 @@ World.prototype.load = function(map)
                 }
             }
             Game.world.loaded = true;
-            Editor.init();
-         /*   for (var i=0;i<10;i++)
+            for (var i=0;i<100;i++)
             {
                 Game.world.objects.push(new Unit({
                     type : "prop",
                     texture : "unit",
                     w : 100,
-                    h : 100                        
+                    h : 100
                 }));
-            }*/
+            }
+
+            Editor.init();
         });                
 
 

@@ -12,8 +12,8 @@ class Unit extends Sprite {
      */
     constructor(param) {
         super(param);
-
-        this.z = ++Game.world.zindex;
+        Game.world.zindex += 0.00001;
+        this.z = param.z + Game.world.zindex;
         this.fighting = false;
         this.dying = false;
 
@@ -24,11 +24,11 @@ class Unit extends Sprite {
         // add a random heught pos offset for each unit so they're not all stacked up
         this.offset = -10 + Math.random()*20;
 
-        this.x = (150 + (Math.random()*3000));
+        this.x = (0 + (Math.random()*Game.width));
 
         // height relative to position in terrain
-        var i = Math.floor((this.x + Game.world.terrain.texWidth/2)/(Game.width/Game.world.terrain.blockWidth));
-        this.y = (Game.world.terrain.terrain[i] + Game.world.terrain.offsetY - 32 + this.offset);
+        var i = Math.floor((this.x - Game.world.terrain.x + Game.world.terrain.texWidth/2)/(Game.width/Game.world.terrain.blockWidth));
+        this.y = (Game.world.terrain.terrain[i] + Game.world.terrain.y - 32 + this.offset);
     }
 
     update()
@@ -38,18 +38,19 @@ class Unit extends Sprite {
             this.x = (this.x + this.speed*Game.world.speed);
 
         // Set player y: height relative to position in terrain
-        var i = Math.floor((this.x + Game.world.terrain.texWidth/2)/(Game.width/Game.world.terrain.blockWidth));
-        var h = Game.world.terrain.terrain[i] + Game.world.terrain.offsetY - 32 + this.offset;
+        var i = Math.floor((this.x - Game.world.terrain.x + Game.world.terrain.texWidth/2)/(Game.width/Game.world.terrain.blockWidth));
+        var h = Game.world.terrain.terrain[i] + Game.world.terrain.y - 32 + this.offset;
         this.y = (Utils.lerp(this.y, h, .08*Game.world.speed));
 
-        
-        // Place and rotate sprite to match terrain location
-        var h2 = Game.world.terrain.terrain[i+1] + Game.world.terrain.offsetY - 32 + this.offset;
-        var angle = Math.atan2(h2 - h, Game.world.terrain.blockWidth/2);
-        this.r = Utils.lerp(this.r , angle , .1*Game.world.speed);
-
-
         super.update();            
+        
+        if (this.visible)
+        {
+            // Place and rotate sprite to match terrain location
+            var h2 = Game.world.terrain.terrain[i+1] + Game.world.terrain.y - 32 + this.offset;
+            var angle = Math.atan2(h2 - h, Game.world.terrain.blockWidth/2);
+            this.r = Utils.lerp(this.r , angle , .1*Game.world.speed);
+        }
     }
 
 

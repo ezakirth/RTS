@@ -1,10 +1,6 @@
 Sprite.prototype.touch = function(x, y)
 {
-    var layerPos = null;
-    if (this.type == "prop" || this.type == "terrain")
-        layerPos = twgl.m4.getTranslation(Game.world.TerrainViewMatrix);
-    else
-        layerPos = twgl.m4.getTranslation(this.layerViewMatrix);
+    var layerPos = twgl.m4.getTranslation(this.layerViewMatrix);
 
     var screenPos = twgl.m4.getTranslation(this.modelMatrix);
     var spriteX = screenPos[0] + layerPos[0];
