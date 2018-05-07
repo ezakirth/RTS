@@ -40,8 +40,10 @@ class World {
             if (this.speed > 5) this.speed = 5;
             Input.update();
 
+            this.terrain.update();
             for (var i=0; i<this.objects.length; i++)
             {
+                if (this.objects[i].type != "terrain")
                 this.objects[i].update();
             }
 
