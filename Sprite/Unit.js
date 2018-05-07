@@ -12,20 +12,20 @@ class Unit extends Sprite {
      */
     constructor(param) {
         super(param);
-        this.z = Game.world.terrain.z + Game.world.zindex;
+        this.z = Game.world.terrain.z + 5 + Game.world.zindex;
         this.fighting = false;
         this.dying = false;
 
-        this.speed = 3 + (-1 + Math.random()*2);
+        this.speed = 2 + (Math.random());
 
         // add a random heught pos offset for each unit so they're not all stacked up
-        this.offset = -10 + Math.random()*20;
+        this.offset = -56 -10 + Math.random()*20;
 
-        this.x = (0 + (Math.random()*Game.width));
+        this.x = (300 + (Math.random()*(Game.width - 300)));
 
         // height relative to position in terrain
         var i = Math.floor((this.x - Game.world.terrain.x + Game.world.terrain.texWidth/2)/(Game.width/Game.world.terrain.blockWidth));
-        this.y = (Game.world.terrain.terrain[i] + Game.world.terrain.y - 32 + this.offset);
+        this.y = (Game.world.terrain.terrain[i] + Game.world.terrain.y + this.offset);
     }
 
     update()
@@ -38,7 +38,7 @@ class Unit extends Sprite {
         {
             // Set player y: height relative to position in terrain
             var i = Math.floor((this.x - Game.world.terrain.x + Game.world.terrain.texWidth/2)/(Game.width/Game.world.terrain.blockWidth));
-            var h = Game.world.terrain.terrain[i] + Game.world.terrain.y - 32 + this.offset;
+            var h = Game.world.terrain.terrain[i] + Game.world.terrain.y + this.offset;
             this.y = (Utils.lerp(this.y, h, .08*Game.world.speed));
 
             super.update();            
@@ -46,7 +46,7 @@ class Unit extends Sprite {
             if (this.visible)
             {
                 // Place and rotate sprite to match terrain location
-                var h2 = Game.world.terrain.terrain[i+1] + Game.world.terrain.y - 32 + this.offset;
+                var h2 = Game.world.terrain.terrain[i+1] + Game.world.terrain.y + this.offset;
                 var angle = Math.atan2(h2 - h, Game.world.terrain.blockWidth/2);
                 this.r = Utils.lerp(this.r , angle , .1*Game.world.speed);
             }

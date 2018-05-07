@@ -59,7 +59,7 @@ World.prototype.load = function(map)
                 }
                 else
                 {
-                    if (object.type != "prop")
+                  //  if (object.type != "prop")
                     {
                         var sprite = new Sprite({
                             type : object.type,
@@ -86,8 +86,8 @@ World.prototype.load = function(map)
                 Game.world.objects.push(new Unit({
                     type : "prop",
                     texture : "unit",
-                    w : 100,
-                    h : 100
+                    w : 64,
+                    h : 64
                 }));
             }
 
