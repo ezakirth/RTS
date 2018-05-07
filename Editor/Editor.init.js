@@ -62,7 +62,7 @@ Editor.loadObjectInfo = function(sprite)
 
     $("#block_info").empty();
     
-    Editor.addEditorItem([{block : "Object Information", block_id : "block_info"}]);
+    Editor.addEditorItem([{block : "Object Information (" + sprite.type + ")", block_id : "block_info"}]);
 
     Editor.addEditorItem([{block_id : "block_info", type : "button", value : "Delete sprite", onclick : "Editor.deleteItem()", disabled : sprite.locked }]);
     Editor.addEditorItem([{block_id : "block_info", type : "checkbox", label : "locked", checked : sprite.locked }]);
