@@ -51,6 +51,7 @@ class World {
 
     draw()
     {
+        Editor.onscreen = 0;
         for (var i=0; i<this.objects.length; i++)
         {
             var sprite = this.objects[i];

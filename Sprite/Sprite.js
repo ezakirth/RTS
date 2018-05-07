@@ -106,6 +106,7 @@ class Sprite {
     {
         if (this.visible)
         {
+            Editor.onscreen ++;
             twgl.setBuffersAndAttributes(gl, gl.programInfo, this.bufferInfo);
             twgl.setUniforms(gl.programInfo, this.uniforms);
             gl.drawElements(gl.TRIANGLES, this.bufferInfo.numElements, gl.UNSIGNED_SHORT, 0);

@@ -9,6 +9,7 @@ var Editor = {
     showprop : true,
     showlayer : true,
     showstatic : true,
+    onscreen : 0,
 
     palette : {
         canvas : null,
@@ -18,6 +19,7 @@ var Editor = {
 
     update : function()
     {
+        $("#block_sprite label:first").html("Sprites ("+Editor.onscreen+ " out of " + Game.world.objects.length + " visible)");
         Editor.overlay.update();        
     },
 
