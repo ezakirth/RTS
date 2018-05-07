@@ -41,6 +41,7 @@ World.prototype.load = function(map)
         {
             Game.world.objects = [];
             Game.world.terrain = null;
+
             for (var i=0; i<map.objects.length;i++)
             {
                 var object = map.objects[i];
@@ -57,7 +58,13 @@ World.prototype.load = function(map)
                     });
                     Game.world.objects.push(Game.world.terrain);
                 }
-                else
+            }
+
+            for (var i=0; i<map.objects.length;i++)
+            {
+                var object = map.objects[i];
+
+                if (object.type != "terrain")
                 {
                   //  if (object.type != "prop")
                     {
