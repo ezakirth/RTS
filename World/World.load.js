@@ -14,14 +14,48 @@ World.prototype.load = function(map)
             Game.world.texturesInfos[object.texture] = { src : map.texturesInfos[object.texture].src, min : map.texturesInfos[object.texture].min, max : map.texturesInfos[object.texture].max, wrapS : map.texturesInfos[object.texture].wrapS, wrapT : map.texturesInfos[object.texture].wrapT};
         }
         textureList = [...new Set(textureList)];
-        textureList.push("unit");
-        Game.world.texturesInfos["unit"] = {
-            src : "./assets/textures/unit.png",
+        textureList.push("2_WALK_000");
+        Game.world.texturesInfos["2_WALK_000"] = {
+            src : "./assets/textures/2_WALK_000.png",
             min : gl.LINEAR,
             max : gl.LINEAR,
             wrapS : gl.CLAMP_TO_EDGE,
             wrapT : gl.CLAMP_TO_EDGE
         };
+        textureList.push("2_WALK_001");
+        Game.world.texturesInfos["2_WALK_001"] = {
+            src : "./assets/textures/2_WALK_001.png",
+            min : gl.LINEAR,
+            max : gl.LINEAR,
+            wrapS : gl.CLAMP_TO_EDGE,
+            wrapT : gl.CLAMP_TO_EDGE
+        };
+        textureList.push("2_WALK_002");
+        Game.world.texturesInfos["2_WALK_002"] = {
+            src : "./assets/textures/2_WALK_002.png",
+            min : gl.LINEAR,
+            max : gl.LINEAR,
+            wrapS : gl.CLAMP_TO_EDGE,
+            wrapT : gl.CLAMP_TO_EDGE
+        };
+        textureList.push("2_WALK_003");
+        Game.world.texturesInfos["2_WALK_003"] = {
+            src : "./assets/textures/2_WALK_003.png",
+            min : gl.LINEAR,
+            max : gl.LINEAR,
+            wrapS : gl.CLAMP_TO_EDGE,
+            wrapT : gl.CLAMP_TO_EDGE
+        };
+
+        textureList.push("2_WALK_004");
+        Game.world.texturesInfos["2_WALK_004"] = {
+            src : "./assets/textures/2_WALK_004.png",
+            min : gl.LINEAR,
+            max : gl.LINEAR,
+            wrapS : gl.CLAMP_TO_EDGE,
+            wrapT : gl.CLAMP_TO_EDGE
+        };
+        
         var tex = {};
 
         for (var i=0;i<textureList.length; i++)
@@ -88,13 +122,13 @@ World.prototype.load = function(map)
                 }
             }
             Game.world.loaded = true;
-            for (var i=0;i<10;i++)
+            for (var i=0;i<3;i++)
             {
                 Game.world.objects.push(new Unit({
                     type : "prop",
-                    texture : "unit",
-                    w : 64,
-                    h : 64
+                    texture : "2_WALK_000",
+                    w : 164,
+                    h : 164 
                 }));
             }
 

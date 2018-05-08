@@ -16,16 +16,23 @@ class Unit extends Sprite {
         this.fighting = false;
         this.dying = false;
 
-        this.speed = 2 + (Math.random());
+        this.speed = 2;//    + (Math.random());
 
         // add a random heught pos offset for each unit so they're not all stacked up
-        this.offset = -56 -10 + Math.random()*20;
+        this.offset = -25;// -10 + Math.random()*20;
 
         this.x = (300 + (Math.random()*(Game.width - 300)));
 
         // height relative to position in terrain
         var i = Math.floor((this.x - Game.world.terrain.x + Game.world.terrain.texWidth/2)/(Game.width/Game.world.terrain.blockWidth));
         this.y = (Game.world.terrain.terrain[i] + Game.world.terrain.y + this.offset);
+
+      //  this.wrapX = 1/13;
+       // this.fighting = true;
+      //  this.updateBufferTexcoord();
+
+      this.texid = Math.floor(Math.random()*5);
+      this.t = 0;
     }
 
     update()
@@ -34,10 +41,21 @@ class Unit extends Sprite {
         if (!(this.fighting || this.dying))
             this.x = (this.x + this.speed*Game.world.speed);
 
+        this.uniforms.u_texture = Game.world.textures["2_WALK_00" + this.texid];
+
+        this.t += Game.world.delta;
+        if (this.t > 100)
+        {
+            this.t = 0;
+            this.texid ++
+            if (this.texid > 4) this.texid = 0;
+        }
+
         if (Game.world.terrain)
         {
             // Set player y: height relative to position in terrain
-            var i = Math.floor((this.x - Game.world.terrain.x + Game.world.terrain.texWidth/2)/(Game.width/Game.world.terrain.blockWidth));
+            var i = Math.floor((this.x - Game.world.terrain.x)/(Game.width/Game.world.terrain.blockWidth));
+//            var i = Math.floor((this.x - Game.world.terrain.x + Game.world.terrain.texWidth/4)/(Game.width/Game.world.terrain.blockWidth));
             var h = Game.world.terrain.terrain[i] + Game.world.terrain.y + this.offset;
             this.y = (Utils.lerp(this.y, h, .08*Game.world.speed));
 

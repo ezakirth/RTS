@@ -35,8 +35,9 @@ class World {
         if (this.loaded)
         {
             this.time = Date.now();
+            this.delta = this.time - this.lastTime;
             // Normalize game speed
-            this.speed = 60/(1000/(this.time - this.lastTime));
+            this.speed = 60/(1000/(this.delta));
             if (this.speed > 5) this.speed = 5;
             Input.update();
 
