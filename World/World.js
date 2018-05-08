@@ -21,7 +21,7 @@ class World {
         this.lastTime = 1;
         this.objects = [];
 
-        this.tex = "3_RUN_00";
+        this.tex = "2_WALK_00";
     }
 
 
