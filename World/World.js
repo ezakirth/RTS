@@ -20,6 +20,8 @@ class World {
         this.speed = 1;
         this.lastTime = 1;
         this.objects = [];
+
+        this.tex = "3_RUN_00";
     }
 
 

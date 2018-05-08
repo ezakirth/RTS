@@ -41,7 +41,7 @@ class Unit extends Sprite {
         if (!(this.fighting || this.dying))
             this.x = (this.x + this.speed*Game.world.speed);
 
-        this.uniforms.u_texture = Game.world.textures["2_WALK_00" + this.texid];
+        this.uniforms.u_texture = Game.world.textures[Game.world.tex + this.texid];
 
         this.t += Game.world.delta;
         if (this.t > 100)
