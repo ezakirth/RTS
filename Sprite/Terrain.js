@@ -35,7 +35,7 @@ class Terrain extends Sprite {
             var Simplex = new SimplexNoise();
             this.noise = param.noise;
             this.terrain = [];
-            var xa, xb, ya, yb;
+            
 
             var flatWidth = 20;
             var smoothWidth = 10;
@@ -63,7 +63,7 @@ class Terrain extends Sprite {
             }
         }
 
-
+        var xa, xb, ya, yb;
         this.position = [];
         this.indices = [];
         this.textcoord = [];

@@ -54,7 +54,7 @@ Editor.init = function()
             $("#block_sprite").hide();
             $("#block_terrain").show();
         }
-}
+};
 
 Editor.loadObjectInfo = function(sprite)
 {
@@ -86,4 +86,4 @@ Editor.loadObjectInfo = function(sprite)
             Editor.addEditorItem([{block_id : "block_info", type : "text", label : "wrapY", disabled : sprite.locked }]);
     }
     Editor.addEditorItem([{block_id : "block_info", type : "color", label : "tint", disabled : sprite.locked }]);
-}
+};

@@ -38,7 +38,7 @@ World.prototype.load = function(map)
                 wrapS: Game.world.texturesInfos[textureName].wrapS,
                 wrapT: Game.world.texturesInfos[textureName].wrapT,
                 src: Game.world.texturesInfos[textureName].src         
-            }
+            };
         }
 
         Game.world.textures = null;
@@ -46,10 +46,10 @@ World.prototype.load = function(map)
         {
             Game.world.objects = [];
             Game.world.terrain = null;
-
+            var object = null;
             for (var i=0; i<map.objects.length;i++)
             {
-                var object = map.objects[i];
+                object = map.objects[i];
 
                 if (object.type == "terrain")
                 {
@@ -67,7 +67,7 @@ World.prototype.load = function(map)
 
             for (var i=0; i<map.objects.length;i++)
             {
-                var object = map.objects[i];
+                object = map.objects[i];
 
                 if (object.type != "terrain")
                 {
@@ -105,7 +105,5 @@ World.prototype.load = function(map)
 
             Editor.init();
         });                
-
-
     }
-}
+};

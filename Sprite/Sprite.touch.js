@@ -39,5 +39,4 @@ Sprite.prototype.touch = function(x, y)
             }
         }
     }
-
-}
+};

@@ -9,24 +9,24 @@ Sprite.prototype.setBuffer = function()
         texcoord: this.getBufferTexCoord(),
         indices: [0,1,2,3,4,5]
     });
-}
+};
 
 Sprite.prototype.updateBufferPosition = function()
 {
     twgl.setAttribInfoBufferFromArray(gl, this.bufferInfo.attribs.a_position, this.getBufferPosition());
-}
+};
 
 Sprite.prototype.updateBufferTexcoord = function()
 {
     twgl.setAttribInfoBufferFromArray(gl, this.bufferInfo.attribs.a_texcoord, this.getBufferTexCoord());
-}
+};
 
 Sprite.prototype.getBufferPosition = function()
 {
-    var bl = {x : -.5, y : -.5, z : 0};
-    var br = {x : .5, y : -.5, z : 0};
-    var tr = {x : .5, y : .5, z : 0};
-    var tl = {x : -.5, y : .5, z : 0};
+    var bl = {x : -0.5, y : -0.5, z : 0};
+    var br = {x : 0.5, y : -0.5, z : 0};
+    var tr = {x : 0.5, y : 0.5, z : 0};
+    var tl = {x : -0.5, y : 0.5, z : 0};
 
     return [
         bl.x, bl.y, bl.z,
@@ -36,7 +36,7 @@ Sprite.prototype.getBufferPosition = function()
         br.x, br.y, br.z,
         tr.x, tr.y, tr.z
     ];
-}
+};
 
 Sprite.prototype.getBufferTexCoord = function()
 {
@@ -62,5 +62,5 @@ Sprite.prototype.getBufferTexCoord = function()
             this.wrapX, 0
         ];
     }
-}
+};
 

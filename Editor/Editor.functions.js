@@ -11,21 +11,20 @@ Editor.saveData = function(data, filename)
     a.click();
     $(a).remove();
     window.URL.revokeObjectURL(url);
-
-}
+};
 
 Editor.lockItem = function(lock)
 {
     $("div#block_info :input").prop("disabled", lock);
     $("div#block_info select").prop("disabled", lock);
     $("#editor_locked_id").prop("disabled", false);
-}
+};
 
 Editor.deleteItem = function()
 {
     var confirmation = confirm("Are you sure ?");
     if (confirmation) {
-        var index = Game.world.objects.indexOf(Editor.selected)
+        var index = Game.world.objects.indexOf(Editor.selected);
         if (index > -1) Game.world.objects.splice(index, 1);
         $("#block_info").empty();
         if (Editor.selected.type == "terrain")
@@ -43,6 +42,5 @@ Editor.deleteItem = function()
             $("#block_sprite").hide();
             $("#block_terrain").show();
         }
-        
     }
-}
+};

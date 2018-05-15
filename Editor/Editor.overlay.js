@@ -61,7 +61,7 @@ Editor.overlay = {
             ctx.stroke();
             ctx.setLineDash([]);
 
-            if( sprite.type == "terrain") return
+            if( sprite.type == "terrain") return;
             
             ctx.strokeStyle = "#000000";
             ctx.lineWidth = 2;

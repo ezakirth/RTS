@@ -47,7 +47,7 @@ class Unit extends Sprite {
         if (this.t > 100)
         {
             this.t = 0;
-            this.texid ++
+            this.texid ++;
             if (this.texid > 4) this.texid = 0;
         }
 
@@ -57,7 +57,7 @@ class Unit extends Sprite {
             var i = Math.floor((this.x - Game.world.terrain.x)/(Game.width/Game.world.terrain.blockWidth));
 //            var i = Math.floor((this.x - Game.world.terrain.x + Game.world.terrain.texWidth/4)/(Game.width/Game.world.terrain.blockWidth));
             var h = Game.world.terrain.terrain[i] + Game.world.terrain.y + this.offset;
-            this.y = (Utils.lerp(this.y, h, .08*Game.world.speed));
+            this.y = (Utils.lerp(this.y, h, 0.08*Game.world.speed));
 
             super.update();            
             
@@ -66,7 +66,7 @@ class Unit extends Sprite {
                 // Place and rotate sprite to match terrain location
                 var h2 = Game.world.terrain.terrain[i+1] + Game.world.terrain.y + this.offset;
                 var angle = Math.atan2(h2 - h, Game.world.terrain.blockWidth/2);
-                this.r = Utils.lerp(this.r , angle , .1*Game.world.speed);
+                this.r = Utils.lerp(this.r , angle , 0.1*Game.world.speed);
             }
         }
     }

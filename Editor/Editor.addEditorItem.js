@@ -14,7 +14,7 @@ Editor.addEditorItem = function(items)
             lib.textContent = item.block;
             div.appendChild(lib);
 
-            if ($("#"+item.block_id).length == 0)
+            if ($("#"+item.block_id).length === 0)
             {
                 div.id = item.block_id;
                 Editor.elem.appendChild(div);
@@ -122,9 +122,7 @@ Editor.addEditorItem = function(items)
         div.appendChild(input);
         $("#"+item.block_id).append(div);
     }  
-    
-
-}
+};
 
 Editor.loadMap = function(e)
 {
@@ -135,9 +133,9 @@ Editor.loadMap = function(e)
             Game.world.load(data);
         });
     }
-}
+};
 
 Editor.saveMap = function(e)
 {
     Editor.saveData(Game.world, 'map.json');
-}
+};

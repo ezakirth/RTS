@@ -1,7 +1,7 @@
 
 Editor.addTerrain = function(e)
 {
-    if (e.target.files[0] && e.target.files[0].name != "")
+    if (e.target.files[0] && e.target.files[0].name !== "")
     {
         var src = "./assets/textures/" + e.target.files[0].name;
         var texture = e.target.files[0].name.slice(0, -4) + "_REPEAT_CLAMP";
@@ -37,7 +37,7 @@ Editor.addTerrain = function(e)
         $("#block_sprite").show();
 
     }
-}
+};
 
 Editor.applyTerrain = function(texture, params)
 {
@@ -61,4 +61,4 @@ Editor.applyTerrain = function(texture, params)
             sprite.layerViewMatrix = Game.world.terrain.layerViewMatrix;
         }
     }
-}
+};
